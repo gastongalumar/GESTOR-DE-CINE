@@ -5,8 +5,6 @@ public class App {
         System.out.println("holapetete");
         System.out.println("PRUEBA2 ");
 
-
     }
 
 }
-
