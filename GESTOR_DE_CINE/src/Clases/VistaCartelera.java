@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +34,7 @@ public class VistaCartelera {
         contenedor.setAlignment(Pos.BASELINE_LEFT);
         contenedor.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 
-        contenedor.setOnMouseClicked(e -> {
-            System.out.println("Click detectado en " + pelicula.getNombrePelicula());
-            verFunciones(contenedor, pelicula);
+        contenedor.setOnMouseClicked(e -> {verFunciones(contenedor, pelicula);
         });
 
         return contenedor;
@@ -53,12 +52,21 @@ public class VistaCartelera {
         VBox contenedorFunciones = new VBox(10);
         contenedorFunciones.setAlignment(Pos.CENTER);
 
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         for(Funcion f: listaFunciones){
-            Label horarioFuncion = new Label(f.getHorarioFuncion().toString());
-            horarioFuncion.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
+            Label horarioFuncion = new Label(f.getHorarioFuncion().format(formato).toString());
+            horarioFuncion.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
             contenedorFunciones.getChildren().add(horarioFuncion);
 
+            horarioFuncion.setOnMouseEntered(e->{
+                horarioFuncion.setStyle("-fx-font-size: 14px; -fx-text-fill: blue;");
+            });
+            horarioFuncion.setOnMouseExited(e->{
+                horarioFuncion.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
+            });
+
         }
+
 
         contenedor.getChildren().addAll(copia, contenedorFunciones);
         Scene escena = new Scene(contenedor,500,500);
