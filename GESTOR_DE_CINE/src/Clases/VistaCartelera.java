@@ -10,9 +10,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class VistaCartelera {
 
@@ -42,38 +45,78 @@ public class VistaCartelera {
 
 
     public static HBox verFunciones(VBox peliculaSeleccionada, Pelicula pelicula){
-        VBox copia = crearVista(pelicula);
         Stage ventana = new Stage();
-        copia.setScaleX(0.5);
-        copia.setScaleY(0.5);
-        List<Funcion> listaFunciones = buscarFuncionesPorNombrePelicula(pelicula.getNombrePelicula());
+        peliculaSeleccionada.setScaleX(0.7);
+        peliculaSeleccionada.setScaleY(0.7);
+
 
         HBox contenedor = new HBox(20);
-        VBox contenedorFunciones = new VBox(10);
-        contenedorFunciones.setAlignment(Pos.CENTER);
 
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        for(Funcion f: listaFunciones){
-            Label horarioFuncion = new Label(f.getHorarioFuncion().format(formato).toString());
-            horarioFuncion.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
-            contenedorFunciones.getChildren().add(horarioFuncion);
 
-            horarioFuncion.setOnMouseEntered(e->{
-                horarioFuncion.setStyle("-fx-font-size: 14px; -fx-text-fill: blue;");
-            });
-            horarioFuncion.setOnMouseExited(e->{
-                horarioFuncion.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
-            });
+        VBox contenedorFunciones = new VBox(15);
+        contenedorFunciones.setAlignment(Pos.CENTER_LEFT);
 
+
+        Label titulo = new Label("FUNCIONES PARA " + pelicula.getNombrePelicula());
+        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
+
+
+        Map<LocalDate, List<Funcion>> funcionesPorDia = new TreeMap<>();
+        for(Funcion f : buscarFuncionesPorNombrePelicula(pelicula.getNombrePelicula())){
+            LocalDate dia = f.getHorarioFuncion().toLocalDate();
+
+
+            if(!funcionesPorDia.containsKey(dia)){
+                funcionesPorDia.put(dia, new ArrayList<>());
+            }
+
+
+            funcionesPorDia.get(dia).add(f);
         }
 
 
-        contenedor.getChildren().addAll(copia, contenedorFunciones);
-        Scene escena = new Scene(contenedor,500,500);
+        for(LocalDate dia : funcionesPorDia.keySet()){
+            Label fechaLabel = new Label(dia.format(formatoFecha));
+            fechaLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+
+            HBox horariosDelDia = new HBox(10);
+            for(Funcion f : funcionesPorDia.get(dia)){
+                Label horario = new Label(f.getHorarioFuncion().format(formatoHora));
+                horario.setStyle("-fx-font-size: 14px; -fx-text-fill: black;");
+
+
+                horario.setOnMouseEntered(e -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: blue;"));
+                horario.setOnMouseExited(e -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: black;"));
+
+                horariosDelDia.getChildren().add(horario);
+            }
+
+
+            contenedorFunciones.getChildren().addAll(fechaLabel, horariosDelDia);
+        }
+
+
+        VBox contenedorVertical = new VBox(15, titulo, contenedor);
+        contenedorVertical.setAlignment(Pos.TOP_CENTER);
+        contenedorVertical.setStyle("-fx-background-color: linear-gradient(to bottom, #4b0000, #666666); -fx-padding: 15;");
+
+
+        contenedor.getChildren().addAll(peliculaSeleccionada, contenedorFunciones);
+
+
+        Scene escena = new Scene(contenedorVertical, 600, 500);
         ventana.setScene(escena);
+        ventana.setTitle("Funciones de la película");
         ventana.show();
+
         return contenedor;
     }
+
+
 
 
     public static List<Funcion> buscarFuncionesPorNombrePelicula(String nombre){
