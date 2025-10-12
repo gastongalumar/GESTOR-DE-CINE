@@ -1,9 +1,12 @@
 import Clases.Sala;
 import ManejoJSON.JSONUtiles;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class App {
-    public static void main(String[] args) {
-        System.out.println(Sala.crearSala("Salaprueba",20));
+public class App extends Application {
+
+    public void start(Stage stage){
+
     }
 
 }
