@@ -1,17 +1,14 @@
 package Clases;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Pelicula {
     private String nombrePelicula;
-    private LocalDateTime fechaEstreno;
-    private LocalDateTime fechaSalida;
+    private LocalDate fechaEstreno;
+    private LocalDate fechaSalida;
 
-    public Pelicula(String nombrePelicula) {
-        this.nombrePelicula = nombrePelicula;
-    }
-
-    public Pelicula(String nombrePelicula, LocalDateTime fechaEstreno, LocalDateTime fechaSalida) {
+    public Pelicula(String nombrePelicula, LocalDate fechaEstreno, LocalDate fechaSalida) {
         this.nombrePelicula = nombrePelicula;
         this.fechaEstreno = fechaEstreno;
         this.fechaSalida = fechaSalida;
@@ -25,19 +22,19 @@ public class Pelicula {
         this.nombrePelicula = nombrePelicula;
     }
 
-    public LocalDateTime getFechaEstreno() {
+    public LocalDate getFechaEstreno() {
         return fechaEstreno;
     }
 
-    public void setFechaEstreno(LocalDateTime fechaEstreno) {
+    public void setFechaEstreno(LocalDate fechaEstreno) {
         this.fechaEstreno = fechaEstreno;
     }
 
-    public LocalDateTime getFechaSalida() {
+    public LocalDate getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(LocalDateTime fechaSalida) {
+    public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 }
