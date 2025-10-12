@@ -3,16 +3,6 @@ import Clases.SelectorAsientos;
 import ManejoJSON.JSONUtiles;
 import javax.swing.*;
 
-public class App {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            new SelectorAsientos();
-        });
 import Clases.Funcion;
 import Clases.Pelicula;
 import Clases.Sala;
@@ -44,7 +34,24 @@ public class App extends Application {
         stage.setTitle("CARTELERA DE PELICULAS");
         stage.setScene(escena);
         stage.show();
+
+
+        // LLAMA AL SELECTOR DESDE MAIN
+//        SwingUtilities.invokeLater(() -> {
+//            try {
+//                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//            new SelectorAsientos();
+//        });
+
     }
+
+
+
+
+
 }
 
 }
