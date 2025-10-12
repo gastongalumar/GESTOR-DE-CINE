@@ -6,6 +6,11 @@ public class Asiento {
     private int nroAsiento;
     private EstadoAsiento estadoAsiento;
 
+    public Asiento(int nroAsiento, EstadoAsiento estadoAsiento) {
+        this.nroAsiento = nroAsiento;
+        this.estadoAsiento = estadoAsiento;
+    }
+
     public int getNroAsiento() {
         return nroAsiento;
     }
@@ -20,5 +25,13 @@ public class Asiento {
 
     public void setEstadoAsiento(EstadoAsiento estadoAsiento) {
         this.estadoAsiento = estadoAsiento;
+    }
+
+    @Override
+    public String toString() {
+        return "Asiento{" +
+                "nroAsiento=" + nroAsiento +
+                ", estadoAsiento=" + estadoAsiento +
+                '}';
     }
 }
