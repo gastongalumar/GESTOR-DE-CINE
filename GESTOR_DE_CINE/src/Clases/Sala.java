@@ -55,7 +55,7 @@ public class Sala {
         return id;
     }
 
-    public static Sala crearSala(String nombreSala, int capacidad){
+    public Sala crearSala(String nombreSala, int capacidad){
         List<Asiento> listaAsientos = new ArrayList<>();
         for(int i = 1; i <= capacidad; i++){
             Asiento a = new Asiento(i, EstadoAsiento.DISPONIBLE);

@@ -1,18 +1,25 @@
 package Clases;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Funcion {
     private Sala sala;
     private Pelicula pelicula;
-    private Date fechaSalida;
+    private LocalDate fechaSalida;
 
 
-    public Date getFechaSalida() {
+    public Funcion(Sala sala, Pelicula pelicula, LocalDate fechaSalida) {
+        this.sala = sala;
+        this.pelicula = pelicula;
+        this.fechaSalida = fechaSalida;
+    }
+
+    public LocalDate getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(Date fechaSalida) {
+    public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 

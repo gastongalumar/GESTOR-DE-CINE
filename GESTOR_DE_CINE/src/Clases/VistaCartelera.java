@@ -21,8 +21,8 @@ public class VistaCartelera {
 
         Label titulo = new Label(funcion.getPelicula().getNombrePelicula());
         titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;");
-        Label ultimaFecha = new Label(funcion.getFechaSalida().toString());
-        ultimaFecha.setStyle("fx-text-fill: red;");
+        Label ultimaFecha = new Label("Finaliza el "+funcion.getFechaSalida().toString());
+        ultimaFecha.setStyle("-fx-text-fill: red;");
         VBox contenedor = new VBox(10, imgPelicula,titulo,ultimaFecha);
         contenedor.setAlignment(Pos.BASELINE_LEFT);
         contenedor.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
