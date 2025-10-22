@@ -37,15 +37,17 @@ public class VistaCartelera {
         contenedor.setAlignment(Pos.BASELINE_LEFT);
         contenedor.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 
-        contenedor.setOnMouseClicked(e -> {verFunciones(contenedor, pelicula);
+        contenedor.setOnMouseClicked(e -> {verFunciones(pelicula);
         });
 
         return contenedor;
     }
 
 
-    public static HBox verFunciones(VBox peliculaSeleccionada, Pelicula pelicula){
+    public static HBox verFunciones(Pelicula pelicula){
         Stage ventana = new Stage();
+
+        VBox peliculaSeleccionada = crearVista(pelicula);
         peliculaSeleccionada.setScaleX(0.7);
         peliculaSeleccionada.setScaleY(0.7);
 
@@ -112,6 +114,12 @@ public class VistaCartelera {
         ventana.setScene(escena);
         ventana.setTitle("Funciones de la película");
         ventana.show();
+
+
+        ventana.setOnCloseRequest(e -> {
+            peliculaSeleccionada.setScaleX(1);
+            peliculaSeleccionada.setScaleY(1);
+        });
 
         return contenedor;
     }
