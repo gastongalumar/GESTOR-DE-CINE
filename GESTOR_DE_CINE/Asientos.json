@@ -1,8 +1,8 @@
 {
-    "asientosOcupados": 27,
+    "asientosOcupados": 33,
     "totalColumnas": 16,
     "totalFilas": 10,
-    "fechaActualizacion": "2025-10-23T15:20:45.830193800",
+    "fechaActualizacion": "2025-10-23T15:22:37.202650100",
     "matrizAsientos": [
         [
             {
@@ -142,13 +142,13 @@
             {
                 "columna": 6,
                 "etiqueta": "G2",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 1
             },
             {
                 "columna": 7,
                 "etiqueta": "H2",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 1
             },
             {
@@ -240,13 +240,13 @@
             {
                 "columna": 6,
                 "etiqueta": "G3",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 2
             },
             {
                 "columna": 7,
                 "etiqueta": "H3",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 2
             },
             {
@@ -338,13 +338,13 @@
             {
                 "columna": 6,
                 "etiqueta": "G4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
                 "columna": 7,
                 "etiqueta": "H4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
