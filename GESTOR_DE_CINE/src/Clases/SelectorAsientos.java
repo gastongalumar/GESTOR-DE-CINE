@@ -254,19 +254,27 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
 
     private int obtenerStartColumna(int bloque) {
         switch (bloque) {
-            case 0: return 0;
-            case 2: return LEFT_BLOCK + AISLE_WIDTH;
-            case 4: return LEFT_BLOCK + AISLE_WIDTH + CENTER_BLOCK + AISLE_WIDTH;
-            default: return 0;
+            case 0:
+                return 0;
+            case 2:
+                return LEFT_BLOCK + AISLE_WIDTH;
+            case 4:
+                return LEFT_BLOCK + AISLE_WIDTH + CENTER_BLOCK + AISLE_WIDTH;
+            default:
+                return 0;
         }
     }
 
     private int obtenerNumColumnas(int bloque) {
         switch (bloque) {
-            case 0: return LEFT_BLOCK;
-            case 2: return CENTER_BLOCK;
-            case 4: return RIGHT_BLOCK;
-            default: return 0;
+            case 0:
+                return LEFT_BLOCK;
+            case 2:
+                return CENTER_BLOCK;
+            case 4:
+                return RIGHT_BLOCK;
+            default:
+                return 0;
         }
     }
 
@@ -392,7 +400,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
 
     private void configurarBoton(JButton boton) {
         boton.setBackground(new Color(70, 130, 180));
-        boton.setForeground(Color.WHITE);
+        boton.setForeground(Color.BLACK);
         boton.setFont(new Font("Segoe UI", Font.BOLD, 12));
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
@@ -412,7 +420,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
 
     private void configurarBotonConfirmar(JButton boton) {
         boton.setBackground(new Color(40, 160, 60));
-        boton.setForeground(Color.WHITE);
+        boton.setForeground(Color.BLACK);
         boton.setFont(new Font("Segoe UI", Font.BOLD, 12));
         boton.setFocusPainted(false);
         boton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
@@ -551,20 +559,5 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
      */
     public GestorJsonAsientos getGestorJson() {
         return gestorJson;
-    }
-
-    /**
-     * Método main para ejecutar la aplicación
-     */
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            new SelectorAsientos().setVisible(true);
-        });
     }
 }

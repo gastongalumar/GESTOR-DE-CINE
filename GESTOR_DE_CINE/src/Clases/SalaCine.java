@@ -20,11 +20,6 @@ public class SalaCine {
                 asientos[i][j] = EstadoAsiento.LIBRE;
             }
         }
-
-        // Algunos asientos ocupados por defecto
-        asientos[2][3] = EstadoAsiento.OCUPADO;
-        asientos[5][7] = EstadoAsiento.OCUPADO;
-        asientos[8][1] = EstadoAsiento.OCUPADO;
     }
 
     /**
