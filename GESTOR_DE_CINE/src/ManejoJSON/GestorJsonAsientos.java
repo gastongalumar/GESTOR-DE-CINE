@@ -2,9 +2,8 @@ package ManejoJSON;
 
 import Clases.SalaCine;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
+import org.json.JSONException;
 import ManejoJSON.JSONUtiles;
 import java.io.*;
 import java.nio.file.Files;
@@ -19,9 +18,6 @@ public class GestorJsonAsientos {
         inicializarArchivo();
     }
 
-    /**
-     * Inicializa el archivo JSON si no existe
-     */
     private void inicializarArchivo() {
         File archivo = new File(ARCHIVO_ASIENTOS);
         if (!archivo.exists()) {
@@ -32,44 +28,61 @@ public class GestorJsonAsientos {
         }
     }
 
-    /**
-     * Carga el estado guardado desde el archivo JSON y actualiza la sala
-     */
     public boolean cargarEstadoGuardado() {
         try {
-            JSONTokener tokener = JSONUtiles.leer(ARCHIVO_ASIENTOS);
-            if (tokener == null) {
-                System.err.println("❌ No se pudo leer el archivo JSON");
+            JSONObject estadoSala = JSONUtiles.leerObject(ARCHIVO_ASIENTOS);
+            if (estadoSala == null) {
+                System.err.println("❌ No se pudo leer el archivo JSON o está vacío");
                 return false;
             }
 
-            JSONObject estadoSala = new JSONObject(tokener);
             JSONArray matrizAsientos = estadoSala.getJSONArray("matrizAsientos");
 
-            System.out.println("📊 Cargando estado guardado...");
+            System.out.println("📊 ===== CARGANDO ESTADO DESDE JSON =====");
             System.out.println("📅 Última actualización: " + estadoSala.getString("fechaActualizacion"));
-            System.out.println("🎯 Asientos seleccionados guardados: " + estadoSala.getInt("asientosSeleccionados"));
+
+            int libresJson = 0, ocupadosJson = 0;
+            for (int i = 0; i < matrizAsientos.length(); i++) {
+                JSONArray filaArray = matrizAsientos.getJSONArray(i);
+                for (int j = 0; j < filaArray.length(); j++) {
+                    JSONObject asientoJson = filaArray.getJSONObject(j);
+                    String estado = asientoJson.getString("estado");
+                    switch (estado) {
+                        case "LIBRE": libresJson++; break;
+                        case "OCUPADO": ocupadosJson++; break;
+                    }
+                }
+            }
+
+            System.out.println("📦 ESTADOS EN ARCHIVO JSON:");
+            System.out.println("   ⚪ Libres: " + libresJson);
+            System.out.println("   🔴 Ocupados: " + ocupadosJson);
 
             // Cargar los estados en la sala
             sala.cargarEstadosDesdeJSON(matrizAsientos);
 
-            // Mostrar información de carga
-            System.out.println("✅ Estado cargado correctamente desde: " + ARCHIVO_ASIENTOS);
-            System.out.println("📈 Resumen actual:");
-            System.out.println("   🟢 Libres: " + sala.contarAsientosLibres());
-            System.out.println("   🔵 Seleccionados: " + sala.contarAsientosSeleccionados());
+            // Mostrar información después de cargar
+            System.out.println("📈 ESTADOS DESPUÉS DE CARGAR:");
+            System.out.println("   ⚪ Libres: " + sala.contarAsientosLibres());
             System.out.println("   🔴 Ocupados: " + sala.contarAsientosOcupados());
+            System.out.println("   🔵 Seleccionados: " + sala.contarAsientosSeleccionados() + " (temporal)");
+            System.out.println("✅ ===== ESTADO CARGADO CORRECTAMENTE =====");
 
             return true;
 
+        } catch (JSONException e) {
+            System.err.println("❌ Error de JSON al cargar estado: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         } catch (Exception e) {
-            System.err.println("❌ Error al cargar estado guardado: " + e.getMessage());
+            System.err.println("❌ Error inesperado al cargar estado: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
     /**
-     * Guarda el estado completo de la sala en el archivo JSON
+     * Guarda el estado completo en JSON
      */
     public void guardarEstadoCompleto() {
         try {
@@ -77,8 +90,6 @@ public class GestorJsonAsientos {
             estadoSala.put("fechaActualizacion", java.time.LocalDateTime.now().toString());
             estadoSala.put("totalFilas", sala.getFilas());
             estadoSala.put("totalColumnas", sala.getColumnas());
-            estadoSala.put("asientosSeleccionados", sala.contarAsientosSeleccionados());
-            estadoSala.put("asientosLibres", sala.contarAsientosLibres());
             estadoSala.put("asientosOcupados", sala.contarAsientosOcupados());
 
             // Matriz de asientos
@@ -97,91 +108,39 @@ public class GestorJsonAsientos {
             }
             estadoSala.put("matrizAsientos", matrizAsientos);
 
-            // Usar JSONUtiles para guardar
-            guardarJsonObject(estadoSala);
+            JSONUtiles.grabar(estadoSala, ARCHIVO_ASIENTOS);
 
-            System.out.println("💾 Estado guardado en: " + ARCHIVO_ASIENTOS +
-                    " | 🎯 Seleccionados: " + sala.contarAsientosSeleccionados());
+            System.out.println("💾 Estado guardado en JSON:");
+            System.out.println("   🔴 Ocupados: " + sala.contarAsientosOcupados());
+            System.out.println("   ⚪ Libres: " + sala.contarAsientosLibres());
 
         } catch (Exception e) {
             System.err.println("❌ Error al guardar el estado de asientos: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     /**
-     * Guarda un JSONObject usando JSONUtiles
+     * Confirma las selecciones y guarda en JSON
      */
-    private void guardarJsonObject(JSONObject jsonObject) {
-        try {
-            FileWriter file = new FileWriter(ARCHIVO_ASIENTOS);
-            try {
-                file.write(jsonObject.toString(4)); // 4 espacios de indentación
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            file.flush();
-            file.close();
-        } catch (IOException e) {
-            System.err.println("❌ Error al escribir archivo: " + e.getMessage());
-        }
+    public int confirmarSelecciones() {
+        int confirmados = sala.confirmarSelecciones();
+        guardarEstadoCompleto();
+        return confirmados;
     }
 
-    /**
-     * Guarda el estado de un asiento específico
-     */
-    public void guardarEstadoAsiento(int fila, int columna) {
-        try {
-            // Leer el archivo existente usando JSONUtiles
-            JSONTokener tokener = JSONUtiles.leer(ARCHIVO_ASIENTOS);
-            if (tokener == null) {
-                guardarEstadoCompleto();
-                return;
-            }
-
-            JSONObject estadoSala = new JSONObject(tokener);
-
-            // Actualizar fecha y contador
-            estadoSala.put("fechaActualizacion", java.time.LocalDateTime.now().toString());
-            estadoSala.put("asientosSeleccionados", sala.contarAsientosSeleccionados());
-            estadoSala.put("asientosLibres", sala.contarAsientosLibres());
-            estadoSala.put("asientosOcupados", sala.contarAsientosOcupados());
-
-            // Actualizar el asiento específico en la matriz
-            JSONArray matrizAsientos = estadoSala.getJSONArray("matrizAsientos");
-            if (fila < matrizAsientos.length()) {
-                JSONArray filaArray = matrizAsientos.getJSONArray(fila);
-                if (columna < filaArray.length()) {
-                    JSONObject asiento = filaArray.getJSONObject(columna);
-                    asiento.put("estado", sala.getEstadoAsiento(fila, columna).toString());
-                }
-            }
-
-            // Guardar los cambios
-            guardarJsonObject(estadoSala);
-
-        } catch (Exception e) {
-            System.err.println("❌ Error al actualizar asiento: " + e.getMessage());
-            guardarEstadoCompleto();
-        }
-    }
-
-    /**
-     * Genera un reporte resumido de la sala usando datos actuales
-     */
     public JSONObject generarReporte() {
         try {
             JSONObject reporte = new JSONObject();
             reporte.put("fechaReporte", java.time.LocalDateTime.now().toString());
             reporte.put("totalAsientos", sala.getFilas() * sala.getColumnas());
             reporte.put("asientosSeleccionados", sala.contarAsientosSeleccionados());
-            reporte.put("asientosLibres", sala.contarAsientosLibres());
             reporte.put("asientosOcupados", sala.contarAsientosOcupados());
+            reporte.put("asientosLibres", sala.contarAsientosLibres());
 
-            // Leer la última actualización del archivo
             try {
-                JSONTokener tokener = JSONUtiles.leer(ARCHIVO_ASIENTOS);
-                if (tokener != null) {
-                    JSONObject estadoSala = new JSONObject(tokener);
+                JSONObject estadoSala = JSONUtiles.leerObject(ARCHIVO_ASIENTOS);
+                if (estadoSala != null) {
                     reporte.put("ultimaActualizacion", estadoSala.getString("fechaActualizacion"));
                 }
             } catch (Exception e) {
@@ -200,37 +159,15 @@ public class GestorJsonAsientos {
         }
     }
 
-    /**
-     * Verifica si el archivo JSON existe y es válido
-     */
     public boolean archivoExiste() {
         File archivo = new File(ARCHIVO_ASIENTOS);
-        if (!archivo.exists()) {
-            return false;
-        }
-
-        try {
-            JSONTokener tokener = JSONUtiles.leer(ARCHIVO_ASIENTOS);
-            if (tokener != null) {
-                new JSONObject(tokener);
-                return true;
-            }
-        } catch (Exception e) {
-            System.err.println("❌ Archivo JSON corrupto: " + e.getMessage());
-        }
-        return false;
+        return archivo.exists();
     }
 
-    /**
-     * Genera la etiqueta del asiento (ej: "A1", "B2")
-     */
     private String generarEtiquetaAsiento(int fila, int columna) {
         return String.valueOf((char) ('A' + columna)) + (fila + 1);
     }
 
-    /**
-     * Obtiene el contenido completo del archivo JSON como String
-     */
     public String getJsonCompleto() {
         try {
             return new String(Files.readAllBytes(Paths.get(ARCHIVO_ASIENTOS)));
@@ -240,7 +177,7 @@ public class GestorJsonAsientos {
     }
 
     /**
-     * Método para limpiar/resetear todos los asientos (excepto ocupados)
+     * Limpia selecciones y guarda
      */
     public void limpiarSelecciones() {
         sala.limpiarSelecciones();
