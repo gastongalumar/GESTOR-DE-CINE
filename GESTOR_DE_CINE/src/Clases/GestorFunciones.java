@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorFunciones {
-   private static List<Funcion> listaFunciones;
+   private static List<Funcion> listaFunciones = new ArrayList<>();
 
     public GestorFunciones(){
-        listaFunciones = new ArrayList<>();
+        // Ya no es necesario inicializar la lista aquí; se hace en la declaración
     }
 
     public static List<Funcion> getListaFunciones() {
@@ -18,7 +18,7 @@ public class GestorFunciones {
         GestorFunciones.listaFunciones = listaFunciones;
     }
 
-    public void agregarFuncion(Funcion f){
+    public static void agregarFuncion(Funcion f){
         listaFunciones.add(f);
     }
 }

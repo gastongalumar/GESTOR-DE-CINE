@@ -1,8 +1,6 @@
 package Clases;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Funcion {
     private Sala sala;
@@ -13,6 +11,8 @@ public class Funcion {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
+        // Registrar automáticamente la función en el gestor
+        GestorFunciones.agregarFuncion(this);
     }
 
     public LocalDateTime getHorarioFuncion() {

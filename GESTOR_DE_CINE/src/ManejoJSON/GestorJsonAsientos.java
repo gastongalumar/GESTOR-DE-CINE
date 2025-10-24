@@ -10,27 +10,35 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class GestorJsonAsientos {
-    private static final String ARCHIVO_ASIENTOS = "Asientos.json";
+    // Archivo por defecto si no se especifica uno
+    private static final String ARCHIVO_POR_DEFECTO = "Asientos.json";
     private final SalaCine sala;
+    private final String archivoAsientos;
 
     public GestorJsonAsientos(SalaCine sala) {
+        this(sala, ARCHIVO_POR_DEFECTO);
+    }
+
+    // Constructor nuevo que permite especificar el archivo JSON (por función, por ejemplo)
+    public GestorJsonAsientos(SalaCine sala, String archivoAsientos) {
         this.sala = sala;
+        this.archivoAsientos = archivoAsientos != null && !archivoAsientos.isEmpty() ? archivoAsientos : ARCHIVO_POR_DEFECTO;
         inicializarArchivo();
     }
 
     private void inicializarArchivo() {
-        File archivo = new File(ARCHIVO_ASIENTOS);
+        File archivo = new File(archivoAsientos);
         if (!archivo.exists()) {
-            System.out.println("📝 Creando nuevo archivo JSON...");
+            System.out.println("📝 Creando nuevo archivo JSON... -> " + archivoAsientos);
             guardarEstadoCompleto();
         } else {
-            System.out.println("📁 Archivo JSON encontrado: " + ARCHIVO_ASIENTOS);
+            System.out.println("📁 Archivo JSON encontrado: " + archivoAsientos);
         }
     }
 
     public boolean cargarEstadoGuardado() {
         try {
-            JSONObject estadoSala = JSONUtiles.leerObject(ARCHIVO_ASIENTOS);
+            JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
             if (estadoSala == null) {
                 System.err.println("❌ No se pudo leer el archivo JSON o está vacío");
                 return false;
@@ -108,9 +116,9 @@ public class GestorJsonAsientos {
             }
             estadoSala.put("matrizAsientos", matrizAsientos);
 
-            JSONUtiles.grabar(estadoSala, ARCHIVO_ASIENTOS);
+            JSONUtiles.grabar(estadoSala, archivoAsientos);
 
-            System.out.println("💾 Estado guardado en JSON:");
+            System.out.println("💾 Estado guardado en JSON: -> " + archivoAsientos);
             System.out.println("   🔴 Ocupados: " + sala.contarAsientosOcupados());
             System.out.println("   ⚪ Libres: " + sala.contarAsientosLibres());
 
@@ -139,7 +147,7 @@ public class GestorJsonAsientos {
             reporte.put("asientosLibres", sala.contarAsientosLibres());
 
             try {
-                JSONObject estadoSala = JSONUtiles.leerObject(ARCHIVO_ASIENTOS);
+                JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
                 if (estadoSala != null) {
                     reporte.put("ultimaActualizacion", estadoSala.getString("fechaActualizacion"));
                 }
@@ -160,7 +168,7 @@ public class GestorJsonAsientos {
     }
 
     public boolean archivoExiste() {
-        File archivo = new File(ARCHIVO_ASIENTOS);
+        File archivo = new File(archivoAsientos);
         return archivo.exists();
     }
 
@@ -170,7 +178,7 @@ public class GestorJsonAsientos {
 
     public String getJsonCompleto() {
         try {
-            return new String(Files.readAllBytes(Paths.get(ARCHIVO_ASIENTOS)));
+            return new String(Files.readAllBytes(Paths.get(archivoAsientos)));
         } catch (IOException e) {
             return "{}";
         }

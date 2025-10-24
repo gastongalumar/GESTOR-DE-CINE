@@ -9,6 +9,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
 
 public class SelectorAsientos extends JFrame implements PropertyChangeListener {
     // Configuración de la sala
@@ -20,16 +21,45 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
     private final int AISLE_WIDTH = 1;
     private final int COLUMNAS = LEFT_BLOCK + AISLE_WIDTH + CENTER_BLOCK + AISLE_WIDTH + RIGHT_BLOCK;
 
-    private final SalaCine sala;
-    private final GestorJsonAsientos gestorJson;
+    private SalaCine sala; // ya no final, se inicializa en init
+    private GestorJsonAsientos gestorJson; // ya no final
     private final AsientoButton[][] botonesAsientos = new AsientoButton[FILAS_ASIENTOS][COLUMNAS];
     private final List<Integer> columnasValidas = new ArrayList<>();
     private final JLabel contadorLabel = new JLabel("0 asientos seleccionados");
 
     public SelectorAsientos() {
         super("🎬 Selector de Asientos - Sala con tres bloques");
-        this.sala = new SalaCine(FILAS_ASIENTOS, COLUMNAS);
-        this.gestorJson = new GestorJsonAsientos(sala);
+        SalaCine salaDefault = new SalaCine(FILAS_ASIENTOS, COLUMNAS);
+        init(salaDefault, null);
+    }
+
+    /**
+     * Nuevo constructor: crea el selector para una Funcion concreta.
+     * Genera un nombre de archivo JSON por función para separar estados.
+     */
+    public SelectorAsientos(Funcion funcion) {
+        String nombrePelicula = funcion.getPelicula() != null ? funcion.getPelicula().getNombrePelicula() : "pelicula";
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+        String horarioStr = funcion.getHorarioFuncion() != null ? funcion.getHorarioFuncion().format(fmt) : "horaDesconocida";
+        String archivo = String.format("Asientos_%s_%s.json", nombrePelicula.replaceAll("\\s+", "_"), horarioStr);
+
+        this.setTitle("🎬 Selector - " + nombrePelicula + " (" + horarioStr + ")");
+
+        SalaCine salaDefault = new SalaCine(FILAS_ASIENTOS, COLUMNAS);
+        init(salaDefault, archivo);
+    }
+
+    /**
+     * Método central de inicialización que antes estaba en el constructor.
+     * Si archivoJson es null se usa el por defecto dentro del gestor.
+     */
+    private void init(SalaCine salaCine, String archivoJson) {
+        this.sala = salaCine;
+        if (archivoJson == null) {
+            this.gestorJson = new GestorJsonAsientos(sala);
+        } else {
+            this.gestorJson = new GestorJsonAsientos(sala, archivoJson);
+        }
 
         inicializarColumnasValidas();
         configurarVentana();

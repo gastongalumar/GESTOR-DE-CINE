@@ -1,13 +1,20 @@
 package Clases;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class Pelicula {
     private String nombrePelicula;
     private LocalDate fechaEstreno;
     private LocalDate fechaSalida;
 
+    public Pelicula(String nombrePelicula) {
+        this.nombrePelicula = nombrePelicula;
+        // Inicializar fechas como null por defecto (VistaCartelera ya maneja nulls)
+        this.fechaEstreno = null;
+        this.fechaSalida = null;
+    }
+
+    // Sobrecarga para crear la película con fechas
     public Pelicula(String nombrePelicula, LocalDate fechaEstreno, LocalDate fechaSalida) {
         this.nombrePelicula = nombrePelicula;
         this.fechaEstreno = fechaEstreno;
