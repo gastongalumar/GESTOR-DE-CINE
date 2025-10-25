@@ -21,7 +21,7 @@ public class App extends Application {
         Pelicula p2 = new Pelicula("pelicula2");
         Pelicula p3 = new Pelicula("pelicula3");
         Pelicula p4 = new Pelicula("pelicula4");
-
+        System.out.println("prueba rebase");
         Sala s1 = new Sala("Sala 1", 200);
         Sala s2 = new Sala("Sala 2", 200);
 
