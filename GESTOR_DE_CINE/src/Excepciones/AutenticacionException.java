@@ -30,4 +30,7 @@ public class AutenticacionException extends CineException {
                 CUENTA_INACTIVA
         );
     }
+
+
+    /// Nuevos métodos factory para otras excepciones comunes
 }
