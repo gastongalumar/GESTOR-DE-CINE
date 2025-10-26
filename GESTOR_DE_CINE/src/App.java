@@ -22,8 +22,8 @@ public class App extends Application {
         Pelicula p3 = new Pelicula("pelicula3");
         Pelicula p4 = new Pelicula("pelicula4");
         System.out.println("prueba rebase");
-        Sala s1 = new Sala("Sala 1", 200);
-        Sala s2 = new Sala("Sala 2", 200);
+        SalaCine s1 = new SalaCine("Sala 1", 200);
+        SalaCine s2 = new SalaCine("Sala 2", 200);
 
         // Crear funciones asociadas a las películas (se registran automáticamente en GestorFunciones)
         Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
@@ -40,7 +40,7 @@ public class App extends Application {
         HBox contenedor = new HBox(20, vista1, vista2,vista3,vista4);
         contenedor.setAlignment(Pos.CENTER);
 
-        Scene escena = new Scene(contenedor, 900, 500);
+        Scene escena = new Scene(contenedor, 1360, 768);
         stage.setTitle("CARTELERA DE PELICULAS");
         stage.setScene(escena);
         stage.show();
@@ -61,7 +61,7 @@ public class App extends Application {
                     ex.printStackTrace();
                 }
                 Pelicula p1 = new Pelicula("pelicula1");
-                Sala s1 = new Sala("Sala 1", 200);
+                SalaCine s1 = new SalaCine("Sala 1", 200);
                 Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
                 SelectorAsientos selector = new SelectorAsientos(f1);
                 selector.setVisible(true);
