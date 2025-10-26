@@ -1,0 +1,22 @@
+[
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-10-15 18:30",
+        "Pelicula": "pelicula1"
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-10-15 21:00",
+        "Pelicula": "pelicula1"
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-05 14:00",
+        "Pelicula": "pelicula2"
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-10-16 18:30",
+        "Pelicula": "pelicula1"
+    }
+]
