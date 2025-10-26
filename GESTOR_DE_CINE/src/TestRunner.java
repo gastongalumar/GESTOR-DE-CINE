@@ -10,7 +10,7 @@ public class TestRunner {
         Pelicula p1 = new Pelicula("pelicula1");
 
 
-        Sala s1 = new Sala("Sala 1", 200);
+        SalaCine s1 = new SalaCine("Sala 1", 200);
 
         LocalDateTime horario = LocalDateTime.of(2025, 10, 15, 18, 30);
         Funcion f1 = new Funcion(s1, p1, horario);

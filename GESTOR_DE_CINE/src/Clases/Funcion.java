@@ -4,11 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Funcion {
-    private Sala sala;
+    private SalaCine sala;
     private Pelicula pelicula;
     private LocalDateTime horarioFuncion;
 
-    public Funcion(Sala sala, Pelicula pelicula, LocalDateTime horarioFuncion) {
+    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
@@ -48,11 +48,11 @@ public class Funcion {
         this.horarioFuncion = horarioFuncion;
     }
 
-    public Sala getSala() {
+    public SalaCine getSala() {
         return sala;
     }
 
-    public void setSala(Sala sala) {
+    public void setSala(SalaCine sala) {
         this.sala = sala;
     }
 
