@@ -48,11 +48,11 @@ public class VistaCartelera {
 
        // String fechaSalidaStr = pelicula.getFechaSalida() != null ? pelicula.getFechaSalida().format(fechaFormateador) : "N/A";
         Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida());
-        ultimaFecha.setStyle("-fx-text-fill: red;");
+        ultimaFecha.setStyle("-fx-text-fill: black;");
 
         VBox contenedor = new VBox(10, imageNode, titulo, ultimaFecha);
         contenedor.setAlignment(Pos.BASELINE_LEFT);
-        contenedor.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
+        contenedor.setStyle("-fx-background-color: #0A6E61; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 
         contenedor.setOnMouseClicked(e -> verFunciones(pelicula));
 
