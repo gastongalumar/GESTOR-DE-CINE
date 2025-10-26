@@ -176,6 +176,8 @@ public class GestorJsonAsientos {
         return String.valueOf((char) ('A' + columna)) + (fila + 1);
     }
 
+
+    //GETTERS Y SETTERS
     public String getJsonCompleto() {
         try {
             return new String(Files.readAllBytes(Paths.get(archivoAsientos)));

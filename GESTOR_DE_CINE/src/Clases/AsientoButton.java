@@ -14,6 +14,9 @@ public class AsientoButton extends JButton {
     private final SalaCine sala;
     private final PropertyChangeSupport propertyChangeSupport;
 
+
+    //CONSTRUCTOR
+
     public AsientoButton(int fila, int columna, SalaCine sala) {
         this.fila = fila;
         this.columna = columna;
@@ -25,6 +28,19 @@ public class AsientoButton extends JButton {
         actualizarToolTip();
     }
 
+    //GETTER Y SETTER
+
+    public int getFila() {
+        return fila;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+
+
+    //METODOS
     private void configurarApariencia() {
         setPreferredSize(new Dimension(60, 52));
         setContentAreaFilled(false);
@@ -65,13 +81,6 @@ public class AsientoButton extends JButton {
         setToolTipText("Asiento " + (fila + 1) + "-" + (char)('A' + columna) + " (" + estadoStr + ")");
     }
 
-    public int getFila() {
-        return fila;
-    }
-
-    public int getColumna() {
-        return columna;
-    }
 
     @Override
     protected void paintComponent(Graphics g) {

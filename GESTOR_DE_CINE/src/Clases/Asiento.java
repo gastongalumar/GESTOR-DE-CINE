@@ -6,10 +6,14 @@ public class Asiento {
     private int nroAsiento;
     private EstadoAsiento estadoAsiento;
 
+    //CONSTRUCTOR
+
     public Asiento(int nroAsiento, EstadoAsiento estadoAsiento) {
         this.nroAsiento = nroAsiento;
         this.estadoAsiento = estadoAsiento;
     }
+
+    //GETTER Y SETTER
 
     public int getNroAsiento() {
         return nroAsiento;
@@ -27,6 +31,8 @@ public class Asiento {
         this.estadoAsiento = estadoAsiento;
     }
 
+
+    //TO STRING
     @Override
     public String toString() {
         return "Asiento{" +

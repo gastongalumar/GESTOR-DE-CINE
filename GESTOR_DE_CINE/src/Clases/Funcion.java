@@ -8,6 +8,8 @@ public class Funcion {
     private Pelicula pelicula;
     private LocalDateTime horarioFuncion;
 
+
+    //CONSTRUCTOR
     public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion) {
         this.sala = sala;
         this.pelicula = pelicula;
@@ -40,6 +42,8 @@ public class Funcion {
             GestorFunciones.agregarFuncion(this);
         }*/
     }
+
+    //GETTER Y SETTER
     public LocalDateTime getHorarioFuncion() {
         return horarioFuncion;
     }
@@ -65,6 +69,7 @@ public class Funcion {
     }
 
 
+//TO STRING
     @Override
     public String toString() {
         return "Funcion{" +
