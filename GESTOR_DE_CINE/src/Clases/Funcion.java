@@ -1,33 +1,58 @@
 package Clases;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class Funcion {
-    private Sala sala;
+    private SalaCine sala;
     private Pelicula pelicula;
-    private LocalDate fechaSalida;
+    private LocalDateTime horarioFuncion;
 
-
-    public Funcion(Sala sala, Pelicula pelicula, LocalDate fechaSalida) {
+    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion) {
         this.sala = sala;
         this.pelicula = pelicula;
-        this.fechaSalida = fechaSalida;
+        this.horarioFuncion = horarioFuncion;
+        // Registrar automáticamente la función en el gestor
+        GestorFunciones.agregarFuncion(this);
     }
 
-    public LocalDate getFechaSalida() {
-        return fechaSalida;
+    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas){
+        boolean encontrado = true;
+        SalaCine salaEncontrada = null;
+        Pelicula peliculaEncontrada = null;
+        for(Funcion f: GestorFunciones.getListaFunciones()){
+            if(f.getSala().getNombreSala().equalsIgnoreCase(nombreSala)){
+                salaEncontrada = f.getSala();
+                encontrado = true;
+            }
+        }
+        for(Pelicula p: listaPeliculas){
+            if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){
+                encontrado = true;
+                peliculaEncontrada = p;
+            }
+        }
+
+        this.sala = salaEncontrada;
+        this.pelicula = peliculaEncontrada;
+        this.horarioFuncion = horarioFuncion;
+       /* if(encontrado){
+            GestorFunciones.agregarFuncion(this);
+        }*/
+    }
+    public LocalDateTime getHorarioFuncion() {
+        return horarioFuncion;
     }
 
-    public void setFechaSalida(LocalDate fechaSalida) {
-        this.fechaSalida = fechaSalida;
+    public void setHorarioFuncion(LocalDateTime horarioFuncion) {
+        this.horarioFuncion = horarioFuncion;
     }
 
-    public Sala getSala() {
+    public SalaCine getSala() {
         return sala;
     }
 
-    public void setSala(Sala sala) {
+    public void setSala(SalaCine sala) {
         this.sala = sala;
     }
 
@@ -37,5 +62,15 @@ public class Funcion {
 
     public void setPelicula(Pelicula pelicula) {
         this.pelicula = pelicula;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Funcion{" +
+                "sala=" + sala +
+                ", pelicula=" + pelicula +
+                ", horarioFuncion=" + horarioFuncion +
+                '}';
     }
 }
