@@ -21,6 +21,7 @@ public class App extends Application {
     public void start(Stage stage) {
         // Crear datos de prueba
 
+        // HOLA MUNDO
         GestorPeliculas gestorPeliculas = new GestorPeliculas();
         Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025,7,2), LocalDate.of(2025,11,5));
         Pelicula p2 = new Pelicula("pelicula2", LocalDate.of(2025,10,5), LocalDate.of(2025,12,6));
