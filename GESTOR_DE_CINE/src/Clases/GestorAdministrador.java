@@ -1,5 +1,6 @@
 package Clases;
 
+import ManejoJSON.FuncionesJSON;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -147,6 +148,7 @@ public class GestorAdministrador {
 
                     Funcion funcion = new Funcion(sala,nombrePelicula,fechaHora,listaPeliculas);
                     GestorFunciones.agregarFuncion(funcion);
+                    FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
                     ventana.close();
                 }catch (DateTimeParseException ex){
 
