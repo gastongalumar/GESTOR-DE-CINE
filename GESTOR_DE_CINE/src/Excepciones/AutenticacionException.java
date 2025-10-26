@@ -32,5 +32,5 @@ public class AutenticacionException extends CineException {
     }
 
 
-    /// Nuevos métodos factory para otras excepciones comunes
+
 }
