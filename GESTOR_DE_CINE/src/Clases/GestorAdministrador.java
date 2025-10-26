@@ -32,11 +32,23 @@ public class GestorAdministrador {
         Stage ventana = new Stage();
         int i = 0;
         HBox contenedor = new HBox(20);
+        contenedor.setStyle("""
+            -fx-background-color: #6E0A17;
+        """);
         for(Pelicula p: listaPeliculas){
             VBox vista = VistaCartelera.crearVista(p);
             contenedor.getChildren().add(vista);
 
         }
+
+        Label tituloFunciones = new Label("FUNCIONES");
+        tituloFunciones.setStyle("""
+            -fx-font-size: 20px;
+            -fx-text-fill: #0A6E61;
+            -fx-font-weight: bold ;
+            -fx-padding: 5 10 5 10;
+            -fx-background-radius: 2;
+        """);
         Button botonAgregar = new Button("Agregar función");
         botonAgregar.setStyle("""
             -fx-background-color: #006600;
@@ -58,11 +70,36 @@ public class GestorAdministrador {
             -fx-padding: 10 20 10 20;
             -fx-background-radius: 10;
         """);
+        Separator separacion = new Separator();
+        separacion.setStyle("-fx-background-color: #800080;");
+        separacion.setPrefWidth(150);
+
+        Label tituloPeliculas = new Label("PELICULAS");
+        tituloPeliculas.setStyle("""
+            -fx-font-size: 20px;
+            -fx-text-fill: #0A6E61;
+            -fx-font-weight: bold ;
+            -fx-padding: 5 10 5 10;
+            -fx-background-radius: 2;
+        """);
+
+        Button botonAgregarPelicula = new Button("Agregar pelicula");
+        botonAgregarPelicula.setStyle("""
+            -fx-background-color: #006600;
+            -fx-text-fill: white;
+            -fx-font-weight: bold;
+            -fx-padding: 10 20 10 20;
+            -fx-background-radius: 10;
+        """);
+        botonAgregarPelicula.setOnAction(e -> {
+            formularioAgregar(listaPeliculas);
+        });
+
         botonEliminar.setOnAction(e -> {
             formularioEliminarFuncion(GestorFunciones.getListaFunciones());
         });
 
-        VBox contieneBotonesFunciones = new VBox(10, botonAgregar, botonEliminar);
+        VBox contieneBotonesFunciones = new VBox(10,tituloFunciones, botonAgregar, botonEliminar, separacion, tituloPeliculas, botonAgregarPelicula);
         contenedor.getChildren().add(contieneBotonesFunciones);
         Scene escena = new Scene(contenedor,1300,500);
         ventana.setTitle("GESTOR ADMINISTRADOR");
@@ -96,26 +133,38 @@ public class GestorAdministrador {
         Label labelSala = new Label("Sala:");
         TextField campoSala = new TextField();
         campoSala.setPromptText("Número de sala");
+        Label textoSala = new Label("→ Número de sala");
+        textoSala.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 11px;");
+
 
         Label labelFechaInicial = new Label("Fecha inicial:");
         TextField campoFechaInicial = new TextField();
         campoFechaInicial.setPromptText("Ej: 2025-10-15");
+        Label textoFechaInicial = new Label("→ Fecha de inicio del período");
+        textoFechaInicial.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 11px;");
+
 
         Label labelFechaFinal = new Label("Fecha final:");
         TextField campoFechaFinal = new TextField();
         campoFechaFinal.setPromptText("Ej: 2025-10-15");
+        Label textoFechaFinal = new Label("→ Último día del período");
+        textoFechaFinal.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 11px;");
+
 
         Label labelHorario = new Label("Horario:");
         TextField campoHorario = new TextField();
         campoHorario.setPromptText("Ej: 20:30");
+        Label textoHorario = new Label("→ Hora de inicio de la función");
+        textoHorario.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 11px;");
+
 
         GridPane gridDatos = new GridPane();
         gridDatos.setHgap(10);
         gridDatos.setVgap(10);
-        gridDatos.addRow(0, labelSala, campoSala);
-        gridDatos.addRow(1, labelFechaInicial, campoFechaInicial);
-        gridDatos.addRow(2, labelFechaFinal, campoFechaFinal);
-        gridDatos.addRow(3, labelHorario, campoHorario);
+        gridDatos.addRow(0, labelSala, campoSala, textoSala);
+        gridDatos.addRow(1, labelFechaInicial, campoFechaInicial, textoFechaInicial);
+        gridDatos.addRow(2, labelFechaFinal, campoFechaFinal, textoFechaFinal);
+        gridDatos.addRow(3, labelHorario, campoHorario, textoHorario);
 
         VBox seccionDatos = new VBox(5, tituloDatos, gridDatos);
         seccionDatos.setAlignment(Pos.CENTER_LEFT);
@@ -156,6 +205,9 @@ public class GestorAdministrador {
 
                     long diasDiferencia = ChronoUnit.DAYS.between(fechaInicialTime.toLocalDate(), fechaFinalTime.toLocalDate());
 
+                    if(diasDiferencia < 0){
+                        mostrarAlerta("Ingresá un rango de fechas válido");
+                    }
                     LocalDateTime fechaAgregar = fechaInicialTime;
                     System.out.println("Días de diferencia: " + diasDiferencia);
                     System.out.println("Fecha inicial: " + fechaInicialTime);
@@ -186,7 +238,7 @@ public class GestorAdministrador {
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #2a2a2a;");
 
-        Scene escena = new Scene(layout, 400, 350);
+        Scene escena = new Scene(layout, 500, 450);
         ventana.setScene(escena);
         ventana.show();
 
