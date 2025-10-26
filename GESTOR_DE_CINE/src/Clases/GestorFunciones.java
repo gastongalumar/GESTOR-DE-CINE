@@ -21,4 +21,8 @@ public class GestorFunciones {
     public static void agregarFuncion(Funcion f){
         listaFunciones.add(f);
     }
+
+    public static void eliminarFuncion(Funcion f){
+        listaFunciones.remove(f);
+    }
 }
