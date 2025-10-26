@@ -20,15 +20,13 @@ import java.util.List;
 
 public class GestorAdministrador {
 
-    private static List<Pelicula> listaPeliculas = new ArrayList<>();
-
-    public static void PeliculaAdministrador(Pelicula pelicula){
+    /*public static void PeliculaAdministrador(Pelicula pelicula, List<Pelicula> listaPeliculas){
         VBox vista = VistaCartelera.crearVista(pelicula);
         listaPeliculas.add(pelicula);
 
     }
-
-    public static void vistaAdministrador(){
+*/
+    public static void vistaAdministrador(List<Pelicula> listaPeliculas){
         Stage ventana = new Stage();
         int i = 0;
         HBox contenedor = new HBox(20);
@@ -46,7 +44,7 @@ public class GestorAdministrador {
             -fx-background-radius: 10;
         """);
         botonAgregar.setOnAction(e -> {
-            formularioAgregar();
+            formularioAgregar(listaPeliculas);
         });
         contenedor.getChildren().add(botonAgregar);
         Scene escena = new Scene(contenedor,1300,500);
@@ -55,7 +53,7 @@ public class GestorAdministrador {
         ventana.show();
     }
 
-    public static void formularioAgregar(){
+    public static void formularioAgregar(List<Pelicula> listaPeliculas){
         Stage ventana = new Stage();
         ventana.setTitle("Agregar nueva función");
 
@@ -131,6 +129,9 @@ public class GestorAdministrador {
                     DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                     LocalDateTime fechaHora = LocalDateTime.parse(fechaTotal, formato);
                     mostrarAlerta("Funcion agregada correctamente");
+
+                    Funcion funcion = new Funcion(sala,nombrePelicula,fechaHora,listaPeliculas);
+                    GestorFunciones.agregarFuncion(funcion);
                     ventana.close();
                 }catch (DateTimeParseException ex){
 
