@@ -1,6 +1,7 @@
 package Clases;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Funcion {
     private Sala sala;
@@ -15,6 +16,30 @@ public class Funcion {
         GestorFunciones.agregarFuncion(this);
     }
 
+    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas){
+        boolean encontrado = true;
+        Sala salaEncontrada = null;
+        Pelicula peliculaEncontrada = null;
+        for(Funcion f: GestorFunciones.getListaFunciones()){
+            if(f.getSala().getNombreSala().equalsIgnoreCase(nombreSala)){
+                salaEncontrada = f.getSala();
+                encontrado = true;
+            }
+        }
+        for(Pelicula p: listaPeliculas){
+            if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){
+                encontrado = true;
+                peliculaEncontrada = p;
+            }
+        }
+
+        this.sala = salaEncontrada;
+        this.pelicula = peliculaEncontrada;
+        this.horarioFuncion = horarioFuncion;
+       /* if(encontrado){
+            GestorFunciones.agregarFuncion(this);
+        }*/
+    }
     public LocalDateTime getHorarioFuncion() {
         return horarioFuncion;
     }
@@ -39,4 +64,13 @@ public class Funcion {
         this.pelicula = pelicula;
     }
 
+
+    @Override
+    public String toString() {
+        return "Funcion{" +
+                "sala=" + sala +
+                ", pelicula=" + pelicula +
+                ", horarioFuncion=" + horarioFuncion +
+                '}';
+    }
 }
