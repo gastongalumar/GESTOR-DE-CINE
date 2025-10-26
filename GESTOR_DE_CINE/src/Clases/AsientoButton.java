@@ -1,5 +1,7 @@
 package Clases;
 
+import Enumeradores.EstadoAsiento;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -35,9 +37,9 @@ public class AsientoButton extends JButton {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SalaCine.EstadoAsiento estadoActual = sala.getEstadoAsiento(fila, columna);
-                if (estadoActual == SalaCine.EstadoAsiento.LIBRE ||
-                        estadoActual == SalaCine.EstadoAsiento.SELECCIONADO) {
+                EstadoAsiento estadoActual =sala.getEstadoAsiento(fila, columna);
+                if (estadoActual == EstadoAsiento.LIBRE ||
+                        estadoActual == EstadoAsiento.SELECCIONADO) {
 
                     sala.toggleSeleccionAsiento(fila, columna);
                     repaint();
@@ -53,7 +55,7 @@ public class AsientoButton extends JButton {
     }
 
     private void actualizarToolTip() {
-        SalaCine.EstadoAsiento estado = sala.getEstadoAsiento(fila, columna);
+        EstadoAsiento estado = sala.getEstadoAsiento(fila, columna);
         String estadoStr = "";
         switch (estado) {
             case LIBRE: estadoStr = "Libre"; break;
@@ -76,13 +78,13 @@ public class AsientoButton extends JButton {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        SalaCine.EstadoAsiento estado = sala.getEstadoAsiento(fila, columna);
+        EstadoAsiento estado = sala.getEstadoAsiento(fila, columna);
         pintarAsiento(g2, estado);
 
         g2.dispose();
     }
 
-    private void pintarAsiento(Graphics2D g2, SalaCine.EstadoAsiento estado) {
+    private void pintarAsiento(Graphics2D g2, EstadoAsiento estado) {
         int w = getWidth();
         int h = getHeight();
 

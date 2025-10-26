@@ -9,5 +9,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="java-json" level="project" />
     <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="javafx-sdk-21.0" level="project" />
+    <orderEntry type="library" name="lib1" level="project" />
   </component>
 </module>

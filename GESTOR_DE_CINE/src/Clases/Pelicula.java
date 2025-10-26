@@ -44,4 +44,14 @@ public class Pelicula {
     public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
+
+
+    @Override
+    public String toString() {
+        return "Pelicula{" +
+                "nombrePelicula='" + nombrePelicula + '\'' +
+                ", fechaEstreno=" + fechaEstreno +
+                ", fechaSalida=" + fechaSalida +
+                '}';
+    }
 }

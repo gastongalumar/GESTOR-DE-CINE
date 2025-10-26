@@ -1,9 +1,9 @@
 package Clases;
 
-    public class SalaCine {
+import Enumeradores.EstadoAsiento;
 
+public class SalaCine {
 
-        public enum EstadoAsiento { LIBRE, SELECCIONADO, OCUPADO }
         private String nombreSala;
         private int capacidad;
         private final int filas;
@@ -187,6 +187,4 @@ package Clases;
         public int getColumnas() {
             return columnas;
         }
-
-
     }

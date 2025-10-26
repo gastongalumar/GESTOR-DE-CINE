@@ -1,5 +1,5 @@
 package Enumeradores;
 
 public enum EstadoAsiento {
-    OCUPADO, DISPONIBLE;
+    LIBRE, SELECCIONADO, OCUPADO;
 }

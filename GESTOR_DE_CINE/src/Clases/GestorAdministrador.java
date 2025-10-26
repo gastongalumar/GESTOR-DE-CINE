@@ -148,7 +148,7 @@ public class GestorAdministrador {
 
                     Funcion funcion = new Funcion(sala,nombrePelicula,fechaHora,listaPeliculas);
                     GestorFunciones.agregarFuncion(funcion);
-                    FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+                   // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
                     ventana.close();
                 }catch (DateTimeParseException ex){
 
@@ -218,8 +218,8 @@ public class GestorAdministrador {
         seccionDatos.setAlignment(Pos.CENTER_LEFT);
 
         // --- Botón Guardar ---
-        Button botonGuardar = new Button("Eliminar funcion");
-        botonGuardar.setStyle("""
+        Button botonEliminar = new Button("Eliminar funcion");
+        botonEliminar.setStyle("""
             -fx-background-color: #228B22;
             -fx-text-fill: white;
             -fx-font-weight: bold;
@@ -228,7 +228,7 @@ public class GestorAdministrador {
         """);
 
 
-        botonGuardar.setOnAction(e -> {
+        botonEliminar.setOnAction(e -> {
             String nombrePelicula = campoPelicula.getText();
             String sala = campoSala.getText();
             String fecha = campoFecha.getText();
@@ -267,7 +267,7 @@ public class GestorAdministrador {
 
 
         // --- Layout principal ---
-        VBox layout = new VBox(20, titulo, seccionPelicula, seccionDatos, botonGuardar);
+        VBox layout = new VBox(20, titulo, seccionPelicula, seccionDatos, botonEliminar);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #2a2a2a;");
@@ -278,13 +278,15 @@ public class GestorAdministrador {
 
     }
 
-    private static void mostrarAlerta(String mensaje) {
+    public static void mostrarAlerta(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("Información");
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
+
+
 
 
 }

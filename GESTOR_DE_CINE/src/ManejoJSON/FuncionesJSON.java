@@ -30,7 +30,7 @@ public class FuncionesJSON {
                     jsonFunciones.put(jsonFuncion);
                 }
 
-                JSONUtiles.grabar(jsonFunciones, "pruebafunciones.json");
+                JSONUtiles.grabar(jsonFunciones, "funciones.json");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -45,7 +45,7 @@ public class FuncionesJSON {
         List<Funcion> listaFunciones = new ArrayList<>();
 
         try {
-            JSONArray jsonFunciones = new JSONArray(JSONUtiles.leer("pruebafunciones.json"));
+            JSONArray jsonFunciones = new JSONArray(JSONUtiles.leer("funciones.json"));
             if (jsonFunciones == null) {
                 System.out.println("⚠️ No hay funciones guardadas en el JSON.");
                 return listaFunciones;
