@@ -46,8 +46,8 @@ public class VistaCartelera {
         Label titulo = new Label(pelicula.getNombrePelicula());
         titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;");
 
-        String fechaSalidaStr = pelicula.getFechaSalida() != null ? pelicula.getFechaSalida().format(fechaFormateador) : "N/A";
-        Label ultimaFecha = new Label("Finaliza el " + fechaSalidaStr);
+       // String fechaSalidaStr = pelicula.getFechaSalida() != null ? pelicula.getFechaSalida().format(fechaFormateador) : "N/A";
+        Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida());
         ultimaFecha.setStyle("-fx-text-fill: red;");
 
         VBox contenedor = new VBox(10, imageNode, titulo, ultimaFecha);
@@ -102,25 +102,24 @@ public class VistaCartelera {
 
 
             HBox horariosDelDia = new HBox(10);
-            for(Funcion f : funcionesPorDia.get(dia)){
+            for (Funcion f : funcionesPorDia.get(dia)) {
                 Label horario = new Label(f.getHorarioFuncion().format(formatoHora));
                 horario.setStyle("-fx-font-size: 14px; -fx-text-fill: white;");
-
 
                 horario.setOnMouseEntered(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: yellow;"));
                 horario.setOnMouseExited(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: white;"));
 
-                // Al hacer click en un horario abrimos el Selector de Asientos correspondiente
+                // ✅ ÚNICO click handler correcto
                 horario.setOnMouseClicked(ev -> {
-                    // Abrir la UI Swing en el EDT
                     SwingUtilities.invokeLater(() -> {
-                        SelectorAsientos selector = new SelectorAsientos(f);
-                        selector.setVisible(true);
+                        new SelectorAsientos(f).setVisible(true);
                     });
                 });
 
                 horariosDelDia.getChildren().add(horario);
             }
+
+
 
 
             contenedorFunciones.getChildren().addAll(fechaLabel, horariosDelDia);
