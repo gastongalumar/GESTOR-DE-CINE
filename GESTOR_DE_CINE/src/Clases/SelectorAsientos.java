@@ -20,15 +20,18 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
     private final int RIGHT_BLOCK = 3;
     private final int AISLE_WIDTH = 1;
     private final int COLUMNAS = LEFT_BLOCK + AISLE_WIDTH + CENTER_BLOCK + AISLE_WIDTH + RIGHT_BLOCK;
-
     private SalaCine sala; // ya no final, se inicializa en init
     private GestorJsonAsientos gestorJson; // ya no final
     private final AsientoButton[][] botonesAsientos = new AsientoButton[FILAS_ASIENTOS][COLUMNAS];
     private final List<Integer> columnasValidas = new ArrayList<>();
     private final JLabel contadorLabel = new JLabel("0 asientos seleccionados");
 
+    /**
+     * Constructor por defecto: crea el selector con configuración estándar.
+     * Usa el archivo JSON por defecto dentro del gestor.
+     */
     public SelectorAsientos() {
-        super("🎬 Selector de Asientos - Sala con tres bloques");
+        super("🎬 Selector de Asientos - Sala de Cine");
         SalaCine salaDefault = new SalaCine(FILAS_ASIENTOS, COLUMNAS);
         init(salaDefault, null);
     }
@@ -48,6 +51,18 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         SalaCine salaDefault = new SalaCine(FILAS_ASIENTOS, COLUMNAS);
         init(salaDefault, archivo);
     }
+
+    //GETTER Y SETTER
+
+    /**
+     * Método para obtener el gestor JSON desde otras clases
+     */
+    public GestorJsonAsientos getGestorJson() {
+        return gestorJson;
+    }
+
+
+//METODOS
 
     /**
      * Método central de inicialización que antes estaba en el constructor.
@@ -79,6 +94,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         });
     }
 
+
     private void inicializarColumnasValidas() {
         for (int c = 0; c < LEFT_BLOCK; c++) columnasValidas.add(c);
         for (int c = LEFT_BLOCK + AISLE_WIDTH; c < LEFT_BLOCK + AISLE_WIDTH + CENTER_BLOCK; c++) columnasValidas.add(c);
@@ -86,7 +102,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
     }
 
     private void configurarVentana() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setSize(1200, 900);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -406,8 +422,8 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panelBotones.setBackground(new Color(20, 20, 20));
 
-        JButton btnReporte = new JButton("Generar Reporte");
-        JButton btnLimpiar = new JButton("Limpiar Selecciones");
+        JButton btnReporte = new JButton("Estado de Sala");
+        JButton btnLimpiar = new JButton("Anular Selecciones");
         JButton btnConfirmar = new JButton("Confirmar Selección");
 
         configurarBoton(btnReporte);
@@ -492,7 +508,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
                     reporte.getString("ultimaActualizacion")
             );
 
-            JOptionPane.showMessageDialog(this, mensaje, "Reporte de Sala", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, mensaje, "Estado de Sala", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al generar el reporte: " + e.getMessage(),
@@ -505,23 +521,23 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
 
         if (seleccionados == 0) {
             JOptionPane.showMessageDialog(this,
-                    "No hay asientos seleccionados para limpiar.",
+                    "No hay asientos seleccionados para Anular.",
                     "Sin Selecciones",
                     JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
         int respuesta = JOptionPane.showConfirmDialog(this,
-                "¿Estás seguro de que quieres limpiar " + seleccionados + " asiento(s) seleccionado(s)?\n" +
+                "¿Estás seguro de que quieres Anular el/los " + seleccionados + " asiento(s) seleccionado(s)?\n" +
                         "Esto convertirá todos los asientos seleccionados a libres.",
-                "Limpiar Selecciones",
+                "Anular Selecciones",
                 JOptionPane.YES_NO_OPTION);
 
         if (respuesta == JOptionPane.YES_OPTION) {
             gestorJson.limpiarSelecciones();
             actualizarVisualizacionAsientos();
             JOptionPane.showMessageDialog(this,
-                    seleccionados + " selección(es) limpiada(s) correctamente.",
+                    seleccionados + " selección(es) Anulada(s) correctamente.",
                     "Éxito",
                     JOptionPane.INFORMATION_MESSAGE);
         }
@@ -542,7 +558,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         int respuesta = JOptionPane.showConfirmDialog(this,
                 "¿Confirmar " + seleccionados + " asiento(s) seleccionado(s)?\n\n" +
                         "✅ Los asientos seleccionados (azules) pasarán a OCUPADOS (rojos)\n" +
-                        "💾 Se guardarán permanentemente en el archivo JSON\n" +
+                        // "💾 Se guardarán permanentemente en el archivo JSON\n" +
                         "🔒 No podrán ser modificados después",
                 "Confirmar Selección",
                 JOptionPane.YES_NO_OPTION,
@@ -555,7 +571,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
             JOptionPane.showMessageDialog(this,
                     "✅ " + confirmados + " asiento(s) confirmado(s) exitosamente!\n\n" +
                             "🔴 Ahora aparecen en ROJO (ocupados)\n" +
-                            "💾 Guardados permanentemente en JSON\n" +
+                            "💾 Guardados correctamente!!!\n" +
                             "🔒 Ya no se pueden modificar",
                     "Confirmación Exitosa",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -584,10 +600,19 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         }
     }
 
-    /**
-     * Método para obtener el gestor JSON desde otras clases
-     */
-    public GestorJsonAsientos getGestorJson() {
-        return gestorJson;
+//funcion llamar selector asientos y cuando deje de estar en uso continue con la ejecucion de lo que lo llamo
+    public static void mostrarSelectorAsientos(Funcion funcion) {
+        SelectorAsientos selector = new SelectorAsientos(funcion);
+
+        // Agregar el listener antes de mostrar la ventana para garantizar que recibimos el evento
+        selector.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                System.out.println("🔚 Selector de asientos cerrado, continuando ejecución...");
+            }
+        });
+
+        selector.setVisible(true);
     }
+
 }
