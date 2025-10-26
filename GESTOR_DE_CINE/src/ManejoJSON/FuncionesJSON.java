@@ -3,7 +3,7 @@ package ManejoJSON;
 import Clases.Funcion;
 import Clases.GestorFunciones;
 import Clases.Pelicula;
-import Clases.Sala;
+import Clases.SalaCine;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,7 +41,7 @@ public class FuncionesJSON {
 
 
 
-    public static List<Funcion> deserializarFunciones(List<Pelicula> listaPeliculas, List<Sala> listaSalas) {
+    public static List<Funcion> deserializarFunciones(List<Pelicula> listaPeliculas, List<SalaCine> listaSalas) {
         List<Funcion> listaFunciones = new ArrayList<>();
 
         try {
@@ -58,7 +58,7 @@ public class FuncionesJSON {
                 String nombrePelicula = obj.getString("Pelicula");
                 String fechaHoraStr = obj.getString("Fecha y hora");
 
-                Sala salaEncontrada = buscarSalaPorNombre(listaSalas, nombreSala);
+                SalaCine salaEncontrada = buscarSalaPorNombre(listaSalas, nombreSala);
                 Pelicula peliculaEncontrada = buscarPeliculaPorNombre(listaPeliculas, nombrePelicula);
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 if (salaEncontrada != null && peliculaEncontrada != null) {
@@ -89,8 +89,8 @@ public class FuncionesJSON {
         return null;
     }
 
-    private static Sala buscarSalaPorNombre(List<Sala> lista, String nombre) {
-        for (Sala s : lista) {
+    private static SalaCine buscarSalaPorNombre(List<SalaCine> lista, String nombre) {
+        for (SalaCine s : lista) {
             if (s.getNombreSala().equalsIgnoreCase(nombre)) {
                 return s;
             }

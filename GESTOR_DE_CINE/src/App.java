@@ -33,8 +33,8 @@ public class App extends Application {
         gestorPeliculas.getListaPeliculas().add(p4);
 
         //System.out.println("prueba"+ gestorPeliculas.getListaPeliculas());
-        Sala s1 = new Sala("Sala 1", 200);
-        Sala s2 = new Sala("Sala 2", 200);
+        SalaCine s1 = new SalaCine("Sala 1", 200);
+        SalaCine s2 = new SalaCine("Sala 2", 200);
 
         // Crear funciones asociadas a las películas (se registran automáticamente en GestorFunciones)
        /* Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
@@ -89,7 +89,7 @@ public class App extends Application {
                     ex.printStackTrace();
                 }
                 Pelicula p1 = new Pelicula("pelicula1");
-                Sala s1 = new Sala("Sala 1", 200);
+                SalaCine s1 = new SalaCine("Sala 1", 200);
                 Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
                 SelectorAsientos selector = new SelectorAsientos(f1);
                 selector.setVisible(true);

@@ -2,6 +2,7 @@ package Clases;
 
     public class SalaCine {
 
+
         public enum EstadoAsiento { LIBRE, SELECCIONADO, OCUPADO }
         private String nombreSala;
         private int capacidad;
@@ -30,6 +31,30 @@ package Clases;
                     asientos[i][j] = EstadoAsiento.LIBRE;
                 }
             }
+        }
+
+
+        //GETTER Y SETTER
+
+
+        public String getNombreSala() {
+            return nombreSala;
+        }
+
+        public void setNombreSala(String nombreSala) {
+            this.nombreSala = nombreSala;
+        }
+
+        public int getCapacidad() {
+            return capacidad;
+        }
+
+        public void setCapacidad(int capacidad) {
+            this.capacidad = capacidad;
+        }
+
+        public EstadoAsiento[][] getAsientos() {
+            return asientos;
         }
 
         public void cargarEstadosDesdeJSON(org.json.JSONArray matrizAsientos) {
@@ -162,4 +187,6 @@ package Clases;
         public int getColumnas() {
             return columnas;
         }
+
+
     }

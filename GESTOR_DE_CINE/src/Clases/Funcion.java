@@ -18,7 +18,7 @@ public class Funcion {
 
     public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas){
         boolean encontrado = true;
-        Sala salaEncontrada = null;
+        SalaCine salaEncontrada = null;
         Pelicula peliculaEncontrada = null;
         for(Funcion f: GestorFunciones.getListaFunciones()){
             if(f.getSala().getNombreSala().equalsIgnoreCase(nombreSala)){
