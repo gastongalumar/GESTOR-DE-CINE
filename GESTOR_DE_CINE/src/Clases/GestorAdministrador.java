@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,9 +97,13 @@ public class GestorAdministrador {
         TextField campoSala = new TextField();
         campoSala.setPromptText("Número de sala");
 
-        Label labelFecha = new Label("Fecha::");
-        TextField campoFecha = new TextField();
-        campoFecha.setPromptText("Ej: 2025-10-15");
+        Label labelFechaInicial = new Label("Fecha inicial:");
+        TextField campoFechaInicial = new TextField();
+        campoFechaInicial.setPromptText("Ej: 2025-10-15");
+
+        Label labelFechaFinal = new Label("Fecha final:");
+        TextField campoFechaFinal = new TextField();
+        campoFechaFinal.setPromptText("Ej: 2025-10-15");
 
         Label labelHorario = new Label("Horario:");
         TextField campoHorario = new TextField();
@@ -108,8 +113,9 @@ public class GestorAdministrador {
         gridDatos.setHgap(10);
         gridDatos.setVgap(10);
         gridDatos.addRow(0, labelSala, campoSala);
-        gridDatos.addRow(1, labelFecha, campoFecha);
-        gridDatos.addRow(2, labelHorario, campoHorario);
+        gridDatos.addRow(1, labelFechaInicial, campoFechaInicial);
+        gridDatos.addRow(2, labelFechaFinal, campoFechaFinal);
+        gridDatos.addRow(3, labelHorario, campoHorario);
 
         VBox seccionDatos = new VBox(5, tituloDatos, gridDatos);
         seccionDatos.setAlignment(Pos.CENTER_LEFT);
@@ -128,7 +134,8 @@ public class GestorAdministrador {
         botonGuardar.setOnAction(e -> {
             String nombrePelicula = campoPelicula.getText();
             String sala = campoSala.getText();
-            String fecha = campoFecha.getText();
+            String fechaInicial = campoFechaInicial.getText();
+            String fechaFinal = campoFechaFinal.getText();
             String horario = campoHorario.getText();
             boolean encontrado = false;
             for(Pelicula p: listaPeliculas){
@@ -141,18 +148,32 @@ public class GestorAdministrador {
                 mostrarAlerta("Por favor, completa todos los campos.");
             } else {
                 try {
-                    String fechaTotal = campoFecha.getText().trim().concat(" ").concat(campoHorario.getText().trim());
-                    DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                    LocalDateTime fechaHora = LocalDateTime.parse(fechaTotal, formato);
-                    mostrarAlerta("Funcion agregada correctamente");
+                    DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
 
-                    Funcion funcion = new Funcion(sala,nombrePelicula,fechaHora,listaPeliculas);
-                    GestorFunciones.agregarFuncion(funcion);
-                   // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+                    LocalDateTime fechaInicialTime = LocalDateTime.parse(fechaInicial + " " + horario, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+                    LocalDateTime fechaFinalTime = LocalDateTime.parse(fechaFinal + " " + horario, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+                    long diasDiferencia = ChronoUnit.DAYS.between(fechaInicialTime.toLocalDate(), fechaFinalTime.toLocalDate());
+
+                    LocalDateTime fechaAgregar = fechaInicialTime;
+                    System.out.println("Días de diferencia: " + diasDiferencia);
+                    System.out.println("Fecha inicial: " + fechaInicialTime);
+                    System.out.println("Fecha final: " + fechaFinalTime);
+
+                    for (long i = 0; i <= diasDiferencia; i++) {
+                        Funcion funcion = new Funcion(sala, nombrePelicula, fechaAgregar, listaPeliculas);
+                        GestorFunciones.agregarFuncion(funcion);
+                        fechaAgregar = fechaAgregar.plusDays(1);
+                        System.out.println(GestorFunciones.getListaFunciones());
+                    }
+
+                    FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+                    mostrarAlerta("Funciones agregadas correctamente.");
                     ventana.close();
-                }catch (DateTimeParseException ex){
 
-                    mostrarAlerta("Formato de fecha y hora incorrecto");
+                } catch (DateTimeParseException ex) {
+                    mostrarAlerta("Formato de fecha u hora incorrecto");
                 }
 
             }
