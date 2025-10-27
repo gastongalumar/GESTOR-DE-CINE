@@ -1,0 +1,26 @@
+[
+    {
+        "Nombre": "pelicula1",
+        "RutaImagen": "/img/pelicula1.jpg",
+        "FechaEstreno": "2025-07-02",
+        "FechaSalida": "2025-11-05"
+    },
+    {
+        "Nombre": "pelicula2",
+        "RutaImagen": "/img/pelicula2.jpg",
+        "FechaEstreno": "2025-10-05",
+        "FechaSalida": "2025-12-06"
+    },
+    {
+        "Nombre": "pelicula3",
+        "RutaImagen": "/img/pelicula3.jpg",
+        "FechaEstreno": "2025-10-15",
+        "FechaSalida": "2026-01-12"
+    },
+    {
+        "Nombre": "pelicula4",
+        "RutaImagen": "/img/pelicula4.jpg",
+        "FechaEstreno": "2025-08-04",
+        "FechaSalida": "2025-11-06"
+    }
+]
