@@ -58,13 +58,13 @@ public class Pelicula {
         return rutaImagen;
     }
 
-
     @Override
     public String toString() {
         return "Pelicula{" +
                 "nombrePelicula='" + nombrePelicula + '\'' +
                 ", fechaEstreno=" + fechaEstreno +
                 ", fechaSalida=" + fechaSalida +
+                ", rutaImagen='" + rutaImagen + '\'' +
                 '}';
     }
 }
