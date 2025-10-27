@@ -1,9 +1,6 @@
 package ManejoJSON;
 
-import Clases.Funcion;
-import Clases.GestorFunciones;
-import Clases.Pelicula;
-import Clases.SalaCine;
+import Clases.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,17 +18,19 @@ public class FuncionesJSON {
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
             try {
-                for(int i = 0; i < listaFunciones.size(); i++) {
-                    JSONObject jsonFuncion = new JSONObject();
-                    Funcion funcion = listaFunciones.get(i);
-                    jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
-                    jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
-                    jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
+                if(!listaFunciones.isEmpty()) {
+                    for (int i = 0; i < listaFunciones.size(); i++) {
+                        JSONObject jsonFuncion = new JSONObject();
+                        Funcion funcion = listaFunciones.get(i);
+                        jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
+                        jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
+                        jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
 
-                    jsonFunciones.put(jsonFuncion);
+                        jsonFunciones.put(jsonFuncion);
+                    }
+
+                    JSONUtiles.grabar(jsonFunciones, "funciones.json");
                 }
-
-                JSONUtiles.grabar(jsonFunciones, "funciones.json");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -145,6 +144,7 @@ public class FuncionesJSON {
                 listaPeliculas.add(p);
             }
 
+            GestorPeliculas.setListaPeliculas(listaPeliculas);
         } catch (Exception e) {
             System.out.println("❌ Error al deserializar películas: " + e.getMessage());
         }
