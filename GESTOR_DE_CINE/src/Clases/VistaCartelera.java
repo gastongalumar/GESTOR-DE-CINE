@@ -18,36 +18,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.SwingUtilities; // añadido para abrir la UI Swing desde JavaFX
-
+import javax.swing.SwingUtilities;
 public class VistaCartelera {
 
     public static VBox crearVista(Pelicula pelicula){
-        String rutaImagen = "/img/" + pelicula.getNombrePelicula() + ".jpg";
-        InputStream is = VistaCartelera.class.getResourceAsStream(rutaImagen);
+        String rutaImagen = pelicula.getRutaImagen();
 
         Node imageNode;
-        if(is != null){
-            Image imagen = new Image(is);
-            ImageView imgPelicula = new ImageView(imagen);
-            imgPelicula.setFitHeight(300);
-            imgPelicula.setFitWidth(220);
-            imgPelicula.setPreserveRatio(true);
-            imageNode = imgPelicula;
-        }else{
-            // Placeholder si no se encuentra la imagen
-            Label placeholder = new Label("[imagen no disponible]");
-            placeholder.setPrefSize(220,300);
-            placeholder.setStyle("-fx-background-color: #444; -fx-text-fill: white; -fx-alignment: center; -fx-padding: 10;");
-            imageNode = placeholder;
+        if(rutaImagen != null && !rutaImagen.isEmpty()){
+            try (InputStream is = VistaCartelera.class.getResourceAsStream(rutaImagen)) {
+                if(is != null){
+                    Image imagen = new Image(is);
+                    ImageView imgPelicula = new ImageView(imagen);
+                    imgPelicula.setFitHeight(300);
+                    imgPelicula.setFitWidth(220);
+                    imgPelicula.setPreserveRatio(true);
+                    imageNode = imgPelicula;
+                } else {
+                    imageNode = crearPlaceholder();
+                }
+            } catch(Exception ex){
+                ex.printStackTrace();
+                imageNode = crearPlaceholder();
+            }
+        } else {
+            imageNode = crearPlaceholder();
         }
 
         DateTimeFormatter fechaFormateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Label titulo = new Label(pelicula.getNombrePelicula());
         titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;");
 
-       // String fechaSalidaStr = pelicula.getFechaSalida() != null ? pelicula.getFechaSalida().format(fechaFormateador) : "N/A";
-        Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida());
+        Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida().format(fechaFormateador));
         ultimaFecha.setStyle("-fx-text-fill: black;");
 
         VBox contenedor = new VBox(10, imageNode, titulo, ultimaFecha);
@@ -57,6 +59,13 @@ public class VistaCartelera {
         contenedor.setOnMouseClicked(e -> verFunciones(pelicula));
 
         return contenedor;
+    }
+
+    private static Label crearPlaceholder(){
+        Label placeholder = new Label("[imagen no disponible]");
+        placeholder.setPrefSize(220,300);
+        placeholder.setStyle("-fx-background-color: #444; -fx-text-fill: white; -fx-alignment: center; -fx-padding: 10;");
+        return placeholder;
     }
 
 
