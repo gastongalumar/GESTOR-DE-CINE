@@ -6,6 +6,7 @@ public class Pelicula {
     private String nombrePelicula;
     private LocalDate fechaEstreno;
     private LocalDate fechaSalida;
+    private String rutaImagen;
 
     public Pelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
@@ -20,6 +21,14 @@ public class Pelicula {
         this.fechaEstreno = fechaEstreno;
         this.fechaSalida = fechaSalida;
     }
+
+    public Pelicula(String nombre, String rutaImagen, LocalDate estreno, LocalDate salida) {
+        this.nombrePelicula = nombre;
+        this.rutaImagen = rutaImagen;
+        this.fechaEstreno = estreno;
+        this.fechaSalida = salida;
+    }
+
 
     public String getNombrePelicula() {
         return nombrePelicula;
@@ -43,6 +52,10 @@ public class Pelicula {
 
     public void setFechaSalida(LocalDate fechaSalida) {
         this.fechaSalida = fechaSalida;
+    }
+
+    public String getRutaImagen() {
+        return rutaImagen;
     }
 
 
