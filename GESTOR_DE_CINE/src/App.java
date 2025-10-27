@@ -22,16 +22,16 @@ public class App extends Application {
         // Crear datos de prueba
 
         // HOLA MUNDO
-        GestorPeliculas gestorPeliculas = new GestorPeliculas();
+        GestorAdministrador.iniciarAdministrador();
         Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025, 7, 2), LocalDate.of(2025, 11, 5));
         Pelicula p2 = new Pelicula("pelicula2", LocalDate.of(2025, 10, 5), LocalDate.of(2025, 12, 6));
         Pelicula p3 = new Pelicula("pelicula3", LocalDate.of(2025, 10, 15), LocalDate.of(2026, 1, 12));
         Pelicula p4 = new Pelicula("pelicula4", LocalDate.of(2025, 8, 4), LocalDate.of(2025, 11, 6));
 
-        gestorPeliculas.getListaPeliculas().add(p1);
+        /*gestorPeliculas.getListaPeliculas().add(p1);
         gestorPeliculas.getListaPeliculas().add(p2);
         gestorPeliculas.getListaPeliculas().add(p3);
-        gestorPeliculas.getListaPeliculas().add(p4);
+        gestorPeliculas.getListaPeliculas().add(p4);*/
 
         //System.out.println("prueba"+ gestorPeliculas.getListaPeliculas());
         SalaCine s1 = new SalaCine("Sala 1", 200);
@@ -66,13 +66,14 @@ public class App extends Application {
         GestorAdministrador.PeliculaAdministrador(p2,gestorPeliculas.getListaPeliculas());
         GestorAdministrador.PeliculaAdministrador(p3,gestorPeliculas.getListaPeliculas());
         GestorAdministrador.PeliculaAdministrador(p4,gestorPeliculas.getListaPeliculas());*/
-        GestorAdministrador.vistaAdministrador(gestorPeliculas.getListaPeliculas());
+        //GestorAdministrador.vistaAdministrador(gestorPeliculas.getListaPeliculas());
         //GestorAdministrador.replica(contenedor, stage);
 
-        System.out.println(GestorFunciones.getListaFunciones());
-
+       // System.out.println(GestorFunciones.getListaFunciones());
+        FuncionesJSON.deserializarPeliculas();
         // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
-        FuncionesJSON.deserializarFunciones(gestorPeliculas.getListaPeliculas(), List.of(s1, s2));
+        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2));
+        //FuncionesJSON.deserializarPeliculas();
 
     }
 }
