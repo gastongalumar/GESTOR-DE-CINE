@@ -1,11 +1,13 @@
 package Clases;
 
+import ManejoJSON.FuncionesJSON;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GestorPeliculas {
 
-    private List<Pelicula> listaPeliculas;
+    private static List<Pelicula> listaPeliculas;
 
     public GestorPeliculas(){
         listaPeliculas = new ArrayList<>();
@@ -15,7 +17,16 @@ public class GestorPeliculas {
         return listaPeliculas;
     }
 
-    public void setListaPeliculas(List<Pelicula> listaPeliculas) {
-        this.listaPeliculas = listaPeliculas;
+    public static void setListaPeliculas(List<Pelicula> listaPeliculas) {
+        GestorPeliculas.listaPeliculas = listaPeliculas;
+    }
+
+    public static void agregarPelicula(Pelicula p){
+        listaPeliculas.add(p);
+        FuncionesJSON.serializarPeliculas(listaPeliculas);
+    }
+    public static void eliminarPelicula(Pelicula p){
+        listaPeliculas.remove(p);
+        FuncionesJSON.serializarPeliculas(listaPeliculas);
     }
 }
