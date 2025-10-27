@@ -4,15 +4,19 @@ import ManejoJSON.FuncionesJSON;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -27,8 +31,16 @@ public class GestorAdministrador {
         listaPeliculas.add(pelicula);
 
     }
+
+
 */
+
+    public static void iniciarAdministrador() {
+        List<Pelicula> listaPeliculas = FuncionesJSON.deserializarPeliculas();
+        vistaAdministrador(listaPeliculas);
+    }
     public static void vistaAdministrador(List<Pelicula> listaPeliculas){
+
         Stage ventana = new Stage();
         int i = 0;
         HBox contenedor = new HBox(20);
@@ -92,7 +104,7 @@ public class GestorAdministrador {
             -fx-background-radius: 10;
         """);
         botonAgregarPelicula.setOnAction(e -> {
-            formularioAgregar(listaPeliculas);
+            formularioAgregarPelicula(listaPeliculas);
         });
 
         botonEliminar.setOnAction(e -> {
@@ -349,6 +361,134 @@ public class GestorAdministrador {
         ventana.setScene(escena);
         ventana.show();
 
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------------*/
+
+    public static void formularioAgregarPelicula(List<Pelicula> listaPeliculas){
+        Stage ventana = new Stage();
+        ventana.setTitle("Agregar nueva película");
+
+        // --- Título principal ---
+        Label titulo = new Label("Agregar nueva película");
+        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        // --- Nombre de Película ---
+        Label labelNombre = new Label("Película");
+        labelNombre.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #ffcc00;");
+        TextField campoNombre = new TextField();
+        campoNombre.setPromptText("Nombre de la película");
+        VBox seccionNombre = new VBox(5, labelNombre, campoNombre);
+        seccionNombre.setAlignment(Pos.CENTER_LEFT);
+
+        // --- Fechas ---
+        Label labelEstreno = new Label("Fecha de estreno:");
+        TextField campoEstreno = new TextField();
+        campoEstreno.setPromptText("Ej: 2025-10-15");
+
+        Label labelSalida = new Label("Fecha de finalización:");
+        TextField campoSalida = new TextField();
+        campoSalida.setPromptText("Ej: 2025-12-31");
+
+        GridPane gridFechas = new GridPane();
+        gridFechas.setHgap(10);
+        gridFechas.setVgap(10);
+        gridFechas.addRow(0, labelEstreno, campoEstreno);
+        gridFechas.addRow(1, labelSalida, campoSalida);
+
+        VBox seccionFechas = new VBox(5, gridFechas);
+        seccionFechas.setAlignment(Pos.CENTER_LEFT);
+
+        // --- Selección de imagen ---
+        Button botonImagen = new Button("Seleccionar imagen");
+        Label labelImagen = new Label("No se seleccionó ninguna imagen");
+        labelImagen.setStyle("-fx-text-fill: #bbbbbb;");
+
+        final File[] archivoSeleccionado = new File[1];
+        botonImagen.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Seleccionar imagen de la película");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg"));
+
+            File archivo = fileChooser.showOpenDialog(ventana);
+            if(archivo != null){
+                archivoSeleccionado[0] = archivo;
+                labelImagen.setText(archivo.getName());
+            }
+        });
+
+        VBox seccionImagen = new VBox(5, botonImagen, labelImagen);
+        seccionImagen.setAlignment(Pos.CENTER_LEFT);
+
+        // --- Botón Guardar ---
+        Button botonGuardar = new Button("Guardar película");
+        botonGuardar.setStyle("""
+        -fx-background-color: #228B22;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-background-radius: 8;
+        -fx-padding: 8 20 8 20;
+    """);
+
+        botonGuardar.setOnAction(e -> {
+            String nombre = campoNombre.getText().trim();
+            String fechaEstrenoStr = campoEstreno.getText().trim();
+            String fechaSalidaStr = campoSalida.getText().trim();
+
+            if(nombre.isEmpty() || fechaEstrenoStr.isEmpty() || fechaSalidaStr.isEmpty() || archivoSeleccionado[0] == null){
+                mostrarAlerta("Por favor, completa todos los campos y selecciona una imagen.");
+                return;
+            }
+
+            try {
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate fechaEstreno = LocalDate.parse(fechaEstrenoStr, formato);
+                LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr, formato);
+
+                // --- Copiar imagen a src/img ---
+                Path carpetaImg = Paths.get("src", "img");
+                if(!Files.exists(carpetaImg)){
+                    Files.createDirectories(carpetaImg);
+                }
+
+                Path destino = carpetaImg.resolve(archivoSeleccionado[0].getName());
+                Files.copy(archivoSeleccionado[0].toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+                // --- Crear película con ruta compatible con getResourceAsStream ---
+                String rutaImagen = "/img/" + archivoSeleccionado[0].getName();
+                Pelicula pelicula = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida);
+                listaPeliculas.add(pelicula);
+
+
+                FuncionesJSON.serializarPeliculas(listaPeliculas);
+                mostrarAlerta("Película agregada correctamente.");
+                ventana.close();
+
+            } catch(Exception ex){
+                ex.printStackTrace(); // opcional, para debug
+                mostrarAlerta("Error al procesar las fechas o la imagen.");
+            }
+        });
+
+        // --- Layout principal ---
+        VBox layout = new VBox(15, titulo, seccionNombre, seccionFechas, seccionImagen, botonGuardar);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-background-color: #2a2a2a;");
+
+        Scene escena = new Scene(layout, 500, 450);
+        ventana.setScene(escena);
+        ventana.show();
+    }
+
+
+
+
+
+    public static void PeliculaAdministrador(Pelicula pelicula, List<Pelicula> listaPeliculas){
+        VBox vista = VistaCartelera.crearVista(pelicula); // Crear vista de la película
+        listaPeliculas.add(pelicula); // Agregar a la lista
+        mostrarAlerta("Película \"" + pelicula.getNombrePelicula() + "\" agregada correctamente.");
     }
 
     public static void mostrarAlerta(String mensaje) {
