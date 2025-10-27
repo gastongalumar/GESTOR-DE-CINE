@@ -7,13 +7,13 @@ import java.util.List;
 
 public class GestorPeliculas {
 
-    private static List<Pelicula> listaPeliculas;
+    private static List<Pelicula> listaPeliculas = new ArrayList<>();
 
     public GestorPeliculas(){
-        listaPeliculas = new ArrayList<>();
+
     }
 
-    public List<Pelicula> getListaPeliculas() {
+    public static List<Pelicula> getListaPeliculas() {
         return listaPeliculas;
     }
 

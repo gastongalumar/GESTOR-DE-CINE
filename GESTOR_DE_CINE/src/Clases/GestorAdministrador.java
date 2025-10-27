@@ -36,8 +36,8 @@ public class GestorAdministrador {
 */
 
     public static void iniciarAdministrador() {
-        List<Pelicula> listaPeliculas = FuncionesJSON.deserializarPeliculas();
-        vistaAdministrador(listaPeliculas);
+        Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
+        vistaAdministrador(GestorPeliculas.getListaPeliculas());
     }
     public static void vistaAdministrador(List<Pelicula> listaPeliculas){
 
@@ -108,7 +108,7 @@ public class GestorAdministrador {
             -fx-background-radius: 10;
         """);
         botonAgregarPelicula.setOnAction(e -> {
-            formularioAgregarPelicula(listaPeliculas);
+            formularioAgregarPelicula();
         });
 
 
@@ -123,7 +123,7 @@ public class GestorAdministrador {
         """);
 
         botonEliminarPelicula.setOnAction(e -> {
-            formularioEliminarFuncion(GestorFunciones.getListaFunciones());
+            formularioEliminarPelicula();
         });
 
         VBox contieneBotonesFunciones = new VBox(10,tituloFunciones, botonAgregar, botonEliminar, separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula);
@@ -336,6 +336,8 @@ public class GestorAdministrador {
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             String fechaTotal = campoFecha.getText().trim().concat(" ").concat(campoHorario.getText().trim());
             LocalDateTime fechaHora = LocalDateTime.parse(fechaTotal, formato);
+
+
             boolean encontrado = false;
             Funcion funcionEliminar = null;
             for(Funcion f: listaFunciones){
@@ -380,7 +382,7 @@ public class GestorAdministrador {
 
     /*----------------------------------------------------------------------------------------------------------------------*/
 
-    public static void formularioAgregarPelicula(List<Pelicula> listaPeliculas){
+    public static void formularioAgregarPelicula(){
         Stage ventana = new Stage();
         ventana.setTitle("Agregar nueva película");
 
@@ -460,7 +462,6 @@ public class GestorAdministrador {
                 LocalDate fechaEstreno = LocalDate.parse(fechaEstrenoStr, formato);
                 LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr, formato);
 
-                // --- Copiar imagen a src/img ---
                 Path carpetaImg = Paths.get("src", "img");
                 if(!Files.exists(carpetaImg)){
                     Files.createDirectories(carpetaImg);
@@ -469,13 +470,10 @@ public class GestorAdministrador {
                 Path destino = carpetaImg.resolve(archivoSeleccionado[0].getName());
                 Files.copy(archivoSeleccionado[0].toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
 
-                // --- Crear película con ruta compatible con getResourceAsStream ---
                 String rutaImagen = "/img/" + archivoSeleccionado[0].getName();
                 Pelicula pelicula = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida);
-                listaPeliculas.add(pelicula);
 
-
-                FuncionesJSON.serializarPeliculas(listaPeliculas);
+                GestorPeliculas.agregarPelicula(pelicula);
                 mostrarAlerta("Película agregada correctamente.");
                 ventana.close();
 
@@ -498,111 +496,63 @@ public class GestorAdministrador {
 
 
 
-    private static void formularioEliminarPelicula(List<Funcion> listaFunciones){
+    private static void formularioEliminarPelicula(){
         Stage ventana = new Stage();
-        ventana.setTitle("Agregar nueva función");
+        ventana.setTitle("Eliminar película");
 
-        // --- Título principal ---
-        Label titulo = new Label("Agregar nueva función");
+        Label titulo = new Label("Eliminar película");
         titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
-
-        // --- Sección Película ---
-        Label tituloPelicula = new Label("Película");
-        tituloPelicula.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #ffcc00;");
 
         TextField campoPelicula = new TextField();
         campoPelicula.setPromptText("Nombre de la película");
         campoPelicula.setPrefWidth(250);
 
-        VBox seccionPelicula = new VBox(5, tituloPelicula, campoPelicula);
+        VBox seccionPelicula = new VBox(5, titulo, campoPelicula);
         seccionPelicula.setAlignment(Pos.CENTER_LEFT);
 
-        // --- Sección Datos de función ---
-        Label tituloDatos = new Label("Datos de función");
-        tituloDatos.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #ffcc00;");
-
-        Label labelSala = new Label("Sala:");
-        TextField campoSala = new TextField();
-        campoSala.setPromptText("Número de sala");
-
-        Label labelFecha = new Label("Fecha::");
-        TextField campoFecha = new TextField();
-        campoFecha.setPromptText("Ej: 2025-10-15");
-
-        Label labelHorario = new Label("Horario:");
-        TextField campoHorario = new TextField();
-        campoHorario.setPromptText("Ej: 20:30");
-
-        GridPane gridDatos = new GridPane();
-        gridDatos.setHgap(10);
-        gridDatos.setVgap(10);
-        gridDatos.addRow(0, labelSala, campoSala);
-        gridDatos.addRow(1, labelFecha, campoFecha);
-        gridDatos.addRow(2, labelHorario, campoHorario);
-
-        VBox seccionDatos = new VBox(5, tituloDatos, gridDatos);
-        seccionDatos.setAlignment(Pos.CENTER_LEFT);
-
-        // --- Botón Guardar ---
-        Button botonEliminar = new Button("Eliminar funcion");
-        botonEliminar.setStyle("""
-            -fx-background-color: #228B22;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-background-radius: 8;
-            -fx-padding: 8 20 8 20;
-        """);
-
+        Button botonEliminar = new Button("Eliminar película");
+        botonEliminar.setStyle("-fx-background-color: #228B22; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20 8 20;");
 
         botonEliminar.setOnAction(e -> {
-            String nombrePelicula = campoPelicula.getText();
-            String sala = campoSala.getText();
-            String fecha = campoFecha.getText();
-            String horario = campoHorario.getText();
-            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            String fechaTotal = campoFecha.getText().trim().concat(" ").concat(campoHorario.getText().trim());
-            LocalDateTime fechaHora = LocalDateTime.parse(fechaTotal, formato);
-            boolean encontrado = false;
-            Funcion funcionEliminar = null;
-            for(Funcion f: listaFunciones){
-                if(f.getPelicula().getNombrePelicula().equalsIgnoreCase(nombrePelicula) && f.getSala().getNombreSala().equalsIgnoreCase(sala) && f.getHorarioFuncion().equals(fechaHora)){
-                    encontrado = true;
-                    funcionEliminar = f;
+            String nombrePelicula = campoPelicula.getText().trim();
+            if(nombrePelicula.isEmpty()){
+                mostrarAlerta("Por favor, completa el campo con el nombre de la película.");
+                return;
+            }
+
+            Pelicula pelicula = null;
+            for(Pelicula p : GestorPeliculas.getListaPeliculas()){
+                if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){
+                    pelicula = p;
                     break;
                 }
             }
 
-            if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty()|| !encontrado) {
-                mostrarAlerta("Por favor, completa todos los campos.");
-            } else {
-                try {
-                    //String fechaTotal = campoFecha.getText().trim().concat(" ").concat(campoHorario.getText().trim());
-
-                    //LocalDateTime fechaHora = LocalDateTime.parse(fechaTotal, formato);
-                    GestorFunciones.eliminarFuncion(funcionEliminar);
-                    mostrarAlerta("Funcion eliminada correctamente");
-
-                    ventana.close();
-                }catch (DateTimeParseException ex){
-
-                    mostrarAlerta("Formato de fecha y hora incorrecto");
-                }
-
+            if(pelicula == null){
+                mostrarAlerta("No se encontró ninguna película con ese nombre.");
+                return;
             }
+
+            //GestorFunciones.getListaFunciones().removeIf(f -> f.getPelicula().equals(pelicula));
+          //  FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+
+            GestorPeliculas.eliminarPelicula(pelicula);
+            System.out.println(GestorPeliculas.getListaPeliculas());
+
+            mostrarAlerta("Película eliminada correctamente.");
+            ventana.close();
         });
 
-
-        // --- Layout principal ---
-        VBox layout = new VBox(20, titulo, seccionPelicula, seccionDatos, botonEliminar);
+        VBox layout = new VBox(20, seccionPelicula, botonEliminar);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #2a2a2a;");
 
-        Scene escena = new Scene(layout, 400, 350);
+        Scene escena = new Scene(layout, 400, 200);
         ventana.setScene(escena);
         ventana.show();
-
     }
+
 
 
 
