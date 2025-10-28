@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -477,15 +478,7 @@ public class GestorAdministrador {
                 LocalDate fechaEstreno = LocalDate.parse(fechaEstrenoStr, formato);
                 LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr, formato);
 
-                Path carpetaImg = Paths.get("src", "img");
-                if(!Files.exists(carpetaImg)){
-                    Files.createDirectories(carpetaImg);
-                }
-
-                Path destino = carpetaImg.resolve(archivoSeleccionado[0].getName());
-                Files.copy(archivoSeleccionado[0].toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
-
-                String rutaImagen = "/img/" + archivoSeleccionado[0].getName();
+                String rutaImagen = guardarImagenPelicula(archivoSeleccionado[0]);
                 Pelicula pelicula = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida);
 
                 GestorPeliculas.agregarPelicula(pelicula);
@@ -600,10 +593,22 @@ public class GestorAdministrador {
 
                     });
 
+                    funcion.setOnMouseEntered(r->{
+                            funcion.setStyle("-fx-text-fill: green");
+                });
+
+                    funcion.setOnMouseExited(o->{
+                        funcion.setStyle("-fx-text-fill: white");
+
+
+                    });
+
+
                 }
             }
 
         });
+
 
 
 
@@ -633,16 +638,16 @@ public class GestorAdministrador {
         campoNombrePelicula.setPrefWidth(250);
 
         TextField campoSala= new TextField(f.getSala().getNombreSala());
-        campoNombrePelicula.setPromptText("Sala:");
-        campoNombrePelicula.setPrefWidth(250);
+        campoSala.setPromptText("Sala:");
+        campoSala.setPrefWidth(250);
 
         TextField campoFecha= new TextField(f.getHorarioFuncion().toLocalDate().toString());
-        campoNombrePelicula.setPromptText("Fecha:");
-        campoNombrePelicula.setPrefWidth(250);
+        campoFecha.setPromptText("Fecha:");
+        campoFecha.setPrefWidth(250);
 
         TextField campoHorario= new TextField(f.getHorarioFuncion().toLocalTime().toString());
-        campoNombrePelicula.setPromptText("Fecha:");
-        campoNombrePelicula.setPrefWidth(250);
+        campoHorario.setPromptText("Fecha:");
+        campoHorario.setPrefWidth(250);
 
 
         Button botonGuardar = new Button("Guardar cambios");
@@ -677,6 +682,78 @@ public class GestorAdministrador {
     }
 
 
+    /*private static void editarPelicula (Pelicula p){
+        Stage ventana = new Stage();
+
+        ventana.setTitle("Modificar pelicula");
+
+        Label titulo = new Label("Modificar pelicula");
+        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        TextField campoNombrePelicula= new TextField(p.getNombrePelicula());
+        campoNombrePelicula.setPromptText("Nombre pelicula:");
+        campoNombrePelicula.setPrefWidth(250);
+
+        TextField campoFechaEstreno= new TextField(p.getFechaEstreno().toString());
+        campoFechaEstreno.setPromptText("Fecha estreno:");
+        campoFechaEstreno.setPrefWidth(250);
+
+        TextField campoFechaSalida= new TextField(p.getFechaEstreno().toString());
+        campoFechaSalida.setPromptText("Fecha salida/finalización:");
+        campoFechaSalida.setPrefWidth(250);
+
+        TextField campoR= new TextField(f.getHorarioFuncion().toLocalTime().toString());
+        campoNombrePelicula.setPromptText("Fecha:");
+        campoNombrePelicula.setPrefWidth(250);
+
+
+        Button botonGuardar = new Button("Guardar cambios");
+        botonGuardar.setStyle("-fx-background-color: #228B22; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20 8 20;");
+
+        botonGuardar.setOnAction(e->{
+
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            LocalDate fecha = LocalDate.parse(campoFecha.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalTime hora = LocalTime.parse(campoHorario.getText().trim(), DateTimeFormatter.ofPattern("HH:mm"));
+
+            LocalDateTime nuevaFechaHora = LocalDateTime.of(fecha, hora);
+            for(int i = 0; i < GestorFunciones.getListaFunciones().size(); i++){
+                if(f == GestorFunciones.getListaFunciones().get(i)){
+                    GestorFunciones.getListaFunciones().get(i).getSala().setNombreSala(campoSala.getText());
+                    GestorFunciones.getListaFunciones().get(i).setHorarioFuncion(nuevaFechaHora);
+                    break;
+                }
+            }
+            FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+
+        });
+
+        VBox layout = new VBox(20, titulo, campoNombrePelicula, campoSala, campoFecha, campoHorario, botonGuardar);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-background-color: #2a2a2a;");
+        Scene escena = new Scene(layout, 400,250);
+        ventana.setScene(escena);
+        ventana.show();
+    }*/
+
+
+
+
+    private static String guardarImagenPelicula(File archivoOrigen) throws IOException {
+        Path carpetaImg = Paths.get("src", "img");
+
+        //
+        Path destino = carpetaImg.resolve(archivoOrigen.getName());
+        try {
+            Files.copy(archivoOrigen.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "/img/" + archivoOrigen.getName();
+    }
 
     public static void PeliculaAdministrador(Pelicula pelicula, List<Pelicula> listaPeliculas){
         VBox vista = VistaCartelera.crearVista(pelicula); // Crear vista de la película
