@@ -410,7 +410,8 @@ public class SelectorAsientos extends Application {
         btnReporte.setOnAction(e -> generarReporte());
         btnLimpiar.setOnAction(e -> limpiarSelecciones());
         btnConfirmar.setOnAction(e -> {
-            procesarPago(); // ✅ Primero procesar el pago, luego confirmar
+            procesarPago();
+            confirmarSelecciones();// ✅ Primero procesar el pago, luego confirmar
         });
 
         panelBotones.getChildren().addAll(btnReporte, btnLimpiar, btnConfirmar);
