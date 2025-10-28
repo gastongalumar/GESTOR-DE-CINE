@@ -58,6 +58,10 @@ public class Pelicula {
         return rutaImagen;
     }
 
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
     @Override
     public String toString() {
         return "Pelicula{" +

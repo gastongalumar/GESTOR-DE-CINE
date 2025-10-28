@@ -25,7 +25,7 @@ public class GestorFunciones {
 
         if (f.getHorarioFuncion().toLocalDate().isBefore(f.getPelicula().getFechaEstreno()) || f.getHorarioFuncion().toLocalDate().isAfter(f.getPelicula().getFechaSalida())) {
             //throw new FechaInvalidaException("La fecha indicada no puede ser anterior a la fecha de estreno ni posterior a la fecha de salida");
-            GestorAdministrador.mostrarAlerta("La fecha indicada no puede ser anterior a la fecha de estreno ni posterior a la fecha de salida");
+           // GestorAdministrador.mostrarAlerta("La fecha indicada no puede ser anterior a la fecha de estreno ni posterior a la fecha de salida");
         } else {
             listaFunciones.add(f);
             FuncionesJSON.serializarFunciones(listaFunciones);
