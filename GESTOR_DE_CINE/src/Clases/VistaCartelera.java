@@ -130,9 +130,6 @@ public class VistaCartelera {
                 horariosDelDia.getChildren().add(horario);
             }
 
-
-
-
             contenedorFunciones.getChildren().addAll(fechaLabel, horariosDelDia);
         }
 
@@ -168,15 +165,6 @@ public class VistaCartelera {
             }
         }
         return listaFunciones;
-    }
-
-    public static void selecionarMetodoDePago(){
-
-        GestorDePagos gestorDePagos = new GestorDePagos();
-        gestorDePagos.mostrarOpcionesDePago();
-
-
-
     }
 
 }
