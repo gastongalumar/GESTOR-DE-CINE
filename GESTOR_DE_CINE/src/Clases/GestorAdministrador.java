@@ -1,6 +1,7 @@
 package Clases;
 
 import ManejoJSON.FuncionesJSON;
+import ManejoJSON.GestorJsonAsientos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -295,6 +296,9 @@ public class GestorAdministrador {
                 }
 
             }
+
+            ventana.close();
+            ManejoVentanas.reiniciarGestorAdministrador();
         });
 
 
@@ -398,6 +402,7 @@ public class GestorAdministrador {
                     mostrarAlerta("Funcion eliminada correctamente");
 
                     ventana.close();
+                    ManejoVentanas.reiniciarGestorAdministrador();
                 }catch (DateTimeParseException ex){
 
                     mostrarAlerta("Formato de fecha y hora incorrecto");
@@ -512,6 +517,10 @@ public class GestorAdministrador {
                 ex.printStackTrace(); // opcional, para debug
                 mostrarAlerta("Error al procesar las fechas o la imagen.");
             }
+
+
+            ventana.close();
+            ManejoVentanas.reiniciarGestorAdministrador();
         });
 
         // --- Layout principal ---
@@ -572,6 +581,7 @@ public class GestorAdministrador {
 
             mostrarAlerta("Película eliminada correctamente.");
             ventana.close();
+            ManejoVentanas.reiniciarGestorAdministrador();
         });
 
         VBox layout = new VBox(20, seccionPelicula, botonEliminar);
@@ -693,6 +703,8 @@ public class GestorAdministrador {
             }
             FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
 
+            ventana.close();
+            ManejoVentanas.reiniciarGestorAdministrador();
         });
 
         VBox layout = new VBox(20, titulo, campoNombrePelicula, campoSala, campoFecha, campoHorario, botonGuardar);
@@ -821,6 +833,13 @@ public class GestorAdministrador {
             LocalDate nuevaFechaSalida = LocalDate.parse(campoFechaSalida.getText(), formato);
 
 
+            String nombreAnterior = p.getNombrePelicula();
+            String nuevoNombre = campoNombrePelicula.getText();
+
+
+            if (!nombreAnterior.equals(nuevoNombre)) {
+                GestorJsonAsientos.copiarArchivosAsientos(nombreAnterior, nuevoNombre);
+            }
             p.setNombrePelicula(campoNombrePelicula.getText());
             p.setFechaEstreno(nuevaFechaEstreno);
             p.setFechaSalida(nuevaFechaSalida);
@@ -829,13 +848,16 @@ public class GestorAdministrador {
             FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
 
 
+            ventana.close(); // Cierra esta ventana primero
+            ManejoVentanas.reiniciarGestorAdministrador();
+
         });
 
         VBox layout = new VBox(20, titulo, campoNombrePelicula,campoFechaEstreno, campoFechaSalida,imagenVista,botonCambiarImagen, botonGuardar);
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #2a2a2a;");
-        Scene escena = new Scene(layout, 400,250);
+        Scene escena = new Scene(layout, 700,550);
         ventana.setScene(escena);
         ventana.show();
     }
