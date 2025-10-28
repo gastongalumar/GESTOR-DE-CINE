@@ -13,32 +13,30 @@ import java.util.List;
 
 public class FuncionesJSON {
 
-    public static void serializarFunciones(List<Funcion> listaFunciones){
+    public static void serializarFunciones(List<Funcion> listaFunciones) {
         JSONArray jsonFunciones = new JSONArray();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            try {
-                if(!listaFunciones.isEmpty()) {
-                    for (int i = 0; i < listaFunciones.size(); i++) {
-                        JSONObject jsonFuncion = new JSONObject();
-                        Funcion funcion = listaFunciones.get(i);
-                        jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
-                        jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
-                        jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
+        try {
+            if (!listaFunciones.isEmpty()) {
+                for (int i = 0; i < listaFunciones.size(); i++) {
+                    JSONObject jsonFuncion = new JSONObject();
+                    Funcion funcion = listaFunciones.get(i);
+                    jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
+                    jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
+                    jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
 
-                        jsonFunciones.put(jsonFuncion);
-                    }
-
-                    JSONUtiles.grabar(jsonFunciones, "funciones.json");
+                    jsonFunciones.put(jsonFuncion);
                 }
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
 
+                JSONUtiles.grabar(jsonFunciones, "funciones.json");
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
-
 
 
     public static List<Funcion> deserializarFunciones(List<Pelicula> listaPeliculas, List<SalaCine> listaSalas) {
@@ -99,11 +97,9 @@ public class FuncionesJSON {
     }
 
 
-
-
     private static final String RUTA_JSON = "peliculas.json";
 
-    public static void serializarPeliculas(List<Pelicula> listaPeliculas){
+    public static void serializarPeliculas(List<Pelicula> listaPeliculas) {
         JSONArray jsonPeliculas = new JSONArray();
         DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -125,14 +121,14 @@ public class FuncionesJSON {
         }
     }
 
-    public static List<Pelicula> deserializarPeliculas(){
+    public static List<Pelicula> deserializarPeliculas() {
         List<Pelicula> listaPeliculas = new ArrayList<>();
         DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         try {
             JSONArray jsonPeliculas = new JSONArray(JSONUtiles.leer(RUTA_JSON));
 
-            for(int i = 0; i < jsonPeliculas.length(); i++){
+            for (int i = 0; i < jsonPeliculas.length(); i++) {
                 JSONObject obj = jsonPeliculas.getJSONObject(i);
 
                 String nombre = obj.getString("Nombre");
@@ -170,5 +166,6 @@ public class FuncionesJSON {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
     }
 }
