@@ -1,10 +1,10 @@
 package ManejoJSON;
 
-import Clases.Usuario;
-import Enums.EstadoUsuario;
-import Enums.TipoUsuario;
-import Exepciones.AutenticacionException;
-import Exepciones.UsuarioException;
+import Clases.login.Usuario;
+import Enumeradores.login.EstadoUsuario;
+import Enumeradores.login.TipoUsuario;
+import Excepciones.AutenticacionException;
+import Excepciones.UsuarioException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
