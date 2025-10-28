@@ -65,4 +65,8 @@ public class Pago {
 
     }
 
+    public boolean getMetodoPago() {
+
+        return false;
+    }
 }

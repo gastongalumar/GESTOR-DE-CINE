@@ -445,6 +445,26 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         return panelDerecho;
     }
 
+    private boolean elegirMetodoPago() {
+        String[] opciones = {"Tarjeta de Crédito", "PayPal", "Criptomonedas", "Transferencia Bancaria"};
+        int seleccion = JOptionPane.showOptionDialog(this,
+                "Seleccione el método de pago:",
+                "Método de Pago",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]);
+
+        if (seleccion == -1) {
+            System.out.println("❌ Pago cancelado por el usuario.");
+            return false;
+        } else {
+            System.out.println("✅ Método de pago seleccionado: " + opciones[seleccion]);
+            return true;
+        }
+    }
+
     private void configurarBoton(JButton boton) {
         boton.setBackground(new Color(70, 130, 180));
         boton.setForeground(Color.BLACK);
