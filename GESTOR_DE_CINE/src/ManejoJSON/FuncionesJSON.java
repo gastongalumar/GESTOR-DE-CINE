@@ -151,4 +151,24 @@ public class FuncionesJSON {
 
         return listaPeliculas;
     }
+
+    public static void serializarPagos(List<Pago> listaPagos) {
+        JSONArray jsonPagos = new JSONArray();
+
+        try {
+            for (Pago pago : listaPagos) {
+                JSONObject jsonPago = new JSONObject();
+                jsonPago.put("ID", pago.getIdPago());
+                jsonPago.put("Monto", pago.getMonto());
+                jsonPago.put("Fecha", pago.getFechaPago().toString());
+                jsonPago.put("Metodo", pago.getMetodoPago());
+
+                jsonPagos.put(jsonPago);
+            }
+
+            JSONUtiles.grabar(jsonPagos, "pagos.json");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+    }
 }

@@ -123,6 +123,7 @@ public class VistaCartelera {
                 horario.setOnMouseClicked(ev -> {
                     SwingUtilities.invokeLater(() -> {
                         SelectorAsientos.mostrarSelectorAsientos(f);
+
                     });
                 });
 
@@ -167,6 +168,15 @@ public class VistaCartelera {
             }
         }
         return listaFunciones;
+    }
+
+    public static void selecionarMetodoDePago(){
+
+        GestorDePagos gestorDePagos = new GestorDePagos();
+        gestorDePagos.mostrarOpcionesDePago();
+
+
+
     }
 
 }

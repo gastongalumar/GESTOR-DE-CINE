@@ -433,6 +433,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         btnReporte.addActionListener(e -> generarReporte());
         btnLimpiar.addActionListener(e -> limpiarSelecciones());
         btnConfirmar.addActionListener(e -> confirmarSelecciones());
+        btnConfirmar.addActionListener(e -> System.out.println(elegirMetodoPago()));
 
         panelBotones.add(btnReporte);
         panelBotones.add(btnLimpiar);
@@ -600,7 +601,7 @@ public class SelectorAsientos extends JFrame implements PropertyChangeListener {
         }
     }
 
-//funcion llamar selector asientos y cuando deje de estar en uso continue con la ejecucion de lo que lo llamo
+    //funcion llamar selector asientos y cuando deje de estar en uso continue con la ejecucion de lo que lo llamo
     public static void mostrarSelectorAsientos(Funcion funcion) {
         SelectorAsientos selector = new SelectorAsientos(funcion);
 
