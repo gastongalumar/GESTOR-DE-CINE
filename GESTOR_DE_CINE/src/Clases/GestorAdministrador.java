@@ -141,7 +141,7 @@ public class GestorAdministrador {
             formularioEliminarPelicula();
         });
 
-        VBox contieneBotonesFunciones = new VBox(10,tituloFunciones, botonAgregar, botonEliminar, separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula);
+        VBox contieneBotonesFunciones = new VBox(10,tituloFunciones, botonAgregar, botonEliminar,botonModificarFuncion, separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula);
         contenedor.getChildren().add(contieneBotonesFunciones);
         Scene escena = new Scene(contenedor,1300,500);
         ventana.setTitle("GESTOR ADMINISTRADOR");
@@ -568,6 +568,113 @@ public class GestorAdministrador {
         ventana.show();
     }
 
+
+    private static void formularioEditarFuncion(){
+        Stage ventana = new Stage();
+
+        ventana.setTitle("Formulario para modificar funcion");
+
+        Label titulo = new Label("Ingrese nombre pelicula");
+        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        TextField campoNombrePelicula= new TextField();
+        campoNombrePelicula.setPromptText("Nombre pelicula:");
+        campoNombrePelicula.setPrefWidth(250);
+
+
+        Button botonBuscar = new Button("Buscar funciones");
+        botonBuscar.setStyle("-fx-background-color: #228B22; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20 8 20;");
+        VBox layout = new VBox(20, titulo, campoNombrePelicula);
+
+        botonBuscar.setOnAction(e->{
+
+            for(Funcion f: GestorFunciones.getListaFunciones()){
+                if(f.getPelicula().getNombrePelicula().equalsIgnoreCase(campoNombrePelicula.getText())){
+                    Label funcion = new Label(f.getHorarioFuncion().toString().replace("T", " "));
+                    funcion.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white;");
+                    layout.getChildren().add(funcion);
+
+                    funcion.setOnMouseClicked(p->{
+                        editarFuncion(f);
+
+
+                    });
+
+                }
+            }
+
+        });
+
+
+
+        layout.getChildren().add(botonBuscar);
+       // VBox layout = new VBox(20, titulo, campoNombrePelicula);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-background-color: #2a2a2a;");
+        Scene escena = new Scene(layout, 400,250);
+        ventana.setScene(escena);
+        ventana.show();
+
+
+
+    }
+
+    private static void editarFuncion (Funcion f){
+        Stage ventana = new Stage();
+
+        ventana.setTitle("Modificar funcion");
+
+        Label titulo = new Label("Modificar funcion");
+        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;");
+
+        TextField campoNombrePelicula= new TextField(f.getPelicula().getNombrePelicula());
+        campoNombrePelicula.setPromptText("Nombre pelicula:");
+        campoNombrePelicula.setPrefWidth(250);
+
+        TextField campoSala= new TextField(f.getSala().getNombreSala());
+        campoNombrePelicula.setPromptText("Sala:");
+        campoNombrePelicula.setPrefWidth(250);
+
+        TextField campoFecha= new TextField(f.getHorarioFuncion().toLocalDate().toString());
+        campoNombrePelicula.setPromptText("Fecha:");
+        campoNombrePelicula.setPrefWidth(250);
+
+        TextField campoHorario= new TextField(f.getHorarioFuncion().toLocalTime().toString());
+        campoNombrePelicula.setPromptText("Fecha:");
+        campoNombrePelicula.setPrefWidth(250);
+
+
+        Button botonGuardar = new Button("Guardar cambios");
+        botonGuardar.setStyle("-fx-background-color: #228B22; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 8 20 8 20;");
+
+        botonGuardar.setOnAction(e->{
+
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            LocalDate fecha = LocalDate.parse(campoFecha.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalTime hora = LocalTime.parse(campoHorario.getText().trim(), DateTimeFormatter.ofPattern("HH:mm"));
+
+            LocalDateTime nuevaFechaHora = LocalDateTime.of(fecha, hora);
+            for(int i = 0; i < GestorFunciones.getListaFunciones().size(); i++){
+                if(f == GestorFunciones.getListaFunciones().get(i)){
+                    GestorFunciones.getListaFunciones().get(i).getSala().setNombreSala(campoSala.getText());
+                    GestorFunciones.getListaFunciones().get(i).setHorarioFuncion(nuevaFechaHora);
+                    break;
+                }
+            }
+
+
+        });
+
+        VBox layout = new VBox(20, titulo, campoNombrePelicula, campoSala, campoFecha, campoHorario, botonGuardar);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+        layout.setStyle("-fx-background-color: #2a2a2a;");
+        Scene escena = new Scene(layout, 400,250);
+        ventana.setScene(escena);
+        ventana.show();
+    }
 
 
 
