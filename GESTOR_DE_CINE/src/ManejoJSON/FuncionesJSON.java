@@ -13,31 +13,32 @@ import java.util.List;
 
 public class FuncionesJSON {
 
-    public static void serializarFunciones(List<Funcion> listaFunciones) {
+    public static void serializarFunciones(List<Funcion> listaFunciones){
         JSONArray jsonFunciones = new JSONArray();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        try {
-            if (!listaFunciones.isEmpty()) {
-                for (int i = 0; i < listaFunciones.size(); i++) {
-                    JSONObject jsonFuncion = new JSONObject();
-                    Funcion funcion = listaFunciones.get(i);
-                    jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
-                    jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
-                    jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
-                    jsonFuncion.put("Precio", funcion.getPrecio());
+            try {
+                if(!listaFunciones.isEmpty()) {
+                    for (int i = 0; i < listaFunciones.size(); i++) {
+                        JSONObject jsonFuncion = new JSONObject();
+                        Funcion funcion = listaFunciones.get(i);
+                        jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
+                        jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
+                        jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
 
-                    jsonFunciones.put(jsonFuncion);
+                        jsonFunciones.put(jsonFuncion);
+                    }
+
+                    JSONUtiles.grabar(jsonFunciones, "funciones.json");
                 }
-
-                JSONUtiles.grabar(jsonFunciones, "funciones.json");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
             }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+
 
 
     }
+
 
 
     public static List<Funcion> deserializarFunciones(List<Pelicula> listaPeliculas, List<SalaCine> listaSalas) {
@@ -97,6 +98,8 @@ public class FuncionesJSON {
         }
         return null;
     }
+
+
 
 
     private static final String RUTA_JSON = "peliculas.json";
