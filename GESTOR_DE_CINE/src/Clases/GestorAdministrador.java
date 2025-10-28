@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
@@ -85,6 +86,20 @@ public class GestorAdministrador {
 
         botonEliminar.setOnAction(e -> {
             formularioEliminarFuncion(GestorFunciones.getListaFunciones());
+        });
+
+        Button botonModificarFuncion = new Button("Modificar función");
+        botonModificarFuncion.setStyle("""
+            -fx-background-color: #FFAA4A;
+            -fx-text-fill: white;
+            -fx-font-weight: bold;
+            -fx-padding: 10 20 10 20;
+            -fx-background-radius: 10;
+        """);
+
+        botonModificarFuncion.setOnAction(e -> {
+            //editarFuncion(GestorFunciones.getListaFunciones().get(2));
+            formularioEditarFuncion();
         });
         Separator separacion = new Separator();
         separacion.setStyle("-fx-background-color: #800080;");
