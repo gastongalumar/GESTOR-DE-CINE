@@ -25,6 +25,7 @@ public class FuncionesJSON {
                     jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
                     jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
                     jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
+                    jsonFuncion.put("Precio", funcion.getPrecio());
 
                     jsonFunciones.put(jsonFuncion);
                 }
@@ -55,13 +56,14 @@ public class FuncionesJSON {
                 String nombreSala = obj.getString("Sala");
                 String nombrePelicula = obj.getString("Pelicula");
                 String fechaHoraStr = obj.getString("Fecha y hora");
+                double precioFuncion = obj.getDouble("Precio");
 
                 SalaCine salaEncontrada = buscarSalaPorNombre(listaSalas, nombreSala);
                 Pelicula peliculaEncontrada = buscarPeliculaPorNombre(listaPeliculas, nombrePelicula);
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 if (salaEncontrada != null && peliculaEncontrada != null) {
                     LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraStr, formato);
-                    Funcion f = new Funcion(salaEncontrada, peliculaEncontrada, fechaHora);
+                    Funcion f = new Funcion(salaEncontrada, peliculaEncontrada, fechaHora, precioFuncion);
                     listaFunciones.add(f);
                 } else {
                     System.out.println("⚠️ No se encontró coincidencia para: " + nombrePelicula + " / " + nombreSala);
