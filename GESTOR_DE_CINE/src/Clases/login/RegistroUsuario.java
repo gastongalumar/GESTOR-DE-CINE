@@ -1,8 +1,8 @@
 package Clases.login;
 
-import Enums.TipoUsuario;
-import Exepciones.UsuarioException;
-import ManejoJSON.GestorJson;
+import Enumeradores.login.TipoUsuario;
+import Excepciones.UsuarioException;
+import ManejoJSON.GestorJsonLogin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -280,7 +280,7 @@ public class RegistroUsuario extends JFrame {
 
             // Validar y guardar
             nuevoUsuario.validarDatos();
-            GestorJson.agregarUsuario(nuevoUsuario);
+            GestorJsonLogin.agregarUsuario(nuevoUsuario);
 
             mostrarExito("¡Usuario registrado exitosamente!\n" +
                     "Email: " + nuevoUsuario.getEmail() + "\n" +

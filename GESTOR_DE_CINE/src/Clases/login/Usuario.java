@@ -1,8 +1,8 @@
 package Clases.login;
 
-import Enums.EstadoUsuario;
-import Enums.TipoUsuario;
-import Exepciones.UsuarioException;
+import Enumeradores.login.EstadoUsuario;
+import Enumeradores.login.TipoUsuario;
+import Excepciones.UsuarioException;
 
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
