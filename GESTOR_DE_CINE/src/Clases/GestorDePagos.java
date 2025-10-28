@@ -1,7 +1,10 @@
+
 package Clases;
 
 //crear la clase GestorDePagos
 
+import Clases.MetodoDePago;
+import Clases.Pago;
 import ManejoJSON.FuncionesJSON;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +66,19 @@ public class GestorDePagos {
 
         }
     }
+
+    public boolean procesarPago(MetodoDePago metodoPago, double totalAPagar, String descripcion) {
+
+        // Lógica simulada de procesamiento de pago
+        System.out.println("Procesando pago de $" + totalAPagar + " usando " + metodoPago.getNombre() + " para: " + descripcion);
+        // Aquí se podría agregar lógica real de procesamiento de pagos
+        return true; // Simula que el pago fue exitoso
+
+    }
+
+
+
+
 }
 
 
