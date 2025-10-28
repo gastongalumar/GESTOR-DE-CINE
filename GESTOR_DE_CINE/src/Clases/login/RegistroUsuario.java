@@ -1,8 +1,11 @@
 package Clases.login;
 
-import Enums.TipoUsuario;
-import Exepciones.UsuarioException;
-import ManejoJSON.GestorJson;
+
+import Enumeradores.login.TipoUsuario;
+
+import Excepciones.UsuarioException;
+import ManejoJSON.GestorJsonLogin;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +16,7 @@ public class RegistroUsuario extends JFrame {
     private JComboBox<TipoUsuario> tipoUsuarioCombo;
     private JButton registrarButton, cancelarButton;
     private boolean esAdministrador;
+    private GestorJsonLogin GestorJson;
 
     public RegistroUsuario() {
         this(false); // Por defecto, registro normal de cliente
@@ -280,6 +284,7 @@ public class RegistroUsuario extends JFrame {
 
             // Validar y guardar
             nuevoUsuario.validarDatos();
+
             GestorJson.agregarUsuario(nuevoUsuario);
 
             mostrarExito("¡Usuario registrado exitosamente!\n" +

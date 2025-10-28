@@ -71,8 +71,15 @@ public class App extends Application {
 
         System.out.println(GestorFunciones.getListaFunciones());
 
-       // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+        // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
         FuncionesJSON.deserializarFunciones(gestorPeliculas.getListaPeliculas(), List.of(s1,s2));
+
+
+        abrirSistemaLogin();
+    }
+    private void abrirSistemaLogin() {
+        // Esto abre la ventana de login interactiva
+        Clases.estadisticas.LoginInterfaz.abrirLogin();
     }
 
     public static void main(String[] args) {
@@ -94,6 +101,7 @@ public class App extends Application {
                 Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
                 SelectorAsientos selector = new SelectorAsientos(f1);
                 selector.setVisible(true);
+                Clases.estadisticas.LoginInterfaz.abrirLogin();
             });
         }
     }
