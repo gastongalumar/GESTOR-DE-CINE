@@ -7,9 +7,19 @@ public class Funcion {
     private SalaCine sala;
     private Pelicula pelicula;
     private LocalDateTime horarioFuncion;
+    private double precio = 5000.0;
 
 
     //CONSTRUCTOR
+
+
+    public Funcion(SalaCine sala, double precio, LocalDateTime horarioFuncion, Pelicula pelicula) {
+        this.sala = sala;
+        this.precio = precio;
+        this.horarioFuncion = horarioFuncion;
+        this.pelicula = pelicula;
+    }
+
     public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion) {
         this.sala = sala;
         this.pelicula = pelicula;
@@ -68,8 +78,15 @@ public class Funcion {
         this.pelicula = pelicula;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
 
-//TO STRING
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    //TO STRING
     @Override
     public String toString() {
         return "Funcion{" +
