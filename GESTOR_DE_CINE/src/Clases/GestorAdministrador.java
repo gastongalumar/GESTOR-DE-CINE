@@ -663,7 +663,7 @@ public class GestorAdministrador {
                     break;
                 }
             }
-
+            FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
 
         });
 
