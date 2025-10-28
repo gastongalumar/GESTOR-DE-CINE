@@ -215,6 +215,12 @@ public class GestorAdministrador {
         Label textoHorario = new Label("→ Hora de inicio de la función");
         textoHorario.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 11px;");
 
+        Label labelPrecio = new Label("Precio:");
+        TextField campoPrecio = new TextField();
+        campoPrecio.setPromptText("2000");
+        Label textoPrecio= new Label("→ Precio de la función");
+        textoHorario.setStyle("-fx-text-fill: #bbbbbb; -fx-font-size: 11px;");
+
 
         GridPane gridDatos = new GridPane();
         gridDatos.setHgap(10);
@@ -223,6 +229,7 @@ public class GestorAdministrador {
         gridDatos.addRow(1, labelFechaInicial, campoFechaInicial, textoFechaInicial);
         gridDatos.addRow(2, labelFechaFinal, campoFechaFinal, textoFechaFinal);
         gridDatos.addRow(3, labelHorario, campoHorario, textoHorario);
+        gridDatos.addRow(4, labelPrecio, campoPrecio,textoPrecio);
 
         VBox seccionDatos = new VBox(5, tituloDatos, gridDatos);
         seccionDatos.setAlignment(Pos.CENTER_LEFT);
@@ -244,6 +251,7 @@ public class GestorAdministrador {
             String fechaInicial = campoFechaInicial.getText();
             String fechaFinal = campoFechaFinal.getText();
             String horario = campoHorario.getText();
+            double precio = Double.parseDouble(campoPrecio.getText());
             boolean encontrado = false;
             for(Pelicula p: listaPeliculas){
                 if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){
@@ -251,7 +259,7 @@ public class GestorAdministrador {
                 }
             }
 
-            if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty()|| !encontrado) {
+            if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty()|| !encontrado || precio < 0) {
                 mostrarAlerta("Por favor, completa todos los campos.");
             } else {
                 try {
@@ -272,7 +280,7 @@ public class GestorAdministrador {
                     System.out.println("Fecha final: " + fechaFinalTime);
 
                     for (long i = 0; i <= diasDiferencia; i++) {
-                        Funcion funcion = new Funcion(sala, nombrePelicula, fechaAgregar, listaPeliculas);
+                        Funcion funcion = new Funcion(sala, nombrePelicula, fechaAgregar, listaPeliculas, precio);
                         GestorFunciones.agregarFuncion(funcion);
                         fechaAgregar = fechaAgregar.plusDays(1);
                         System.out.println(GestorFunciones.getListaFunciones());
