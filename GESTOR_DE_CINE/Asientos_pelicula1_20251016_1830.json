@@ -1,8 +1,8 @@
 {
-    "asientosOcupados": 10,
+    "asientosOcupados": 23,
     "totalColumnas": 16,
     "totalFilas": 10,
-    "fechaActualizacion": "2025-10-27T21:19:41.301772400",
+    "fechaActualizacion": "2025-10-28T10:53:30.525894700",
     "matrizAsientos": [
         [
             {
@@ -338,31 +338,31 @@
             {
                 "columna": 6,
                 "etiqueta": "G4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
                 "columna": 7,
                 "etiqueta": "H4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
                 "columna": 8,
                 "etiqueta": "I4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
                 "columna": 9,
                 "etiqueta": "J4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
                 "columna": 10,
                 "etiqueta": "K4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
@@ -430,13 +430,13 @@
             {
                 "columna": 5,
                 "etiqueta": "F5",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 4
             },
             {
                 "columna": 6,
                 "etiqueta": "G5",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 4
             },
             {
@@ -460,7 +460,7 @@
             {
                 "columna": 10,
                 "etiqueta": "K5",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 4
             },
             {
@@ -528,19 +528,19 @@
             {
                 "columna": 5,
                 "etiqueta": "F6",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 5
             },
             {
                 "columna": 6,
                 "etiqueta": "G6",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 5
             },
             {
                 "columna": 7,
                 "etiqueta": "H6",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 5
             },
             {
@@ -558,7 +558,7 @@
             {
                 "columna": 10,
                 "etiqueta": "K6",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 5
             },
             {
@@ -626,7 +626,7 @@
             {
                 "columna": 5,
                 "etiqueta": "F7",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 6
             },
             {

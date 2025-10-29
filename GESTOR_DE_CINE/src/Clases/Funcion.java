@@ -7,7 +7,7 @@ public class Funcion {
     private SalaCine sala;
     private Pelicula pelicula;
     private LocalDateTime horarioFuncion;
-    private double precio;
+    private double precio = 5000.0;
 
 
     //CONSTRUCTOR
@@ -24,15 +24,6 @@ public class Funcion {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
-        // Registrar automáticamente la función en el gestor
-        GestorFunciones.agregarFuncion(this);
-    }
-
-    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, double precio) {
-        this.sala = sala;
-        this.pelicula = pelicula;
-        this.horarioFuncion = horarioFuncion;
-        this.precio = precio;
         // Registrar automáticamente la función en el gestor
         GestorFunciones.agregarFuncion(this);
     }
@@ -57,32 +48,6 @@ public class Funcion {
         this.sala = salaEncontrada;
         this.pelicula = peliculaEncontrada;
         this.horarioFuncion = horarioFuncion;
-       /* if(encontrado){
-            GestorFunciones.agregarFuncion(this);
-        }*/
-    }
-
-    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas, double precio){
-        boolean encontrado = true;
-        SalaCine salaEncontrada = null;
-        Pelicula peliculaEncontrada = null;
-        for(Funcion f: GestorFunciones.getListaFunciones()){
-            if(f.getSala().getNombreSala().equalsIgnoreCase(nombreSala)){
-                salaEncontrada = f.getSala();
-                encontrado = true;
-            }
-        }
-        for(Pelicula p: listaPeliculas){
-            if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){
-                encontrado = true;
-                peliculaEncontrada = p;
-            }
-        }
-
-        this.sala = salaEncontrada;
-        this.pelicula = peliculaEncontrada;
-        this.horarioFuncion = horarioFuncion;
-        this.precio = precio;
        /* if(encontrado){
             GestorFunciones.agregarFuncion(this);
         }*/
