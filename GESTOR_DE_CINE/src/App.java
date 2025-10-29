@@ -1,11 +1,8 @@
 // App.java - JavaFX launcher para la cartelera
 import Clases.*;
+import Clases.login.LoginInterfaz;
 import ManejoJSON.FuncionesJSON;
 import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
@@ -79,7 +76,7 @@ public class App extends Application {
     }
     private void abrirSistemaLogin() {
         // Esto abre la ventana de login interactiva
-        Clases.estadisticas.LoginInterfaz.abrirLogin();
+        LoginInterfaz.abrirLogin();
     }
 
     public static void main(String[] args) {
@@ -101,7 +98,7 @@ public class App extends Application {
                 Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
                 SelectorAsientos selector = new SelectorAsientos(f1);
                 selector.setVisible(true);
-                Clases.estadisticas.LoginInterfaz.abrirLogin();
+                LoginInterfaz.abrirLogin();
             });
         }
     }

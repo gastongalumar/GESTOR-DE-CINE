@@ -1,238 +1,194 @@
-package Clases.estadisticas;
+package Clases.login;
 
-import Clases.login.GestorEstadisticasLogin;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.stage.Stage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class LoginInterfaz {
-    private JFrame frame;
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private JButton loginButton, registerButton;
+public class LoginInterfaz extends Application {
+    private Stage stage;
+    private TextField emailField;
+    private PasswordField passwordField;
+    private Button loginButton, registerButton;
     private int intentosLogin = 0;
 
-    public LoginInterfaz() {
+    @Override
+    public void start(Stage primaryStage) {
+        this.stage = primaryStage;
         crearInterfaz();
+        configurarEventos();
+        stage.show();
     }
 
     private void crearInterfaz() {
-        frame = new JFrame("CINE LOS CULIA - Inicio de Sesión");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(400, 500);
-        frame.setLocationRelativeTo(null);
-        frame.setResizable(false);
+        stage.setTitle("CINE LOS CULIA - Inicio de Sesión");
+        stage.setOnCloseRequest(e -> stage.close());
+        stage.setWidth(400);
+        stage.setHeight(500);
+        stage.setResizable(false);
 
         // Panel principal con gradiente
-        JPanel mainPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                Color color1 = new Color(25, 25, 35);
-                Color color2 = new Color(75, 0, 130);
-                GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-            }
-        };
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        VBox mainPanel = new VBox();
+        mainPanel.setBackground(new Background(new BackgroundFill(
+                new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.rgb(25, 25, 35)),
+                        new Stop(1, Color.rgb(75, 0, 130))),
+                CornerRadii.EMPTY, Insets.EMPTY)));
+        mainPanel.setPadding(new Insets(20));
+        mainPanel.setSpacing(20);
 
         // Header
-        JPanel headerPanel = crearHeaderPanel();
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        VBox headerPanel = crearHeaderPanel();
+        mainPanel.getChildren().add(headerPanel);
 
         // Formulario
-        JPanel formPanel = crearFormPanel();
-        mainPanel.add(formPanel, BorderLayout.CENTER);
+        GridPane formPanel = crearFormPanel();
+        mainPanel.getChildren().add(formPanel);
 
         // Footer
-        JPanel footerPanel = crearFooterPanel();
-        mainPanel.add(footerPanel, BorderLayout.SOUTH);
+        HBox footerPanel = crearFooterPanel();
+        mainPanel.getChildren().add(footerPanel);
 
-        frame.add(mainPanel);
+        VBox.setVgrow(formPanel, Priority.ALWAYS);
+
+        Scene scene = new Scene(mainPanel);
+        stage.setScene(scene);
+        stage.centerOnScreen();
+        configurarEventos();
     }
 
-    private JPanel crearHeaderPanel() {
-        JPanel headerPanel = new JPanel();
-        headerPanel.setOpaque(false);
-        headerPanel.setLayout(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+    private VBox crearHeaderPanel() {
+        VBox headerPanel = new VBox();
+        headerPanel.setAlignment(Pos.CENTER);
+        headerPanel.setSpacing(5);
+        headerPanel.setPadding(new Insets(0, 0, 20, 0));
 
-        JLabel titleLabel = new JLabel("INICIAR SESIÓN", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
+        Label titleLabel = new Label("INICIAR SESIÓN");
+        titleLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        JLabel subtitleLabel = new JLabel("Ingresa tus credenciales", SwingConstants.CENTER);
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        subtitleLabel.setForeground(new Color(200, 200, 200));
+        Label subtitleLabel = new Label("Ingresa tus credenciales");
+        subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: #c8c8c8;");
 
-        headerPanel.add(titleLabel, BorderLayout.CENTER);
-        headerPanel.add(subtitleLabel, BorderLayout.SOUTH);
-
+        headerPanel.getChildren().addAll(titleLabel, subtitleLabel);
         return headerPanel;
     }
 
-    private JPanel crearFormPanel() {
-        JPanel formPanel = new JPanel();
-        formPanel.setOpaque(false);
-        formPanel.setLayout(new GridBagLayout());
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridwidth = 2;
+    private GridPane crearFormPanel() {
+        GridPane formPanel = new GridPane();
+        formPanel.setAlignment(Pos.CENTER);
+        formPanel.setHgap(10);
+        formPanel.setVgap(10);
+        formPanel.setPadding(new Insets(20));
 
         // Email
-        gbc.gridx = 0; gbc.gridy = 0;
-        JLabel emailLabel = new JLabel("E-MAIL:");
-        emailLabel.setForeground(Color.WHITE);
-        emailLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        formPanel.add(emailLabel, gbc);
+        Label emailLabel = new Label("E-MAIL:");
+        emailLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
-        gbc.gridy = 1;
-        emailField = new JTextField();
-        emailField.setPreferredSize(new Dimension(300, 40));
-        emailField.setFont(new Font("Arial", Font.PLAIN, 14));
-        emailField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(100, 100, 150), 1),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
-        formPanel.add(emailField, gbc);
+        emailField = new TextField();
+        emailField.setPrefSize(300, 40);
+        emailField.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 10;");
 
         // Contraseña
-        gbc.gridy = 2;
-        JLabel passLabel = new JLabel("CONTRASEÑA:");
-        passLabel.setForeground(Color.WHITE);
-        passLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        formPanel.add(passLabel, gbc);
+        Label passLabel = new Label("CONTRASEÑA:");
+        passLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
-        gbc.gridy = 3;
-        passwordField = new JPasswordField();
-        passwordField.setPreferredSize(new Dimension(300, 40));
-        passwordField.setFont(new Font("Arial", Font.PLAIN, 14));
-        passwordField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(100, 100, 150), 1),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
-        formPanel.add(passwordField, gbc);
+        passwordField = new PasswordField();
+        passwordField.setPrefSize(300, 40);
+        passwordField.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 10;");
 
         // Botones
-        gbc.gridy = 4;
-        gbc.insets = new Insets(20, 10, 10, 10);
+        HBox buttonPanel = new HBox(20);
+        buttonPanel.setAlignment(Pos.CENTER);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        buttonPanel.setOpaque(false);
+        loginButton = new Button("INGRESAR");
+        loginButton.setStyle("-fx-background-color: #0096ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20 10 20;");
+        loginButton.setPrefSize(120, 45);
 
-        loginButton = new JButton("INGRESAR");
-        loginButton.setBackground(new Color(0, 150, 255));
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setFont(new Font("Arial", Font.BOLD, 14));
-        loginButton.setFocusPainted(false);
-        loginButton.setPreferredSize(new Dimension(120, 45));
-        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        registerButton = new Button("REGISTRARSE");
+        registerButton.setStyle("-fx-background-color: #009664; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20 10 20;");
+        registerButton.setPrefSize(120, 45);
 
-        registerButton = new JButton("REGISTRARSE");
-        registerButton.setBackground(new Color(0, 150, 100));
-        registerButton.setForeground(Color.WHITE);
-        registerButton.setFont(new Font("Arial", Font.BOLD, 14));
-        registerButton.setFocusPainted(false);
-        registerButton.setPreferredSize(new Dimension(120, 45));
-        registerButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        buttonPanel.getChildren().addAll(loginButton, registerButton);
 
-        buttonPanel.add(loginButton);
-        buttonPanel.add(registerButton);
-        formPanel.add(buttonPanel, gbc);
+        // Agregar al grid
+        formPanel.add(emailLabel, 0, 0, 2, 1);
+        formPanel.add(emailField, 0, 1, 2, 1);
+        formPanel.add(passLabel, 0, 2, 2, 1);
+        formPanel.add(passwordField, 0, 3, 2, 1);
+        formPanel.add(buttonPanel, 0, 4, 2, 1);
 
         return formPanel;
     }
 
-    private JPanel crearFooterPanel() {
-        JPanel footerPanel = new JPanel();
-        footerPanel.setOpaque(false);
-        footerPanel.setLayout(new BorderLayout());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    private HBox crearFooterPanel() {
+        HBox footerPanel = new HBox();
+        footerPanel.setAlignment(Pos.CENTER);
+        footerPanel.setPadding(new Insets(10, 0, 0, 0));
 
-        JLabel infoLabel = new JLabel("© 2025 Cine Los Culia - Sistema de Gestión", SwingConstants.CENTER);
-        infoLabel.setFont(new Font("Arial", Font.PLAIN, 10));
-        infoLabel.setForeground(new Color(150, 150, 150));
+        Label infoLabel = new Label("© 2025 Cine Los Culia - Sistema de Gestión");
+        infoLabel.setStyle("-fx-font-size: 10; -fx-text-fill: #969696;");
 
-        footerPanel.add(infoLabel, BorderLayout.CENTER);
+        footerPanel.getChildren().add(infoLabel);
         return footerPanel;
     }
 
     private void configurarEventos() {
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                realizarLogin();
-            }
-        });
-
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                registrarUsuario();
-            }
-        });
+        loginButton.setOnAction(e -> realizarLogin());
+        registerButton.setOnAction(e -> registrarUsuario());
 
         // Enter para login
-        emailField.addActionListener(e -> realizarLogin());
-        passwordField.addActionListener(e -> realizarLogin());
+        emailField.setOnAction(e -> realizarLogin());
+        passwordField.setOnAction(e -> realizarLogin());
     }
 
     private void realizarLogin() {
         String email = emailField.getText().trim();
-        String password = new String(passwordField.getPassword());
+        String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(frame,
-                    "Por favor, complete todos los campos",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            mostrarAlerta("Error", "Por favor, complete todos los campos", Alert.AlertType.ERROR);
             return;
         }
 
-        // Autenticación
         if (autenticarUsuario(email, password)) {
             String tipoUsuario = determinarTipoUsuario(email);
 
             // Registrar el login en estadísticas
             GestorEstadisticasLogin.getInstance().registrarLogin(email, tipoUsuario);
 
-            JOptionPane.showMessageDialog(frame,
+            mostrarAlerta("Login Exitoso",
                     "¡Bienvenido a CINE LOS CULIA!\nUsuario: " + email + "\nTipo: " + tipoUsuario,
-                    "Login Exitoso",
-                    JOptionPane.INFORMATION_MESSAGE);
+                    Alert.AlertType.INFORMATION);
 
-            intentosLogin = 0; // Resetear intentos
-            frame.dispose();
+            intentosLogin = 0;
+            stage.close();
 
-            // Aquí podrías abrir el sistema principal según el tipo de usuario
             abrirSistemaPrincipal(email, tipoUsuario);
 
         } else {
             intentosLogin++;
-            JOptionPane.showMessageDialog(frame,
+            mostrarAlerta("Error de Login",
                     "Credenciales incorrectas\nIntentos fallidos: " + intentosLogin,
-                    "Error de Login",
-                    JOptionPane.ERROR_MESSAGE);
+                    Alert.AlertType.ERROR);
 
             if (intentosLogin >= 3) {
-                JOptionPane.showMessageDialog(frame,
+                mostrarAlerta("Seguridad",
                         "Demasiados intentos fallidos. Cerrando aplicación.",
-                        "Seguridad",
-                        JOptionPane.WARNING_MESSAGE);
-                System.exit(0);
+                        Alert.AlertType.WARNING);
+                Platform.exit();
             }
         }
     }
 
     private boolean autenticarUsuario(String email, String password) {
-        // Base de datos simple de usuarios
         return (email.equals("admin@cine.com") && password.equals("admin123")) ||
                 (email.equals("cliente@cine.com") && password.equals("cliente123")) ||
                 (email.equals("empleado@cine.com") && password.equals("empleado123")) ||
@@ -246,35 +202,39 @@ public class LoginInterfaz {
     }
 
     private void abrirSistemaPrincipal(String usuario, String tipoUsuario) {
-        // Aquí puedes abrir tu sistema principal según el tipo de usuario
-        JOptionPane.showMessageDialog(frame,
+        mostrarAlerta("Redirigiendo",
                 "Abriendo sistema para: " + tipoUsuario + "\nUsuario: " + usuario,
-                "Redirigiendo",
-                JOptionPane.INFORMATION_MESSAGE);
+                Alert.AlertType.INFORMATION);
 
-        // Ejemplo: Abrir estadísticas solo si es admin
         if (tipoUsuario.equals("Administrador")) {
             GestorEstadisticasLogin.getInstance().mostrarGraficaLogins();
         }
     }
 
     private void registrarUsuario() {
-        JOptionPane.showMessageDialog(frame,
+        mostrarAlerta("Registro",
                 "Función de registro en desarrollo\nPuedes usar:\n" +
                         "admin@cine.com / admin123\n" +
                         "cliente@cine.com / cliente123\n" +
                         "empleado@cine.com / empleado123",
-                "Registro",
-                JOptionPane.INFORMATION_MESSAGE);
+                Alert.AlertType.INFORMATION);
     }
 
-    public void mostrar() {
-        configurarEventos();
-        frame.setVisible(true);
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
-    // Método estático para abrir fácilmente
+
     public static void abrirLogin() {
-        SwingUtilities.invokeLater(() -> new LoginInterfaz().mostrar());
+        Platform.runLater(() -> {
+            LoginInterfaz login = new LoginInterfaz();
+            login.start(new Stage());
+        });
     }
+
+
 }

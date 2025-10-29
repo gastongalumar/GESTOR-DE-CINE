@@ -1,265 +1,213 @@
 package Clases.login;
 
-
 import Enumeradores.login.TipoUsuario;
-
 import Excepciones.UsuarioException;
 import ManejoJSON.GestorJsonLogin;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.stage.Stage;
 
-
-import javax.swing.*;
-import java.awt.*;
-
-public class RegistroUsuario extends JFrame {
-    private JTextField nombreField, apellidoField, emailField, telefonoField;
-    private JPasswordField passwordField, confirmPasswordField;
-    private JComboBox<TipoUsuario> tipoUsuarioCombo;
-    private JButton registrarButton, cancelarButton;
+public class RegistroUsuario extends Application {
+    private TextField nombreField, apellidoField, emailField, telefonoField;
+    private PasswordField passwordField, confirmPasswordField;
+    private ComboBox<TipoUsuario> tipoUsuarioCombo;
+    private Button registrarButton, cancelarButton;
     private boolean esAdministrador;
-    private GestorJsonLogin GestorJson;
+    private GestorJsonLogin gestorJson;
+    private Stage stage;
 
     public RegistroUsuario() {
-        this(false); // Por defecto, registro normal de cliente
+        this(false);
     }
 
     public RegistroUsuario(boolean esAdministrador) {
         this.esAdministrador = esAdministrador;
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        this.stage = primaryStage;
         inicializarInterfaz();
-        configurarComponentes();
     }
 
     private void inicializarInterfaz() {
-        setTitle("CINE LOS CULIA - " + (esAdministrador ? "Registro Administrativo" : "Registro de Usuario"));
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, esAdministrador ? 650 : 600);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        stage.setTitle("CINE LOS CULIA - " + (esAdministrador ? "Registro Administrativo" : "Registro de Usuario"));
+        stage.setOnCloseRequest(e -> stage.close());
+        stage.setWidth(500);
+        stage.setHeight(esAdministrador ? 650 : 600);
+        stage.setResizable(false);
 
         // Panel principal con gradiente
-        JPanel mainPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                Color color1 = new Color(25, 25, 35);
-                Color color2 = new Color(75, 0, 130);
-                GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-            }
-        };
-        mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        VBox mainPanel = new VBox();
+        mainPanel.setBackground(new Background(new BackgroundFill(
+                new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.rgb(25, 25, 35)),
+                        new Stop(1, Color.rgb(75, 0, 130))),
+                CornerRadii.EMPTY, Insets.EMPTY)));
+        mainPanel.setPadding(new Insets(20));
+        mainPanel.setSpacing(15);
 
         // Header
-        JPanel headerPanel = crearHeaderPanel();
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        VBox headerPanel = crearHeaderPanel();
+        mainPanel.getChildren().add(headerPanel);
 
         // Formulario
-        JPanel formPanel = crearFormPanel();
-        mainPanel.add(formPanel, BorderLayout.CENTER);
+        VBox formPanel = crearFormPanel();
+        mainPanel.getChildren().add(formPanel);
 
         // Footer
-        JPanel footerPanel = crearFooterPanel();
-        mainPanel.add(footerPanel, BorderLayout.SOUTH);
+        HBox footerPanel = crearFooterPanel();
+        mainPanel.getChildren().add(footerPanel);
 
-        add(mainPanel);
+        VBox.setVgrow(formPanel, Priority.ALWAYS);
+
+        Scene scene = new Scene(mainPanel);
+        stage.setScene(scene);
+        stage.centerOnScreen();
+        configurarComponentes();
     }
 
-    private JPanel crearHeaderPanel() {
-        JPanel headerPanel = new JPanel();
-        headerPanel.setOpaque(false);
-        headerPanel.setLayout(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
-        headerPanel.setPreferredSize(new Dimension(400, 80));
+    private VBox crearHeaderPanel() {
+        VBox headerPanel = new VBox();
+        headerPanel.setAlignment(Pos.CENTER);
+        headerPanel.setSpacing(5);
+        headerPanel.setPadding(new Insets(15, 0, 10, 0));
 
-        JLabel titleLabel = new JLabel(
-                esAdministrador ? "REGISTRO ADMINISTRATIVO" : "CREAR CUENTA",
-                SwingConstants.CENTER
-        );
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
-        titleLabel.setForeground(Color.WHITE);
+        Label titleLabel = new Label(esAdministrador ? "REGISTRO ADMINISTRATIVO" : "CREAR CUENTA");
+        titleLabel.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        JLabel subtitleLabel = new JLabel(
-                esAdministrador ?
-                        "Registro de nuevos usuarios del sistema" :
-                        "Complete sus datos para registrarse",
-                SwingConstants.CENTER
-        );
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        subtitleLabel.setForeground(new Color(180, 180, 180));
+        Label subtitleLabel = new Label(esAdministrador ?
+                "Registro de nuevos usuarios del sistema" :
+                "Complete sus datos para registrarse");
+        subtitleLabel.setStyle("-fx-font-size: 12; -fx-text-fill: #b4b4b4;");
 
-        headerPanel.add(titleLabel, BorderLayout.CENTER);
-        headerPanel.add(subtitleLabel, BorderLayout.SOUTH);
-
+        headerPanel.getChildren().addAll(titleLabel, subtitleLabel);
         return headerPanel;
     }
 
-    private JPanel crearFormPanel() {
-        JPanel formPanel = new JPanel();
-        formPanel.setOpaque(false);
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+    private VBox crearFormPanel() {
+        VBox formPanel = new VBox();
+        formPanel.setPadding(new Insets(10, 30, 10, 30));
+        formPanel.setSpacing(15);
 
         // Campos de Nombre y Apellido
-        JPanel nombreApellidoPanel = new JPanel(new GridLayout(1, 2, 20, 0));
-        nombreApellidoPanel.setOpaque(false);
-        nombreApellidoPanel.setMaximumSize(new Dimension(440, 80));
+        HBox nombreApellidoPanel = new HBox(20);
+        nombreApellidoPanel.setAlignment(Pos.CENTER_LEFT);
 
-        nombreApellidoPanel.add(crearCampo("Nombre", nombreField = crearTextField()));
-        nombreApellidoPanel.add(crearCampo("Apellido", apellidoField = crearTextField()));
-
-        formPanel.add(nombreApellidoPanel);
-        formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        VBox nombreBox = crearCampo("Nombre", nombreField = crearTextField(), 200);
+        VBox apellidoBox = crearCampo("Apellido", apellidoField = crearTextField(), 200);
+        nombreApellidoPanel.getChildren().addAll(nombreBox, apellidoBox);
 
         // Email
-        formPanel.add(crearCampo("E-mail", emailField = crearTextField(), 420));
-        formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        VBox emailBox = crearCampo("E-mail", emailField = crearTextField(), 420);
 
         // Teléfono
-        formPanel.add(crearCampo("Teléfono", telefonoField = crearTextField(), 420));
-        formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        VBox telefonoBox = crearCampo("Teléfono", telefonoField = crearTextField(), 420);
+
+        formPanel.getChildren().addAll(nombreApellidoPanel, emailBox, telefonoBox);
 
         // Tipo de Usuario (solo visible para administradores)
         if (esAdministrador) {
-            JPanel tipoPanel = new JPanel();
-            tipoPanel.setOpaque(false);
-            tipoPanel.setLayout(new BoxLayout(tipoPanel, BoxLayout.Y_AXIS));
-            tipoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            VBox tipoBox = new VBox(5);
+            tipoBox.setAlignment(Pos.CENTER_LEFT);
 
-            JLabel tipoLabel = new JLabel("Tipo de Usuario");
-            tipoLabel.setForeground(Color.WHITE);
-            tipoLabel.setFont(new Font("Arial", Font.BOLD, 12));
-            tipoLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            Label tipoLabel = new Label("Tipo de Usuario");
+            tipoLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
-            tipoUsuarioCombo = new JComboBox<>(TipoUsuario.values());
-            tipoUsuarioCombo.setMaximumSize(new Dimension(420, 35));
-            tipoUsuarioCombo.setBackground(new Color(240, 240, 245));
-            tipoUsuarioCombo.setFont(new Font("Arial", Font.PLAIN, 14));
+            tipoUsuarioCombo = new ComboBox<>();
+            tipoUsuarioCombo.getItems().addAll(TipoUsuario.values());
+            tipoUsuarioCombo.setPrefSize(420, 35);
+            tipoUsuarioCombo.setStyle("-fx-background-color: #f0f0f5; -fx-font-size: 14;");
 
-            tipoPanel.add(tipoLabel);
-            tipoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
-            tipoPanel.add(tipoUsuarioCombo);
-
-            formPanel.add(tipoPanel);
-            formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+            tipoBox.getChildren().addAll(tipoLabel, tipoUsuarioCombo);
+            formPanel.getChildren().add(tipoBox);
         }
 
         // Contraseña
-        formPanel.add(crearCampo("Contraseña", passwordField = crearPasswordField(), 420));
-        formPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        VBox passwordBox = crearCampo("Contraseña", passwordField = crearPasswordField(), 420);
 
         // Confirmar Contraseña
-        formPanel.add(crearCampo("Confirmar Contraseña", confirmPasswordField = crearPasswordField(), 420));
-        formPanel.add(Box.createRigidArea(new Dimension(0, 25)));
+        VBox confirmPasswordBox = crearCampo("Confirmar Contraseña", confirmPasswordField = crearPasswordField(), 420);
+
+        formPanel.getChildren().addAll(passwordBox, confirmPasswordBox);
 
         // Botones
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        buttonPanel.setOpaque(false);
-        buttonPanel.setMaximumSize(new Dimension(400, 60));
+        HBox buttonPanel = new HBox(20);
+        buttonPanel.setAlignment(Pos.CENTER);
+        buttonPanel.setPadding(new Insets(25, 0, 0, 0));
 
-        registrarButton = new JButton("REGISTRARSE");
-        registrarButton.setBackground(new Color(0, 150, 100));
-        registrarButton.setForeground(Color.WHITE);
-        registrarButton.setFont(new Font("Arial", Font.BOLD, 14));
-        registrarButton.setFocusPainted(false);
-        registrarButton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(0, 120, 80), 1),
-                BorderFactory.createEmptyBorder(10, 25, 10, 25)
-        ));
-        registrarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        registrarButton = new Button("REGISTRARSE");
+        registrarButton.setStyle("-fx-background-color: #009664; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 25 10 25;");
+        registrarButton.setPrefSize(140, 45);
 
-        cancelarButton = new JButton("CANCELAR");
-        cancelarButton.setBackground(new Color(150, 50, 50));
-        cancelarButton.setForeground(Color.WHITE);
-        cancelarButton.setFont(new Font("Arial", Font.BOLD, 14));
-        cancelarButton.setFocusPainted(false);
-        cancelarButton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(120, 40, 40), 1),
-                BorderFactory.createEmptyBorder(10, 25, 10, 25)
-        ));
-        cancelarButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cancelarButton = new Button("CANCELAR");
+        cancelarButton.setStyle("-fx-background-color: #963232; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 25 10 25;");
+        cancelarButton.setPrefSize(140, 45);
 
-        buttonPanel.add(registrarButton);
-        buttonPanel.add(cancelarButton);
-        formPanel.add(buttonPanel);
+        buttonPanel.getChildren().addAll(registrarButton, cancelarButton);
+        formPanel.getChildren().add(buttonPanel);
 
         return formPanel;
     }
 
-    private JPanel crearCampo(String label, JComponent field) {
-        return crearCampo(label, field, 200);
-    }
+    private VBox crearCampo(String label, Control field, double ancho) {
+        VBox panel = new VBox(5);
+        panel.setAlignment(Pos.CENTER_LEFT);
 
-    private JPanel crearCampo(String label, JComponent field, int ancho) {
-        JPanel panel = new JPanel();
-        panel.setOpaque(false);
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        Label jLabel = new Label(label);
+        jLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
-        JLabel jLabel = new JLabel(label);
-        jLabel.setForeground(Color.WHITE);
-        jLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        jLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        field.setPrefSize(ancho, 35);
+        field.setMaxWidth(ancho);
 
-        field.setMaximumSize(new Dimension(ancho, 35));
-        field.setPreferredSize(new Dimension(ancho, 35));
-
-        panel.add(jLabel);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(field);
-
+        panel.getChildren().addAll(jLabel, field);
         return panel;
     }
 
-    private JTextField crearTextField() {
-        JTextField field = new JTextField();
-        field.setFont(new Font("Arial", Font.PLAIN, 14));
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(100, 100, 150), 1),
-                BorderFactory.createEmptyBorder(8, 10, 8, 10)
-        ));
-        field.setBackground(new Color(240, 240, 245));
+    private TextField crearTextField() {
+        TextField field = new TextField();
+        field.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 8 10 8 10; -fx-background-color: #f0f0f5;");
         return field;
     }
 
-    private JPasswordField crearPasswordField() {
-        JPasswordField field = new JPasswordField();
-        field.setFont(new Font("Arial", Font.PLAIN, 14));
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(100, 100, 150), 1),
-                BorderFactory.createEmptyBorder(8, 10, 8, 10)
-        ));
-        field.setBackground(new Color(240, 240, 245));
+    private PasswordField crearPasswordField() {
+        PasswordField field = new PasswordField();
+        field.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 8 10 8 10; -fx-background-color: #f0f0f5;");
         return field;
     }
 
-    private JPanel crearFooterPanel() {
-        JPanel footerPanel = new JPanel();
-        footerPanel.setOpaque(false);
-        footerPanel.setLayout(new BorderLayout());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-        footerPanel.setPreferredSize(new Dimension(400, 30));
+    private HBox crearFooterPanel() {
+        HBox footerPanel = new HBox();
+        footerPanel.setAlignment(Pos.CENTER);
+        footerPanel.setPadding(new Insets(5, 0, 5, 0));
 
         String mensaje = esAdministrador ?
                 "Registro administrativo - Todos los campos son obligatorios" :
                 "Todos los campos son obligatorios";
 
-        JLabel infoLabel = new JLabel(mensaje, SwingConstants.CENTER);
-        infoLabel.setFont(new Font("Arial", Font.ITALIC, 11));
-        infoLabel.setForeground(new Color(180, 180, 180));
+        Label infoLabel = new Label(mensaje);
+        infoLabel.setStyle("-fx-font-size: 11; -fx-font-style: italic; -fx-text-fill: #b4b4b4;");
 
-        footerPanel.add(infoLabel, BorderLayout.CENTER);
+        footerPanel.getChildren().add(infoLabel);
         return footerPanel;
     }
 
     private void configurarComponentes() {
-        registrarButton.addActionListener(e -> registrarUsuario());
-        cancelarButton.addActionListener(e -> cancelarRegistro());
+        registrarButton.setOnAction(e -> registrarUsuario());
+        cancelarButton.setOnAction(e -> cancelarRegistro());
 
         // Enter key listener
-        emailField.addActionListener(e -> registrarUsuario());
-        passwordField.addActionListener(e -> registrarUsuario());
+        emailField.setOnAction(e -> registrarUsuario());
+        passwordField.setOnAction(e -> registrarUsuario());
     }
 
     private void registrarUsuario() {
@@ -270,27 +218,26 @@ public class RegistroUsuario extends JFrame {
 
             // Determinar tipo de usuario
             TipoUsuario tipoUsuario = esAdministrador ?
-                    (TipoUsuario) tipoUsuarioCombo.getSelectedItem() :
+                    tipoUsuarioCombo.getValue() :
                     TipoUsuario.CLIENTE;
 
             Usuario nuevoUsuario = new Usuario(
                     nombreField.getText().trim(),
                     apellidoField.getText().trim(),
                     emailField.getText().trim(),
-                    new String(passwordField.getPassword()),
+                    passwordField.getText(),
                     telefonoField.getText().trim(),
                     tipoUsuario
             );
 
-            // Validar y guardar
+            // Validar y guardar (manteniendo tu lógica original)
             nuevoUsuario.validarDatos();
-
-            GestorJson.agregarUsuario(nuevoUsuario);
+            gestorJson.agregarUsuario(nuevoUsuario);
 
             mostrarExito("¡Usuario registrado exitosamente!\n" +
                     "Email: " + nuevoUsuario.getEmail() + "\n" +
                     "Tipo: " + nuevoUsuario.getTipoUsuario().getDescripcion());
-            dispose();
+            stage.close();
 
         } catch (UsuarioException e) {
             mostrarError("Error de registro: " + e.getMessage());
@@ -301,13 +248,13 @@ public class RegistroUsuario extends JFrame {
     }
 
     private boolean validarCampos() {
-        // Validaciones básicas
+        // Validaciones básicas (manteniendo tu lógica original)
         if (nombreField.getText().trim().isEmpty() ||
                 apellidoField.getText().trim().isEmpty() ||
                 emailField.getText().trim().isEmpty() ||
                 telefonoField.getText().trim().isEmpty() ||
-                passwordField.getPassword().length == 0 ||
-                confirmPasswordField.getPassword().length == 0) {
+                passwordField.getText().isEmpty() ||
+                confirmPasswordField.getText().isEmpty()) {
 
             mostrarError("Todos los campos son obligatorios");
             return false;
@@ -328,13 +275,13 @@ public class RegistroUsuario extends JFrame {
         }
 
         // Validar contraseña
-        String password = new String(passwordField.getPassword());
-        String confirmPassword = new String(confirmPasswordField.getPassword());
+        String password = passwordField.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
         if (!password.equals(confirmPassword)) {
             mostrarError("Las contraseñas no coinciden");
-            passwordField.setText("");
-            confirmPasswordField.setText("");
+            passwordField.clear();
+            confirmPasswordField.clear();
             passwordField.requestFocus();
             return false;
         }
@@ -348,37 +295,46 @@ public class RegistroUsuario extends JFrame {
     }
 
     private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this,
-                mensaje,
-                "Error de Validación",
-                JOptionPane.ERROR_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error de Validación");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void mostrarExito(String mensaje) {
-        JOptionPane.showMessageDialog(this,
-                mensaje,
-                "Registro Exitoso",
-                JOptionPane.INFORMATION_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Registro Exitoso");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void cancelarRegistro() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro que desea cancelar el registro?\nSe perderán los datos ingresados.",
-                "Confirmar Cancelación",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cancelación");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea cancelar el registro?\nSe perderán los datos ingresados.");
 
-        if (confirm == JOptionPane.YES_OPTION) {
-            dispose();
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            stage.close();
         }
     }
 
     // Métodos estáticos para abrir ventanas
     public static void abrirRegistroCliente() {
-        SwingUtilities.invokeLater(() -> new RegistroUsuario(false).setVisible(true));
+        Platform.runLater(() -> {
+            RegistroUsuario registro = new RegistroUsuario(false);
+            registro.start(new Stage());
+        });
     }
 
     public static void abrirRegistroAdministrativo() {
-        SwingUtilities.invokeLater(() -> new RegistroUsuario(true).setVisible(true));
+        Platform.runLater(() -> {
+            RegistroUsuario registro = new RegistroUsuario(true);
+            registro.start(new Stage());
+        });
     }
+
+
 }
