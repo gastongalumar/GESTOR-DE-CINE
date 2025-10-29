@@ -36,6 +36,7 @@ public class App extends Application {
         gestorPeliculas.getListaPeliculas().add(p4);*/
 
         //System.out.println("prueba"+ gestorPeliculas.getListaPeliculas());
+
         SalaCine s1 = new SalaCine("Sala 1", 200);
         SalaCine s2 = new SalaCine("Sala 2", 200);
 
@@ -72,10 +73,13 @@ public class App extends Application {
         //GestorAdministrador.replica(contenedor, stage);
 
        // System.out.println(GestorFunciones.getListaFunciones());
-        FuncionesJSON.deserializarPeliculas();
         // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+        // FuncionesJSON.deserializarPeliculas();
+
+
+        FuncionesJSON.deserializarPeliculas();
         FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2));
-       // FuncionesJSON.deserializarPeliculas();
+
 
     }
 }
