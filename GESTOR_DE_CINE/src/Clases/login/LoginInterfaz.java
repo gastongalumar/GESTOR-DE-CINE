@@ -1,5 +1,7 @@
 package Clases.login;
 
+import Excepciones.AutenticacionException;
+import Excepciones.UsuarioException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -19,6 +21,7 @@ public class LoginInterfaz extends Application {
     private PasswordField passwordField;
     private Button loginButton, registerButton;
     private int intentosLogin = 0;
+    private GestorUsuarios gestorUsuarios;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,6 +30,12 @@ public class LoginInterfaz extends Application {
         configurarEventos();
         stage.show();
     }
+
+    public LoginInterfaz() {
+        this.gestorUsuarios = new GestorUsuarios();
+        this.gestorUsuarios.cargarUsuariosPrueba(); // Solo carga admin/empleado si no existen
+    }
+
 
     private void crearInterfaz() {
         stage.setTitle("CINE LOS CULIA - Inicio de Sesión");
@@ -189,10 +198,21 @@ public class LoginInterfaz extends Application {
     }
 
     private boolean autenticarUsuario(String email, String password) {
-        return (email.equals("admin@cine.com") && password.equals("admin123")) ||
-                (email.equals("cliente@cine.com") && password.equals("cliente123")) ||
-                (email.equals("empleado@cine.com") && password.equals("empleado123")) ||
-                (email.equals("user@cine.com") && password.equals("user123"));
+        try {
+            Usuario usuario = gestorUsuarios.autenticarUsuario(email, password);
+
+            // Registrar el login en estadísticas
+            GestorEstadisticasLogin.getInstance().registrarLogin(
+                    usuario.getEmail(),
+                    usuario.getTipoUsuario().getDescripcion()
+            );
+
+            return true;
+
+        } catch (AutenticacionException | UsuarioException e) {
+            System.out.println("❌ Error de autenticación: " + e.getMessage());
+            return false;
+        }
     }
 
     private String determinarTipoUsuario(String email) {
@@ -212,13 +232,13 @@ public class LoginInterfaz extends Application {
     }
 
     private void registrarUsuario() {
-        mostrarAlerta("Registro",
-                "Función de registro en desarrollo\nPuedes usar:\n" +
-                        "admin@cine.com / admin123\n" +
-                        "cliente@cine.com / cliente123\n" +
-                        "empleado@cine.com / empleado123",
-                Alert.AlertType.INFORMATION);
+        // ✅ Ahora abre el formulario REAL de registro
+        Platform.runLater(() -> {
+            RegistroUsuario registro = new RegistroUsuario(false); // false = registro normal de cliente
+            registro.start(new Stage());
+        });
     }
+
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);

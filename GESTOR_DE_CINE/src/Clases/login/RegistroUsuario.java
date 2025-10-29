@@ -24,6 +24,7 @@ public class RegistroUsuario extends Application {
     private boolean esAdministrador;
     private GestorJsonLogin gestorJson;
     private Stage stage;
+    private GestorUsuarios gestorUsuarios;
 
     public RegistroUsuario() {
         this(false);
@@ -31,6 +32,8 @@ public class RegistroUsuario extends Application {
 
     public RegistroUsuario(boolean esAdministrador) {
         this.esAdministrador = esAdministrador;
+        this.gestorUsuarios = new GestorUsuarios();
+        this.gestorUsuarios.cargarUsuariosPrueba();
     }
 
     @Override
@@ -38,6 +41,7 @@ public class RegistroUsuario extends Application {
         this.stage = primaryStage;
         inicializarInterfaz();
     }
+
 
     private void inicializarInterfaz() {
         stage.setTitle("CINE LOS CULIA - " + (esAdministrador ? "Registro Administrativo" : "Registro de Usuario"));
@@ -216,39 +220,41 @@ public class RegistroUsuario extends Application {
                 return;
             }
 
-            // Determinar tipo de usuario
-            TipoUsuario tipoUsuario = esAdministrador ?
-                    tipoUsuarioCombo.getValue() :
-                    TipoUsuario.CLIENTE;
-
+            // Crear nuevo usuario
             Usuario nuevoUsuario = new Usuario(
                     nombreField.getText().trim(),
                     apellidoField.getText().trim(),
-                    emailField.getText().trim(),
-                    passwordField.getText(),
+                    emailField.getText().trim().toLowerCase(), // Normalizar email
+                    new String(passwordField.getText()),
                     telefonoField.getText().trim(),
-                    tipoUsuario
+                    esAdministrador ? tipoUsuarioCombo.getValue() : TipoUsuario.CLIENTE
             );
 
-            // Validar y guardar (manteniendo tu lógica original)
-            nuevoUsuario.validarDatos();
-            gestorJson.agregarUsuario(nuevoUsuario);
+            // Registrar el usuario
+            gestorUsuarios.registrarUsuario(nuevoUsuario);
 
-            mostrarExito("¡Usuario registrado exitosamente!\n" +
+            // Mostrar mensaje de éxito
+            mostrarExito("¡Registro exitoso!\n\n" +
+                    "Nombre: " + nuevoUsuario.getNombre() + " " + nuevoUsuario.getApellido() + "\n" +
                     "Email: " + nuevoUsuario.getEmail() + "\n" +
-                    "Tipo: " + nuevoUsuario.getTipoUsuario().getDescripcion());
+                    "Tipo: " + nuevoUsuario.getTipoUsuario().getDescripcion() + "\n\n" +
+                    "Ya puedes iniciar sesión con tus credenciales.");
+
+            // Limpiar formulario y cerrar
+            limpiarFormulario();
             stage.close();
 
         } catch (UsuarioException e) {
-            mostrarError("Error de registro: " + e.getMessage());
+            mostrarError("Error en el registro:\n" + e.getMessage());
         } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
+            mostrarError("Error inesperado:\n" + e.getMessage());
             e.printStackTrace();
         }
     }
 
+
     private boolean validarCampos() {
-        // Validaciones básicas (manteniendo tu lógica original)
+        // Validar que todos los campos estén completos
         if (nombreField.getText().trim().isEmpty() ||
                 apellidoField.getText().trim().isEmpty() ||
                 emailField.getText().trim().isEmpty() ||
@@ -260,9 +266,9 @@ public class RegistroUsuario extends Application {
             return false;
         }
 
-        // Validar email
+        // Validar formato de email
         if (!Usuario.validarEmail(emailField.getText().trim())) {
-            mostrarError("Por favor ingrese un email válido");
+            mostrarError("Por favor ingrese un email válido\nEjemplo: usuario@correo.com");
             emailField.requestFocus();
             return false;
         }
@@ -274,7 +280,7 @@ public class RegistroUsuario extends Application {
             return false;
         }
 
-        // Validar contraseña
+        // Validar que las contraseñas coincidan
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
@@ -286,6 +292,7 @@ public class RegistroUsuario extends Application {
             return false;
         }
 
+        // Validar fortaleza de contraseña
         if (!Usuario.validarPassword(password)) {
             mostrarError("La contraseña debe tener al menos 6 caracteres");
             return false;
@@ -294,21 +301,40 @@ public class RegistroUsuario extends Application {
         return true;
     }
 
-    private void mostrarError(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error de Validación");
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    private void limpiarFormulario() {
+        nombreField.clear();
+        apellidoField.clear();
+        emailField.clear();
+        telefonoField.clear();
+        passwordField.clear();
+        confirmPasswordField.clear();
+        if (tipoUsuarioCombo != null) {
+            tipoUsuarioCombo.setValue(TipoUsuario.CLIENTE);
+        }
     }
 
     private void mostrarExito(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Registro Exitoso");
+        alert.setHeaderText("¡Bienvenido a CINE LOS CULIA!");
+        alert.setContentText(mensaje);
+
+        // Agregar ícono personalizado (opcional)
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+//        stage.getIcons().add(new Image("/iconos/exito.png")); // Si tienes íconos
+
+        alert.showAndWait();
+    }
+
+    private void mostrarError(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error de Registro");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
+
 
     private void cancelarRegistro() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -336,5 +362,5 @@ public class RegistroUsuario extends Application {
         });
     }
 
-
 }
+
