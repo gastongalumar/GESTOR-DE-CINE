@@ -138,14 +138,14 @@ public class AsientoButton extends StackPane {
         Rectangle apoyoIzquierdo = new Rectangle(6, 20);
         apoyoIzquierdo.setArcWidth(8);
         apoyoIzquierdo.setArcHeight(8);
-        apoyoIzquierdo.setFill(colorSombra.darker());
+        apoyoIzquierdo.setFill(colorBase.darker());
         apoyoIzquierdo.setTranslateX(-25);
         apoyoIzquierdo.setTranslateY(8);
 
         Rectangle apoyoDerecho = new Rectangle(6, 20);
         apoyoDerecho.setArcWidth(8);
         apoyoDerecho.setArcHeight(8);
-        apoyoDerecho.setFill(colorSombra.darker());
+        apoyoDerecho.setFill(colorBase.darker());
         apoyoDerecho.setTranslateX(25);
         apoyoDerecho.setTranslateY(8);
 
