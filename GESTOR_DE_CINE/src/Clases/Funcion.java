@@ -28,7 +28,7 @@ public class Funcion {
         GestorFunciones.agregarFuncion(this);
     }
 
-    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas){
+    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas, double precio){
         boolean encontrado = true;
         SalaCine salaEncontrada = null;
         Pelicula peliculaEncontrada = null;

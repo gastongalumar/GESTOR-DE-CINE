@@ -17,6 +17,8 @@ import javax.swing.UIManager;
 
 public class App extends Application {
 
+
+
     @Override
     public void start(Stage stage) {
         // Crear datos de prueba
@@ -73,7 +75,7 @@ public class App extends Application {
         FuncionesJSON.deserializarPeliculas();
         // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
         FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2));
-        //FuncionesJSON.deserializarPeliculas();
+       // FuncionesJSON.deserializarPeliculas();
 
     }
 }
