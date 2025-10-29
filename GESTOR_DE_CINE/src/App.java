@@ -37,8 +37,10 @@ public class App extends Application {
 
         //System.out.println("prueba"+ gestorPeliculas.getListaPeliculas());
 
-        SalaCine s1 = new SalaCine("Sala 1", 200);
-        SalaCine s2 = new SalaCine("Sala 2", 200);
+        SalaCine s1 = new SalaCine("Sala 1", 160);
+        SalaCine s2 = new SalaCine("Sala 2", 160);
+        SalaCine s3 = new SalaCine("Sala 3", 160);
+        SalaCine s4 = new SalaCine("Sala 4", 160);
 
         // Crear funciones asociadas a las películas (se registran automáticamente en GestorFunciones)
        /* Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
