@@ -29,7 +29,7 @@ public class FuncionesJSON {
                     jsonFunciones.put(jsonFuncion);
                 }
 
-                JSONUtiles.grabar(jsonFunciones, "funciones.json");
+                JSONUtiles.grabar(jsonFunciones, "GESTOR_DE_CINE/funciones.json");
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -43,7 +43,7 @@ public class FuncionesJSON {
         List<Funcion> listaFunciones = new ArrayList<>();
 
         try {
-            JSONArray jsonFunciones = new JSONArray(JSONUtiles.leer("funciones.json"));
+            JSONArray jsonFunciones = new JSONArray(JSONUtiles.leer("GESTOR_DE_CINE/funciones.json"));
             if (jsonFunciones == null) {
                 System.out.println("⚠️ No hay funciones guardadas en el JSON.");
                 return listaFunciones;
@@ -97,7 +97,7 @@ public class FuncionesJSON {
     }
 
 
-    private static final String RUTA_JSON = "peliculas.json";
+    private static final String RUTA_JSON = "GESTOR_DE_CINE/peliculas.json";
 
     public static void serializarPeliculas(List<Pelicula> listaPeliculas) {
         JSONArray jsonPeliculas = new JSONArray();
