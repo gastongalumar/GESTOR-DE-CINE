@@ -25,6 +25,7 @@ public class FuncionesJSON {
                         jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
                         jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
                         jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
+                        jsonFuncion.put("Precio", funcion.getPrecio());
 
                         jsonFunciones.put(jsonFuncion);
                     }
