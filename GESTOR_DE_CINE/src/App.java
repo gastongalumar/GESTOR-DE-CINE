@@ -22,16 +22,16 @@ public class App extends Application {
         // Crear datos de prueba
 
         // HOLA MUNDO
-        GestorPeliculas gestorPeliculas = new GestorPeliculas();
-        Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025,7,2), LocalDate.of(2025,11,5));
-        Pelicula p2 = new Pelicula("pelicula2", LocalDate.of(2025,10,5), LocalDate.of(2025,12,6));
-        Pelicula p3 = new Pelicula("pelicula3",LocalDate.of(2025,10,15), LocalDate.of(2026,1,12));
-        Pelicula p4 = new Pelicula("pelicula4",LocalDate.of(2025,8,4), LocalDate.of(2025,11,6));
+        GestorAdministrador.iniciarAdministrador();
+        Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025, 7, 2), LocalDate.of(2025, 11, 5));
+        Pelicula p2 = new Pelicula("pelicula2", LocalDate.of(2025, 10, 5), LocalDate.of(2025, 12, 6));
+        Pelicula p3 = new Pelicula("pelicula3", LocalDate.of(2025, 10, 15), LocalDate.of(2026, 1, 12));
+        Pelicula p4 = new Pelicula("pelicula4", LocalDate.of(2025, 8, 4), LocalDate.of(2025, 11, 6));
 
-        gestorPeliculas.getListaPeliculas().add(p1);
+        /*gestorPeliculas.getListaPeliculas().add(p1);
         gestorPeliculas.getListaPeliculas().add(p2);
         gestorPeliculas.getListaPeliculas().add(p3);
-        gestorPeliculas.getListaPeliculas().add(p4);
+        gestorPeliculas.getListaPeliculas().add(p4);*/
 
         //System.out.println("prueba"+ gestorPeliculas.getListaPeliculas());
         SalaCine s1 = new SalaCine("Sala 1", 200);
@@ -66,35 +66,14 @@ public class App extends Application {
         GestorAdministrador.PeliculaAdministrador(p2,gestorPeliculas.getListaPeliculas());
         GestorAdministrador.PeliculaAdministrador(p3,gestorPeliculas.getListaPeliculas());
         GestorAdministrador.PeliculaAdministrador(p4,gestorPeliculas.getListaPeliculas());*/
-        GestorAdministrador.vistaAdministrador(gestorPeliculas.getListaPeliculas());
+        //GestorAdministrador.vistaAdministrador(gestorPeliculas.getListaPeliculas());
         //GestorAdministrador.replica(contenedor, stage);
 
-        System.out.println(GestorFunciones.getListaFunciones());
+       // System.out.println(GestorFunciones.getListaFunciones());
+        FuncionesJSON.deserializarPeliculas();
+        // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2));
+        //FuncionesJSON.deserializarPeliculas();
 
-       // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
-        FuncionesJSON.deserializarFunciones(gestorPeliculas.getListaPeliculas(), List.of(s1,s2));
-    }
-
-    public static void main(String[] args) {
-        try {
-            launch(args);
-        } catch (Throwable t) {
-            System.err.println("No se pudo iniciar JavaFX: " + t.getMessage());
-            System.err.println("Cayendo al modo fallback Swing. Si quieres ejecutar la cartelera en JavaFX, configura JavaFX en el classpath.");
-
-            // Como fallback, abrir directamente el selector con una función de prueba
-            SwingUtilities.invokeLater(() -> {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                Pelicula p1 = new Pelicula("pelicula1");
-                SalaCine s1 = new SalaCine("Sala 1", 200);
-                Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
-                SelectorAsientos selector = new SelectorAsientos(f1);
-                selector.setVisible(true);
-            });
-        }
     }
 }

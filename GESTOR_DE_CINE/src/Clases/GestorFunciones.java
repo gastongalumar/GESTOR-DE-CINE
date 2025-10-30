@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorFunciones {
-   private static List<Funcion> listaFunciones = new ArrayList<>();
+    private static List<Funcion> listaFunciones = new ArrayList<>();
 
-    public GestorFunciones(){
+    public GestorFunciones() {
         // Ya no es necesario inicializar la lista aquí; se hace en la declaración
     }
 
@@ -23,16 +23,18 @@ public class GestorFunciones {
 
     public static void agregarFuncion(Funcion f) throws FechaInvalidaException {
 
-        if(f.getHorarioFuncion().toLocalDate().isBefore(f.getPelicula().getFechaEstreno()) || f.getHorarioFuncion().toLocalDate().isAfter(f.getPelicula().getFechaSalida())){
+        if (f.getHorarioFuncion().toLocalDate().isBefore(f.getPelicula().getFechaEstreno()) || f.getHorarioFuncion().toLocalDate().isAfter(f.getPelicula().getFechaSalida())) {
             //throw new FechaInvalidaException("La fecha indicada no puede ser anterior a la fecha de estreno ni posterior a la fecha de salida");
-            GestorAdministrador.mostrarAlerta("La fecha indicada no puede ser anterior a la fecha de estreno ni posterior a la fecha de salida");
-        }else {
+           // GestorAdministrador.mostrarAlerta("La fecha indicada no puede ser anterior a la fecha de estreno ni posterior a la fecha de salida");
+        } else {
             listaFunciones.add(f);
             FuncionesJSON.serializarFunciones(listaFunciones);
         }
     }
 
-    public static void eliminarFuncion(Funcion f){
+
+    public static void eliminarFuncion(Funcion f) {
         listaFunciones.remove(f);
+        FuncionesJSON.serializarFunciones(listaFunciones);
     }
 }

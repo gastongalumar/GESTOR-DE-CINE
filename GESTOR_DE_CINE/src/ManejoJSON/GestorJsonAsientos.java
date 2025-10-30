@@ -1,5 +1,7 @@
 package ManejoJSON;
 
+import Clases.Funcion;
+import Clases.GestorFunciones;
 import Clases.SalaCine;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +10,8 @@ import ManejoJSON.JSONUtiles;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.format.DateTimeFormatter;
 
 public class GestorJsonAsientos {
     // Archivo por defecto si no se especifica uno
@@ -176,6 +180,8 @@ public class GestorJsonAsientos {
         return String.valueOf((char) ('A' + columna)) + (fila + 1);
     }
 
+
+    //GETTERS Y SETTERS
     public String getJsonCompleto() {
         try {
             return new String(Files.readAllBytes(Paths.get(archivoAsientos)));
@@ -190,5 +196,80 @@ public class GestorJsonAsientos {
     public void limpiarSelecciones() {
         sala.limpiarSelecciones();
         guardarEstadoCompleto();
+    }
+
+
+
+
+
+
+    public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre) {
+        try {
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+            for (Funcion funcion : GestorFunciones.getListaFunciones()) {
+                if (funcion.getPelicula().getNombrePelicula().equals(nombreAnterior)) {
+                    String horarioStr = funcion.getHorarioFuncion().format(fmt);
+
+                    String archivoViejo = String.format("Asientos_%s_%s.json",
+                            nombreAnterior.replaceAll("\\s+", "_"), horarioStr);
+                    String archivoNuevo = String.format("Asientos_%s_%s.json",
+                            nuevoNombre.replaceAll("\\s+", "_"), horarioStr);
+
+                    File fileViejo = new File(archivoViejo);
+                    File fileNuevo = new File(archivoNuevo);
+
+                    System.out.println("🔄 Procesando: " + archivoViejo + " → " + archivoNuevo);
+
+                    if (fileViejo.exists()) {
+                        // 🔴 FORZAR SOBREESCRITURA incluso si el archivo nuevo ya existe
+                        String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
+                        Files.write(fileNuevo.toPath(), contenido.getBytes(),
+                                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                        System.out.println("✅ Datos SOBREESCRITOS: " + archivoViejo + " → " + archivoNuevo);
+
+                    } else {
+                        System.out.println("⚠️ Archivo origen no encontrado: " + archivoViejo);
+                    }
+
+                    fileViejo.delete();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ Error al copiar archivos de asientos: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    private static void guardarEstadoCompleto(SalaCine sala, String archivo) {
+        try {
+            JSONObject estadoSala = new JSONObject();
+            estadoSala.put("fechaActualizacion", java.time.LocalDateTime.now().toString());
+            estadoSala.put("totalFilas", sala.getFilas());
+            estadoSala.put("totalColumnas", sala.getColumnas());
+            estadoSala.put("asientosOcupados", sala.contarAsientosOcupados());
+
+            JSONArray matrizAsientos = new JSONArray();
+            for (int i = 0; i < sala.getFilas(); i++) {
+                JSONArray filaArray = new JSONArray();
+                for (int j = 0; j < sala.getColumnas(); j++) {
+                    JSONObject asiento = new JSONObject();
+                    asiento.put("fila", i);
+                    asiento.put("columna", j);
+                    asiento.put("estado", sala.getEstadoAsiento(i, j).toString());
+                    asiento.put("etiqueta", String.valueOf((char) ('A' + j)) + (i + 1));
+                    filaArray.put(asiento);
+                }
+                matrizAsientos.put(filaArray);
+            }
+            estadoSala.put("matrizAsientos", matrizAsientos);
+
+            Files.write(Paths.get(archivo), estadoSala.toString().getBytes());
+            System.out.println("📁 Archivo creado: " + archivo);
+
+        } catch (Exception e) {
+            System.err.println("❌ Error al crear archivo: " + e.getMessage());
+        }
     }
 }
