@@ -509,7 +509,8 @@ public class SelectorAsientos extends Application {
 
             // Usar el GestorDePagos para procesar el pago
             GestorDePagos gestorPagos = new GestorDePagos();
-            boolean pagoExitoso = gestorPagos.procesarPago(metodoPago, totalAPagar, descripcion);
+           // boolean pagoExitoso = gestorPagos.procesarPago(metodoPago, totalAPagar, descripcion);
+            boolean pagoExitoso = gestorPagos.procesarPago(metodoPago, totalAPagar,descripcion);
 
             if (pagoExitoso) {
                 Alert exito = new Alert(Alert.AlertType.INFORMATION);
@@ -537,7 +538,6 @@ public class SelectorAsientos extends Application {
         }
     }
 
-    // ✅ NUEVO: Método para generar ID único para método de pago
     private int generarIdMetodoPago() {
         return (int) (System.currentTimeMillis() % 1000000);
     }

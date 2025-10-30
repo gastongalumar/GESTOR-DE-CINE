@@ -67,7 +67,7 @@ public class GestorDePagos {
         }
     }
 
-    public boolean procesarPago(MetodoDePago metodoPago, double totalAPagar, String descripcion) {
+    public static boolean procesarPago(MetodoDePago metodoPago, double totalAPagar, String descripcion) {
 
         // Lógica simulada de procesamiento de pago
         System.out.println("Procesando pago de $" + totalAPagar + " usando " + metodoPago.getNombre() + " para: " + descripcion);
