@@ -170,18 +170,14 @@ public class AsientoButton extends StackPane {
                 (char)('A' + columna) + " (" + estadoStr + ")"));
     }
 
-    /**
-     * Método público para forzar el redibujado del asiento
-     */
+
     public void redibujar() {
         this.estado = sala.getEstadoAsiento(fila, columna);
         dibujarAsiento();
         actualizarToolTip();
     }
 
-    /**
-     * Método para establecer callback cuando el asiento cambia
-     */
+
     public void setOnAsientoCambiado(Runnable callback) {
         this.onAsientoCambiado = callback;
     }

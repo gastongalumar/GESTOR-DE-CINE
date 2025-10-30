@@ -127,7 +127,8 @@ public class GestorAdministrador {
             -fx-background-radius: 10;
         """);
         botonAgregarPelicula.setOnAction(e -> {
-            formularioAgregarPelicula();
+           //formularioAgregarPelicula();
+            Formularios.formularioAgregarPelicula();
         });
 
 
@@ -142,7 +143,8 @@ public class GestorAdministrador {
         """);
 
         botonEliminarPelicula.setOnAction(e -> {
-            formularioEliminarPelicula();
+            //formularioEliminarPelicula();
+            Formularios.formularioEliminarPelicula();
         });
 
         Button botonModificarPelicula = new Button("Modificar pelicula");
@@ -865,7 +867,7 @@ public class GestorAdministrador {
 
 
 
-    private static String guardarImagenPelicula(File archivoOrigen) throws IOException {
+    public static String guardarImagenPelicula(File archivoOrigen) throws IOException {
         Path carpetaImg = Paths.get("src", "img");
 
         //
