@@ -2,6 +2,7 @@ package Clases;
 
 import Excepciones.CamposIncompletosException;
 import Excepciones.FechaInvalidaException;
+import Excepciones.PeliculaInvalidaException;
 import ManejoJSON.FuncionesJSON;
 import ManejoJSON.GestorJsonAsientos;
 import javafx.geometry.Insets;
@@ -211,7 +212,7 @@ public class Formularios {
 
 
 
-    public static void formularioEliminarPelicula() {
+    public static void formularioEliminarPelicula() throws CamposIncompletosException, PeliculaInvalidaException {
         Stage ventana = crearVentana("Eliminar película");
         Label titulo = crearTitulo("Eliminar película");
 
@@ -220,27 +221,26 @@ public class Formularios {
         Button botonEliminar = crearBotonVerde("Eliminar película");
         botonEliminar.setOnAction(e -> {
             String nombrePelicula = campoPelicula.getText().trim();
-            if (nombrePelicula.isEmpty()) {
-                mostrarAlerta("Por favor, completa el campo con el nombre de la película.");
-                return;
+            try {
+                if (nombrePelicula.isEmpty()) {
+                    throw new CamposIncompletosException("Por favor, completa el campo con el nombre de la película.");
+                }
+
+                Pelicula pelicula = buscarPeliculaPorNombre(nombrePelicula);
+
+                if (pelicula == null) {
+                    throw new PeliculaInvalidaException("El nombre de la pelicula no coincide con ninguna de la cartelera");
+                }
+
+                GestorPeliculas.eliminarPelicula(pelicula);
+                mostrarAlerta("Película eliminada correctamente.");
+
+                ventana.close();
+                ManejoVentanas.reiniciarGestorAdministrador();
+
+            }catch (CamposIncompletosException | PeliculaInvalidaException ex){
+                mostrarAlerta(ex.getMessage());
             }
-
-            Pelicula pelicula = buscarPeliculaPorNombre(nombrePelicula);
-
-            if (pelicula == null) {
-                mostrarAlerta("No se encontró ninguna película con ese nombre.");
-                return;
-            }
-
-            // Eliminamos funciones relacionadas (comentado en tu versión original)
-            // GestorFunciones.getListaFunciones().removeIf(f -> f.getPelicula().equals(pelicula));
-            // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
-
-            GestorPeliculas.eliminarPelicula(pelicula);
-            mostrarAlerta("Película eliminada correctamente.");
-
-            ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador();
         });
 
         VBox layout = crearLayout(titulo, campoPelicula, botonEliminar);
