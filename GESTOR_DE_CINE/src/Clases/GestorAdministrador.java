@@ -157,7 +157,8 @@ public class GestorAdministrador {
         """);
 
         botonModificarPelicula.setOnAction(e -> {
-            formularioEditarPelicula();
+           // formularioEditarPelicula();
+            Formularios.formularioEditarPelicula();
         });
 
         VBox contieneBotonesFunciones = new VBox(10,tituloFunciones, botonAgregar, botonEliminar,botonModificarFuncion, separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula, botonModificarPelicula);
