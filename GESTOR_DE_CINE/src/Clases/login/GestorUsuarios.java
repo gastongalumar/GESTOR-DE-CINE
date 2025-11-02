@@ -1,5 +1,8 @@
 package Clases.login;
 
+import Clases.login.usuario.Administrador;
+import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import Enumeradores.login.EstadoUsuario;
 import Enumeradores.login.TipoUsuario;
 import Excepciones.AutenticacionException;
@@ -35,7 +38,6 @@ public class GestorUsuarios {
     private void guardarUsuarios() {
         gestorJson.guardar(usuarios.obtenerTodos());
     }
-
 
     public Usuario autenticarUsuario(String email, String password)
             throws AutenticacionException, UsuarioException {
@@ -94,18 +96,68 @@ public class GestorUsuarios {
         return usuarios.obtenerTodos();
     }
 
-    // Convertidores JSON (específicos para Usuario)
+    // ✅ MÉTODO jsonToUsuario
     private Usuario jsonToUsuario(JSONObject jsonUser) {
         try {
-            Usuario usuario = new Usuario(
-                    jsonUser.getString("nombre"),
-                    jsonUser.getString("apellido"),
-                    jsonUser.getString("email"),
-                    jsonUser.getString("password"),
-                    jsonUser.getString("telefono"),
-                    TipoUsuario.valueOf(jsonUser.getString("tipoUsuario"))
-            );
+            TipoUsuario tipo = TipoUsuario.valueOf(jsonUser.getString("tipoUsuario"));
+            Usuario usuario;
 
+            // CREAR LA INSTANCIA CORRECTA SEGÚN EL TIPO
+            if (tipo == TipoUsuario.CLIENTE) {
+                Cliente cliente = new Cliente(
+                        jsonUser.getString("nombre"),
+                        jsonUser.getString("apellido"),
+                        jsonUser.getString("email"),
+                        jsonUser.getString("password"),
+                        jsonUser.getString("telefono")
+                );
+                // CARGAR PUNTOS DE FIDELIDAD SI EXISTEN
+                if (jsonUser.has("puntosFidelidad")) {
+                    cliente.setPuntosFidelidad(jsonUser.getInt("puntosFidelidad"));
+                }
+                usuario = cliente;
+
+            } else if (tipo == TipoUsuario.ADMINISTRADOR) {
+                Administrador admin = new Administrador(
+                        jsonUser.getString("nombre"),
+                        jsonUser.getString("apellido"),
+                        jsonUser.getString("email"),
+                        jsonUser.getString("password"),
+                        jsonUser.getString("telefono")
+                );
+                // CARGAR NIVEL DE ACCESO SI EXISTE
+                if (jsonUser.has("nivelAcceso")) {
+                    admin.setNivelAcceso(jsonUser.getString("nivelAcceso"));
+                }
+                usuario = admin;
+
+            } else {
+                // Para EMPLEADO - crear clase anónima
+                usuario = new Usuario(
+                        jsonUser.getString("nombre"),
+                        jsonUser.getString("apellido"),
+                        jsonUser.getString("email"),
+                        jsonUser.getString("password"),
+                        jsonUser.getString("telefono"),
+                        tipo
+                ) {
+                    @Override
+                    public boolean puedeRealizarAccion(String accion) {
+                        if (!isActivo()) return false;
+
+                        switch (getTipoUsuario()) {
+                            case EMPLEADO:
+                                return accion.equals("vender_entradas") ||
+                                        accion.equals("ver_cartelera") ||
+                                        accion.equals("atender_clientes");
+                            default:
+                                return true;
+                        }
+                    }
+                };
+            }
+
+            // ✅ SOLO UNA VEZ ESTE BLOQUE - ELIMINAR EL DUPLICADO
             usuario.setEstado(EstadoUsuario.valueOf(jsonUser.getString("estado")));
             usuario.setIntentosFallidos(jsonUser.getInt("intentosFallidos"));
 
@@ -114,11 +166,13 @@ public class GestorUsuarios {
             }
 
             return usuario;
+
         } catch (JSONException e) {
             throw new RuntimeException("Error convirtiendo JSON a Usuario", e);
         }
     }
 
+    // ✅ MÉTODO usuarioToJson ACTUALIZADO
     private JSONObject usuarioToJson(Usuario usuario) {
         try {
             JSONObject jsonUser = new JSONObject();
@@ -132,6 +186,14 @@ public class GestorUsuarios {
             jsonUser.put("fechaUltimoAcceso", usuario.getFechaUltimoAcceso().toString());
             jsonUser.put("estado", usuario.getEstado().name());
             jsonUser.put("intentosFallidos", usuario.getIntentosFallidos());
+
+            // AGREGAR ATRIBUTOS ESPECÍFICOS DE LAS SUBCLASES
+            if (usuario instanceof Cliente cliente) {
+                jsonUser.put("puntosFidelidad", cliente.getPuntosFidelidad());
+            } else if (usuario instanceof Administrador admin) {
+                jsonUser.put("nivelAcceso", admin.getNivelAcceso());
+            }
+
             return jsonUser;
         } catch (JSONException e) {
             throw new RuntimeException("Error convirtiendo Usuario a JSON", e);
@@ -151,40 +213,82 @@ public class GestorUsuarios {
             throw UsuarioException.usuarioDuplicado(nuevoUsuario.getEmail());
         }
 
-        // Asignar fecha de registro y estado inicial
-        nuevoUsuario.setFechaRegistro(LocalDateTime.now());
-        nuevoUsuario.setFechaUltimoAcceso(LocalDateTime.now());
-        nuevoUsuario.setEstado(EstadoUsuario.ACTIVO);
-        nuevoUsuario.setIntentosFallidos(0);
+        // CREAR LA INSTANCIA CORRECTA SEGÚN EL TIPO
+        Usuario usuarioParaGuardar;
+        if (nuevoUsuario.getTipoUsuario() == TipoUsuario.CLIENTE) {
+            usuarioParaGuardar = new Cliente(
+                    nuevoUsuario.getNombre(),
+                    nuevoUsuario.getApellido(),
+                    nuevoUsuario.getEmail(),
+                    nuevoUsuario.getPassword(),
+                    nuevoUsuario.getTelefono()
+            );
+        } else if (nuevoUsuario.getTipoUsuario() == TipoUsuario.ADMINISTRADOR) {
+            usuarioParaGuardar = new Administrador(
+                    nuevoUsuario.getNombre(),
+                    nuevoUsuario.getApellido(),
+                    nuevoUsuario.getEmail(),
+                    nuevoUsuario.getPassword(),
+                    nuevoUsuario.getTelefono()
+            );
+        } else {
+            // Para empleados, crear clase anónima
+            usuarioParaGuardar = new Usuario(
+                    nuevoUsuario.getNombre(),
+                    nuevoUsuario.getApellido(),
+                    nuevoUsuario.getEmail(),
+                    nuevoUsuario.getPassword(),
+                    nuevoUsuario.getTelefono(),
+                    nuevoUsuario.getTipoUsuario()
+            ) {
+                @Override
+                public boolean puedeRealizarAccion(String accion) {
+                    if (!isActivo()) return false;
+
+                    switch (getTipoUsuario()) {
+                        case EMPLEADO:
+                            return accion.equals("vender_entradas") ||
+                                    accion.equals("ver_cartelera");
+                        default:
+                            return true;
+                    }
+                }
+            };
+        }
+
+        // Asignar fechas y estado
+        usuarioParaGuardar.setFechaRegistro(LocalDateTime.now());
+        usuarioParaGuardar.setFechaUltimoAcceso(LocalDateTime.now());
+        usuarioParaGuardar.setEstado(EstadoUsuario.ACTIVO);
+        usuarioParaGuardar.setIntentosFallidos(0);
 
         // Agregar y guardar
-        usuarios.agregar(nuevoUsuario);
+        usuarios.agregar(usuarioParaGuardar);
         guardarUsuarios();
 
-        System.out.println("✅ Nuevo usuario registrado: " + nuevoUsuario.getEmail() +
-                " - Tipo: " + nuevoUsuario.getTipoUsuario().getDescripcion());
+        System.out.println("✅ Nuevo usuario registrado: " + usuarioParaGuardar.getEmail() +
+                " - Tipo: " + usuarioParaGuardar.getTipoUsuario().getDescripcion());
     }
-
-    // Método específico para registro de clientes (público)
-    public void registrarCliente(String nombre, String apellido, String email,
-                                 String password, String telefono) throws UsuarioException {
-        Usuario nuevoCliente = new Usuario(
-                nombre, apellido, email, password, telefono, TipoUsuario.CLIENTE
-        );
-        registrarUsuario(nuevoCliente);
-    }
-
 
     // Mantener usuarios de prueba SOLO si no hay usuarios reales
     public void cargarUsuariosPrueba() {
         if (usuarios.estaVacia()) {
             System.out.println("🎬 Cargando usuarios de prueba...");
 
-            // Solo cargar admin y empleado de prueba, clientes se registran
-            usuarios.agregar(new Usuario("Admin", "Sistema", "admin@cine.com",
-                    "admin123", "123456789", TipoUsuario.ADMINISTRADOR));
+            // USAR LAS SUBCLASES CORRECTAS
+            usuarios.agregar(new Administrador("Admin", "Sistema", "admin@cine.com",
+                    "admin123", "123456789"));
+
+            // Empleado como clase anónima
             usuarios.agregar(new Usuario("Empleado", "Ventas", "empleado@cine.com",
-                    "empleado123", "987654321", TipoUsuario.EMPLEADO));
+                    "empleado123", "987654321", TipoUsuario.EMPLEADO) {
+                @Override
+                public boolean puedeRealizarAccion(String accion) {
+                    return accion.equals("vender_entradas") ||
+                            accion.equals("ver_cartelera") ||
+                            accion.equals("atender_clientes");
+                }
+            });
 
             guardarUsuarios();
             System.out.println("✅ Usuarios de prueba (admin/empleado) creados");

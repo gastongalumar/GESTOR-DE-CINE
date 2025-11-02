@@ -1,5 +1,6 @@
 package Clases.login;
 
+import Clases.login.usuario.Usuario;
 import Excepciones.AutenticacionException;
 import Excepciones.UsuarioException;
 import javafx.application.Application;

@@ -1,5 +1,6 @@
 package Clases.login;
 
+import Clases.login.usuario.Usuario;
 import Enumeradores.login.TipoUsuario;
 import Excepciones.UsuarioException;
 import ManejoJSON.GestorJsonLogin;
@@ -228,7 +229,12 @@ public class RegistroUsuario extends Application {
                     new String(passwordField.getText()),
                     telefonoField.getText().trim(),
                     esAdministrador ? tipoUsuarioCombo.getValue() : TipoUsuario.CLIENTE
-            );
+            ) {
+                @Override
+                public boolean puedeRealizarAccion(String accion) {
+                    return false;
+                }
+            };
 
             // Registrar el usuario
             gestorUsuarios.registrarUsuario(nuevoUsuario);

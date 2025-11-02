@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class ListaGenerica<T> {
+public class ListaGenerica<T>  {
     private List<T> elementos;
 
     public ListaGenerica() {

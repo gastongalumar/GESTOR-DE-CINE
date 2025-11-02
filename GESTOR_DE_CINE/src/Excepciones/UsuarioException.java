@@ -12,6 +12,8 @@ public class UsuarioException extends CineException {
         super(mensaje, codigoError, "Gestión de Usuarios", "USER");
     }
 
+
+
     // Métodos factory estáticos
     public static UsuarioException usuarioNoEncontrado(String email) {
         return new UsuarioException(
