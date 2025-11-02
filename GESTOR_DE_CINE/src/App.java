@@ -1,5 +1,6 @@
 // App.java - JavaFX launcher para la cartelera
 import Clases.*;
+import Clases.login.LoginInterfaz;
 import ManejoJSON.FuncionesJSON;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -28,7 +29,7 @@ public class App extends Application {
         Pelicula p3 = new Pelicula("pelicula3", LocalDate.of(2025, 10, 15), LocalDate.of(2026, 1, 12));
         Pelicula p4 = new Pelicula("pelicula4", LocalDate.of(2025, 8, 4), LocalDate.of(2025, 11, 6));
 
-        /*gestorPeliculas.getListaPeliculas().add(p1);
+      /*  gestorPeliculas.getListaPeliculas().add(p1);
         gestorPeliculas.getListaPeliculas().add(p2);
         gestorPeliculas.getListaPeliculas().add(p3);
         gestorPeliculas.getListaPeliculas().add(p4);*/
@@ -69,11 +70,13 @@ public class App extends Application {
         //GestorAdministrador.vistaAdministrador(gestorPeliculas.getListaPeliculas());
         //GestorAdministrador.replica(contenedor, stage);
 
-       // System.out.println(GestorFunciones.getListaFunciones());
         FuncionesJSON.deserializarPeliculas();
-        // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
-        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2));
-        //FuncionesJSON.deserializarPeliculas();
+        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1,s2));
 
+        abrirSistemaLogin();
+    }
+    private void abrirSistemaLogin() {
+        // Esto abre la ventana de login interactiva
+        LoginInterfaz.abrirLogin();
     }
 }
