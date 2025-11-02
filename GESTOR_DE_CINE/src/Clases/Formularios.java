@@ -25,7 +25,7 @@ import static Clases.GestorAdministrador.mostrarAlerta;
 
 public class Formularios {
 
-    public static void formularioAgregarPelicula() {
+    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones) {
         Stage ventana = crearVentana("Agregar nueva película");
         Label titulo = crearTitulo("Agregar nueva película");
 
@@ -88,7 +88,7 @@ public class Formularios {
             }
 
             ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador();
+            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
         });
 
         VBox layout = crearLayout(titulo, campoNombre, seccionFechas, seccionImagen, botonGuardar);
@@ -201,7 +201,7 @@ public class Formularios {
                 mostrarAlerta("Error al procesar las fechas o la imagen.");
             }
 
-            ManejoVentanas.reiniciarGestorAdministrador();
+          //  ManejoVentanas.reiniciarGestorAdministrador();
         });
 
         return boton;
@@ -212,7 +212,7 @@ public class Formularios {
 
 
 
-    public static void formularioEliminarPelicula() throws CamposIncompletosException, PeliculaInvalidaException {
+    public static void formularioEliminarPelicula(GestorFunciones gestorFunciones) throws CamposIncompletosException, PeliculaInvalidaException {
         Stage ventana = crearVentana("Eliminar película");
         Label titulo = crearTitulo("Eliminar película");
 
@@ -236,7 +236,7 @@ public class Formularios {
                 mostrarAlerta("Película eliminada correctamente.");
 
                 ventana.close();
-                ManejoVentanas.reiniciarGestorAdministrador();
+                ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
 
             }catch (CamposIncompletosException | PeliculaInvalidaException ex){
                 mostrarAlerta(ex.getMessage());
@@ -254,7 +254,7 @@ public class Formularios {
 
 
 
-    public static void formularioEditarPelicula() {
+    public static void formularioEditarPelicula(GestorFunciones gestorFunciones) {
         Stage ventana = crearVentana("Modificar película");
         Label titulo = crearTitulo("Buscar película para modificar");
 
@@ -274,7 +274,7 @@ public class Formularios {
                 return;
             }
 
-            editarPelicula(pelicula);
+            editarPelicula(pelicula, gestorFunciones);
             ventana.close();
         });
 
@@ -283,7 +283,7 @@ public class Formularios {
         ventana.show();
     }
 
-    private static void editarPelicula(Pelicula p) throws CamposIncompletosException, FechaInvalidaException {
+    private static void editarPelicula(Pelicula p, GestorFunciones gestorFunciones) throws CamposIncompletosException, FechaInvalidaException {
         Stage ventana = crearVentana("Modificar película");
         Label titulo = crearTitulo("Modificar película");
 
@@ -351,8 +351,8 @@ public class Formularios {
                 String nuevoNombre = campoNombre.getText().trim();
 
                 if (!nombreAnterior.equals(nuevoNombre)) {
-                    GestorJsonAsientos.copiarArchivosAsientos(nombreAnterior, nuevoNombre);
-                    for(Funcion funcion: GestorFunciones.getListaFunciones()){
+                    GestorJsonAsientos.copiarArchivosAsientos(nombreAnterior, nuevoNombre, gestorFunciones);
+                    for(Funcion funcion: gestorFunciones.getListaFunciones().getElementos()){
                         if(funcion.getPelicula().equals(p)){
                             funcion.getPelicula().setNombrePelicula(nuevoNombre);
                         }
@@ -363,7 +363,7 @@ public class Formularios {
                 p.setFechaEstreno(nuevaFechaEstreno);
                 p.setFechaSalida(nuevaFechaSalida);
                 p.setRutaImagen(nuevaRutaImagen[0]);
-                FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
+                FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
                 FuncionesJSON.serializarPeliculas(GestorPeliculas.getListaPeliculas());
 
             }catch (CamposIncompletosException | FechaInvalidaException ex){
@@ -371,7 +371,7 @@ public class Formularios {
             }
                 mostrarAlerta("Película modificada correctamente.");
                 ventana.close();
-                ManejoVentanas.reiniciarGestorAdministrador();
+                ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
 
         });
 
@@ -429,7 +429,7 @@ public class Formularios {
 
             mostrarAlerta("Película eliminada correctamente.");
             ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador();
+            //ManejoVentanas.reiniciarGestorAdministrador();
         });
 
         return boton;

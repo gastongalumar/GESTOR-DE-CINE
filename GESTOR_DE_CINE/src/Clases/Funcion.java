@@ -20,19 +20,20 @@ public class Funcion {
         this.pelicula = pelicula;
     }
 
-    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion) {
+    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, GestorFunciones gestorFunciones) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
         // Registrar automáticamente la función en el gestor
-        GestorFunciones.agregarFuncion(this);
+        //GestorFunciones.agregarFuncion(this);
+        gestorFunciones.agregarFuncion(this);
     }
 
-    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas, double precio){
+    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas, double precio, GestorFunciones gestorFunciones){
         boolean encontrado = true;
         SalaCine salaEncontrada = null;
         Pelicula peliculaEncontrada = null;
-        for(Funcion f: GestorFunciones.getListaFunciones()){
+        for(Funcion f: gestorFunciones.getListaFunciones().getElementos()){
             if(f.getSala().getNombreSala().equalsIgnoreCase(nombreSala)){
                 salaEncontrada = f.getSala();
                 encontrado = true;
@@ -51,6 +52,16 @@ public class Funcion {
        /* if(encontrado){
             GestorFunciones.agregarFuncion(this);
         }*/
+    }
+
+    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, double precio, GestorFunciones gestorFunciones) {
+        this.sala = sala;
+        this.pelicula = pelicula;
+        this.horarioFuncion = horarioFuncion;
+        this.precio = precio;
+        // Registrar automáticamente la función en el gestor
+        //GestorFunciones.agregarFuncion(this);
+        gestorFunciones.agregarFuncion(this);
     }
 
     //GETTER Y SETTER

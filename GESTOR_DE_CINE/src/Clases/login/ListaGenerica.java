@@ -77,4 +77,13 @@ public class ListaGenerica<T> {
     public boolean existe(Predicate<T> criterio) {
         return elementos.stream().anyMatch(criterio);
     }
+
+
+    public List<T> getElementos() {
+        return elementos;
+    }
+
+    public void setElementos(List<T> elementos) {
+        this.elementos = elementos;
+    }
 }

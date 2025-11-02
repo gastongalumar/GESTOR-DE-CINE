@@ -1,5 +1,6 @@
 // App.java - JavaFX launcher para la cartelera
 import Clases.*;
+import Clases.login.LoginInterfaz;
 import ManejoJSON.FuncionesJSON;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -17,30 +18,27 @@ import javax.swing.UIManager;
 
 public class App extends Application {
 
-
-
     @Override
     public void start(Stage stage) {
         // Crear datos de prueba
 
         // HOLA MUNDO
-        GestorAdministrador.iniciarAdministrador();
-        Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025, 7, 2), LocalDate.of(2025, 11, 5));
+
+        GestorFunciones gestorFunciones = new GestorFunciones();
+        GestorAdministrador.iniciarAdministrador(gestorFunciones);
+      /*  Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025, 7, 2), LocalDate.of(2025, 11, 5));
         Pelicula p2 = new Pelicula("pelicula2", LocalDate.of(2025, 10, 5), LocalDate.of(2025, 12, 6));
         Pelicula p3 = new Pelicula("pelicula3", LocalDate.of(2025, 10, 15), LocalDate.of(2026, 1, 12));
-        Pelicula p4 = new Pelicula("pelicula4", LocalDate.of(2025, 8, 4), LocalDate.of(2025, 11, 6));
+        Pelicula p4 = new Pelicula("pelicula4", LocalDate.of(2025, 8, 4), LocalDate.of(2025, 11, 6));*/
 
-        /*gestorPeliculas.getListaPeliculas().add(p1);
+      /*  gestorPeliculas.getListaPeliculas().add(p1);
         gestorPeliculas.getListaPeliculas().add(p2);
         gestorPeliculas.getListaPeliculas().add(p3);
         gestorPeliculas.getListaPeliculas().add(p4);*/
 
         //System.out.println("prueba"+ gestorPeliculas.getListaPeliculas());
-
-        SalaCine s1 = new SalaCine("Sala 1", 160);
-        SalaCine s2 = new SalaCine("Sala 2", 160);
-        SalaCine s3 = new SalaCine("Sala 3", 160);
-        SalaCine s4 = new SalaCine("Sala 4", 160);
+        SalaCine s1 = new SalaCine("Sala 1", 200);
+        SalaCine s2 = new SalaCine("Sala 2", 200);
 
         // Crear funciones asociadas a las películas (se registran automáticamente en GestorFunciones)
        /* Funcion f1 = new Funcion(s1, p1, LocalDateTime.of(2025, 10, 15, 18, 30));
@@ -74,14 +72,14 @@ public class App extends Application {
         //GestorAdministrador.vistaAdministrador(gestorPeliculas.getListaPeliculas());
         //GestorAdministrador.replica(contenedor, stage);
 
-       // System.out.println(GestorFunciones.getListaFunciones());
-        // FuncionesJSON.serializarFunciones(GestorFunciones.getListaFunciones());
-        // FuncionesJSON.deserializarPeliculas();
-
-
         FuncionesJSON.deserializarPeliculas();
-        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2));
+        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2), gestorFunciones);
 
+        abrirSistemaLogin();
+    }
 
+    private void abrirSistemaLogin() {
+        // Esto abre la ventana de login interactiva
+        LoginInterfaz.abrirLogin();
     }
 }

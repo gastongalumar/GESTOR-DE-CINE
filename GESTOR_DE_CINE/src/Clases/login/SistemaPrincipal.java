@@ -1,97 +1,103 @@
 package Clases.login;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-public class SistemaPrincipal extends JFrame {
+public class SistemaPrincipal extends Application {
     private String usuarioActual;
     private String tipoUsuario;
+    private Stage stage;
 
     public SistemaPrincipal(String usuario, String tipoUsuario) {
         this.usuarioActual = usuario;
         this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        this.stage = primaryStage;
         inicializarInterfaz();
     }
 
     private void inicializarInterfaz() {
-        setTitle("CINE LOS CULIA - Sistema de Gestión");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 800);
-        setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        stage.setTitle("CINE LOS CULIA - Sistema de Gestión");
+        stage.setOnCloseRequest(e -> Platform.exit());
+        stage.setWidth(1200);
+        stage.setHeight(800);
+        stage.setMaximized(true);
 
         // Panel principal
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        BorderPane mainPanel = new BorderPane();
 
         // Header
-        JPanel headerPanel = crearHeaderPanel();
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        HBox headerPanel = crearHeaderPanel();
+        mainPanel.setTop(headerPanel);
 
         // Menu lateral
-        JPanel menuPanel = crearMenuPanel();
-        mainPanel.add(menuPanel, BorderLayout.WEST);
+        VBox menuPanel = crearMenuPanel();
+        mainPanel.setLeft(menuPanel);
 
         // Contenido principal
-        JPanel contentPanel = crearContentPanel();
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        StackPane contentPanel = crearContentPanel();
+        mainPanel.setCenter(contentPanel);
 
-        add(mainPanel);
+        Scene scene = new Scene(mainPanel);
+        stage.setScene(scene);
+        stage.centerOnScreen();
     }
 
-    private JPanel crearHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(new Color(25, 25, 35));
-        headerPanel.setPreferredSize(new Dimension(getWidth(), 70));
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+    private HBox crearHeaderPanel() {
+        HBox headerPanel = new HBox();
+        headerPanel.setStyle("-fx-background-color: #191923;");
+        headerPanel.setPadding(new Insets(10, 20, 10, 20));
+        headerPanel.setPrefHeight(70);
+        headerPanel.setAlignment(Pos.CENTER_LEFT);
 
         // Título
-        JLabel titleLabel = new JLabel("CINE LOS CULIA - Sistema de Gestión Cinematográfica");
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        Label titleLabel = new Label("CINE LOS CULIA - Sistema de Gestión Cinematográfica");
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20;");
 
         // Info usuario
-        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        userPanel.setBackground(new Color(25, 25, 35));
+        HBox userPanel = new HBox(10);
+        userPanel.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(userPanel, Priority.ALWAYS);
 
-        JLabel userLabel = new JLabel("Usuario: " + usuarioActual + " (" + tipoUsuario + ")");
-        userLabel.setForeground(Color.WHITE);
-        userLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        Label userLabel = new Label("Usuario: " + usuarioActual + " (" + tipoUsuario + ")");
+        userLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14;");
 
-        JButton logoutButton = new JButton("Cerrar Sesión");
-        logoutButton.setBackground(new Color(150, 50, 50));
-        logoutButton.setForeground(Color.WHITE);
-        logoutButton.setFocusPainted(false);
-        logoutButton.addActionListener(e -> cerrarSesion());
+        Button logoutButton = new Button("Cerrar Sesión");
+        logoutButton.setStyle("-fx-background-color: #963232; -fx-text-fill: white;");
+        logoutButton.setOnAction(e -> cerrarSesion());
 
-        userPanel.add(userLabel);
-        userPanel.add(logoutButton);
-
-        headerPanel.add(titleLabel, BorderLayout.WEST);
-        headerPanel.add(userPanel, BorderLayout.EAST);
+        userPanel.getChildren().addAll(userLabel, logoutButton);
+        headerPanel.getChildren().addAll(titleLabel, userPanel);
 
         return headerPanel;
     }
 
-    private JPanel crearMenuPanel() {
-        JPanel menuPanel = new JPanel();
-        menuPanel.setBackground(new Color(40, 40, 60));
-        menuPanel.setPreferredSize(new Dimension(250, getHeight()));
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+    private VBox crearMenuPanel() {
+        VBox menuPanel = new VBox();
+        menuPanel.setStyle("-fx-background-color: #28283c;");
+        menuPanel.setPrefWidth(250);
+        menuPanel.setPadding(new Insets(20, 10, 20, 10));
+        menuPanel.setSpacing(10);
 
         // Botones del menú según tipo de usuario
         String[] opcionesMenu = getOpcionesMenu();
 
         for (String opcion : opcionesMenu) {
-            JButton menuButton = crearBotonMenu(opcion);
-            menuPanel.add(menuButton);
-            menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            Button menuButton = crearBotonMenu(opcion);
+            menuPanel.getChildren().add(menuButton);
         }
 
-        menuPanel.add(Box.createVerticalGlue());
-
+        VBox.setVgrow(menuPanel, Priority.ALWAYS);
         return menuPanel;
     }
 
@@ -117,80 +123,60 @@ public class SistemaPrincipal extends JFrame {
         }
     }
 
-    private JButton crearBotonMenu(String texto) {
-        JButton button = new JButton(texto);
-        button.setAlignmentX(Component.LEFT_ALIGNMENT);
-        button.setMaximumSize(new Dimension(230, 45));
-        button.setBackground(new Color(60, 60, 80));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 14));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                manejarOpcionMenu(texto);
-            }
-        });
-
+    private Button crearBotonMenu(String texto) {
+        Button button = new Button(texto);
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.setPrefHeight(45);
+        button.setStyle("-fx-background-color: #3c3c50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 15 10 15;");
+        button.setOnAction(e -> manejarOpcionMenu(texto));
         return button;
     }
 
-    private JPanel crearContentPanel() {
-        JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(Color.WHITE);
+    private StackPane crearContentPanel() {
+        StackPane contentPanel = new StackPane();
+        contentPanel.setStyle("-fx-background-color: white;");
 
         // Panel de bienvenida por defecto
-        JPanel welcomePanel = new JPanel(new GridBagLayout());
-        welcomePanel.setBackground(Color.WHITE);
+        VBox welcomePanel = new VBox(10);
+        welcomePanel.setAlignment(Pos.CENTER);
+        welcomePanel.setPadding(new Insets(20));
 
-        JLabel welcomeLabel = new JLabel("¡Bienvenido al Sistema CINE LOS CULIA!");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        welcomeLabel.setForeground(new Color(25, 25, 35));
+        Label welcomeLabel = new Label("¡Bienvenido al Sistema CINE LOS CULIA!");
+        welcomeLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #191923;");
 
-        JLabel userInfoLabel = new JLabel("Usuario: " + usuarioActual + " | Tipo: " + tipoUsuario);
-        userInfoLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        userInfoLabel.setForeground(new Color(100, 100, 120));
+        Label userInfoLabel = new Label("Usuario: " + usuarioActual + " | Tipo: " + tipoUsuario);
+        userInfoLabel.setStyle("-fx-font-size: 16; -fx-text-fill: #646478;");
 
-        JLabel instructionsLabel = new JLabel("Seleccione una opción del menú lateral para comenzar");
-        instructionsLabel.setFont(new Font("Arial", Font.ITALIC, 14));
-        instructionsLabel.setForeground(new Color(150, 150, 150));
+        Label instructionsLabel = new Label("Seleccione una opción del menú lateral para comenzar");
+        instructionsLabel.setStyle("-fx-font-size: 14; -fx-font-style: italic; -fx-text-fill: #969696;");
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-        welcomePanel.add(welcomeLabel, gbc);
-        welcomePanel.add(userInfoLabel, gbc);
-        welcomePanel.add(instructionsLabel, gbc);
-
-        contentPanel.add(welcomePanel, BorderLayout.CENTER);
+        welcomePanel.getChildren().addAll(welcomeLabel, userInfoLabel, instructionsLabel);
+        contentPanel.getChildren().add(welcomePanel);
 
         return contentPanel;
     }
 
     private void manejarOpcionMenu(String opcion) {
-        // Aquí implementarías la lógica para cada opción del menú
-        JOptionPane.showMessageDialog(this,
-                "Has seleccionado: " + opcion + "\n\n" +
-                        "Esta funcionalidad está en desarrollo.",
-                "Opción del Menú",
-                JOptionPane.INFORMATION_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Opción del Menú");
+        alert.setHeaderText(null);
+        alert.setContentText("Has seleccionado: " + opcion + "\n\nEsta funcionalidad está en desarrollo.");
+        alert.showAndWait();
     }
 
     private void cerrarSesion() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro que desea cerrar sesión?",
-                "Confirmar Cierre de Sesión",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cierre de Sesión");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea cerrar sesión?");
 
-        if (confirm == JOptionPane.YES_OPTION) {
-            this.dispose();
-            new CineLogin().setVisible(true);
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            stage.close();
+            // Volver al login
+            CineLogin cineLogin = new CineLogin();
+            cineLogin.start(new Stage());
         }
     }
+
+
 }
