@@ -1,20 +1,20 @@
 {
-    "asientosOcupados": 3,
+    "asientosOcupados": 12,
     "totalColumnas": 16,
     "totalFilas": 10,
-    "fechaActualizacion": "2025-10-28T10:10:27.449349800",
+    "fechaActualizacion": "2025-11-02T19:12:34.396910900",
     "matrizAsientos": [
         [
             {
                 "columna": 0,
                 "etiqueta": "A1",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 0
             },
             {
                 "columna": 1,
                 "etiqueta": "B1",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 0
             },
             {
@@ -252,13 +252,13 @@
             {
                 "columna": 8,
                 "etiqueta": "I3",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 2
             },
             {
                 "columna": 9,
                 "etiqueta": "J3",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 2
             },
             {
@@ -338,7 +338,7 @@
             {
                 "columna": 6,
                 "etiqueta": "G4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
@@ -356,7 +356,7 @@
             {
                 "columna": 9,
                 "etiqueta": "J4",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 3
             },
             {
@@ -436,13 +436,13 @@
             {
                 "columna": 6,
                 "etiqueta": "G5",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 4
             },
             {
                 "columna": 7,
                 "etiqueta": "H5",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 4
             },
             {
@@ -460,7 +460,7 @@
             {
                 "columna": 10,
                 "etiqueta": "K5",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 4
             },
             {
@@ -742,13 +742,13 @@
             {
                 "columna": 8,
                 "etiqueta": "I8",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 7
             },
             {
                 "columna": 9,
                 "etiqueta": "J8",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 7
             },
             {
