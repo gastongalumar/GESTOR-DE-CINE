@@ -2,73 +2,73 @@
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-10-15 18:30",
-        "Pelicula": "pelicula1",
+        "Pelicula": "F1 La pelicula",
         "Precio": 2000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-10-15 21:00",
-        "Pelicula": "pelicula1",
+        "Pelicula": "F1 La pelicula",
         "Precio": 2000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-11-05 14:00",
-        "Pelicula": "pelicula2",
+        "Pelicula": "Havoc",
         "Precio": 3000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-10-16 18:30",
-        "Pelicula": "pelicula1",
+        "Pelicula": "F1 La pelicula",
         "Precio": 2000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-10-26 19:07",
-        "Pelicula": "pelicula1",
+        "Pelicula": "F1 La pelicula",
         "Precio": 2000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-10-15 18:30",
-        "Pelicula": "pelicula1",
+        "Pelicula": "F1 La pelicula",
         "Precio": 2000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-11-05 11:00",
-        "Pelicula": "pelicula4",
+        "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-11-06 11:00",
-        "Pelicula": "pelicula4",
+        "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-11-02 21:00",
-        "Pelicula": "pelicula4",
+        "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-11-03 21:00",
-        "Pelicula": "pelicula4",
+        "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-11-04 21:00",
-        "Pelicula": "pelicula4",
+        "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
     },
     {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-11-05 21:00",
-        "Pelicula": "pelicula4",
+        "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
     }
 ]

@@ -42,7 +42,7 @@ public class FuncionesJSON {
 
 
 
-    public static List<Funcion> deserializarFunciones(List<Pelicula> listaPeliculas, List<SalaCine> listaSalas) {
+    public static List<Funcion> deserializarFunciones(List<Pelicula> listaPeliculas, List<SalaCine> listaSalas, GestorFunciones gestorFunciones) {
         List<Funcion> listaFunciones = new ArrayList<>();
 
         try {
@@ -65,14 +65,14 @@ public class FuncionesJSON {
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 if (salaEncontrada != null && peliculaEncontrada != null) {
                     LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraStr, formato);
-                    Funcion f = new Funcion(salaEncontrada, peliculaEncontrada, fechaHora, precioFuncion);
+                    Funcion f = new Funcion(salaEncontrada, peliculaEncontrada, fechaHora, precioFuncion, gestorFunciones);
                     listaFunciones.add(f);
                 } else {
                     System.out.println("⚠️ No se encontró coincidencia para: " + nombrePelicula + " / " + nombreSala);
                 }
             }
 
-            GestorFunciones.setListaFunciones(listaFunciones);
+            //GestorFunciones.setListaFunciones(listaFunciones);
 
         } catch (Exception e) {
             System.out.println("❌ Error al deserializar funciones: " + e.getMessage());

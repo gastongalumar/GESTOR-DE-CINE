@@ -21,7 +21,7 @@ import java.util.TreeMap;
 import javax.swing.SwingUtilities;
 public class VistaCartelera {
 
-    public static VBox crearVista(Pelicula pelicula){
+    public static VBox crearVista(Pelicula pelicula, List<Funcion> listaFunciones){
         String rutaImagen = pelicula.getRutaImagen();
 
         Node imageNode;
@@ -56,7 +56,7 @@ public class VistaCartelera {
         contenedor.setAlignment(Pos.BASELINE_LEFT);
         contenedor.setStyle("-fx-background-color: #0A6E61; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 
-        contenedor.setOnMouseClicked(e -> verFunciones(pelicula));
+        contenedor.setOnMouseClicked(e -> verFunciones(pelicula, listaFunciones));
 
         return contenedor;
     }
@@ -69,10 +69,10 @@ public class VistaCartelera {
     }
 
 
-    public static void verFunciones(Pelicula pelicula){
+    public static void verFunciones(Pelicula pelicula, List<Funcion> listaFunciones){
         Stage ventana = new Stage();
 
-        VBox peliculaSeleccionada = crearVista(pelicula);
+        VBox peliculaSeleccionada = crearVista(pelicula, listaFunciones);
         peliculaSeleccionada.setScaleX(0.7);
         peliculaSeleccionada.setScaleY(0.7);
 
@@ -92,7 +92,7 @@ public class VistaCartelera {
 
 
         Map<LocalDate, List<Funcion>> funcionesPorDia = new TreeMap<>();
-        for(Funcion f : buscarFuncionesPorNombrePelicula(pelicula.getNombrePelicula())){
+        for(Funcion f : buscarFuncionesPorNombrePelicula(pelicula.getNombrePelicula(), listaFunciones)){
             LocalDate dia = f.getHorarioFuncion().toLocalDate();
 
 
@@ -157,9 +157,9 @@ public class VistaCartelera {
     }
 
 
-    public static List<Funcion> buscarFuncionesPorNombrePelicula(String nombre){
+    public static List<Funcion> buscarFuncionesPorNombrePelicula(String nombre, List<Funcion> listaFuncionesGestor){
         List<Funcion> listaFunciones = new ArrayList<>();
-        for(Funcion f: GestorFunciones.getListaFunciones()){
+        for(Funcion f: listaFuncionesGestor){
             if(f.getPelicula().getNombrePelicula().equals(nombre)){
                 listaFunciones.add(f);
             }

@@ -203,11 +203,11 @@ public class GestorJsonAsientos {
 
 
 
-    public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre) {
+    public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
         try {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
 
-            for (Funcion funcion : GestorFunciones.getListaFunciones()) {
+            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
                 if (funcion.getPelicula().getNombrePelicula().equals(nombreAnterior)) {
                     String horarioStr = funcion.getHorarioFuncion().format(fmt);
 

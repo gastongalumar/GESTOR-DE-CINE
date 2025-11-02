@@ -47,7 +47,7 @@ public class ManejoVentanas {
     /**
      * Cierra ventanas específicas del administrador y reinicia el gestor
      */
-    public static void reiniciarGestorAdministrador() {
+    public static void reiniciarGestorAdministrador(GestorFunciones gestorFunciones) {
         // Cerrar todas las ventanas del administrador
         cerrarVentanasPorTitulo("GESTOR ADMINISTRADOR");
         cerrarVentanasPorTitulo("Formulario para modificar");
@@ -61,7 +61,7 @@ public class ManejoVentanas {
             try {
                 // Pequeña pausa para que cierre
                 Thread.sleep(1000);
-                GestorAdministrador.iniciarAdministrador();
+                GestorAdministrador.iniciarAdministrador(gestorFunciones);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

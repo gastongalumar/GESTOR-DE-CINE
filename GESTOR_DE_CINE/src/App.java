@@ -23,11 +23,13 @@ public class App extends Application {
         // Crear datos de prueba
 
         // HOLA MUNDO
-        GestorAdministrador.iniciarAdministrador();
-        Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025, 7, 2), LocalDate.of(2025, 11, 5));
+
+        GestorFunciones gestorFunciones = new GestorFunciones();
+        GestorAdministrador.iniciarAdministrador(gestorFunciones);
+      /*  Pelicula p1 = new Pelicula("pelicula1", LocalDate.of(2025, 7, 2), LocalDate.of(2025, 11, 5));
         Pelicula p2 = new Pelicula("pelicula2", LocalDate.of(2025, 10, 5), LocalDate.of(2025, 12, 6));
         Pelicula p3 = new Pelicula("pelicula3", LocalDate.of(2025, 10, 15), LocalDate.of(2026, 1, 12));
-        Pelicula p4 = new Pelicula("pelicula4", LocalDate.of(2025, 8, 4), LocalDate.of(2025, 11, 6));
+        Pelicula p4 = new Pelicula("pelicula4", LocalDate.of(2025, 8, 4), LocalDate.of(2025, 11, 6));*/
 
       /*  gestorPeliculas.getListaPeliculas().add(p1);
         gestorPeliculas.getListaPeliculas().add(p2);
@@ -71,10 +73,11 @@ public class App extends Application {
         //GestorAdministrador.replica(contenedor, stage);
 
         FuncionesJSON.deserializarPeliculas();
-        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1,s2));
+        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2), gestorFunciones);
 
         abrirSistemaLogin();
     }
+
     private void abrirSistemaLogin() {
         // Esto abre la ventana de login interactiva
         LoginInterfaz.abrirLogin();
