@@ -1,10 +1,8 @@
 package Clases.login;
 
-import Enumeradores.login.TipoUsuario;
 import Enumeradores.login.EstadoUsuario;
-
+import Enumeradores.login.TipoUsuario;
 import Excepciones.UsuarioException;
-
 
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
@@ -36,9 +34,6 @@ public class Usuario {
         this.intentosFallidos = 0;
     }
 
-    public Usuario() {
-    }
-
     // Métodos de validación
     public static boolean validarEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
@@ -54,7 +49,6 @@ public class Usuario {
     }
 
     public void validarDatos() throws UsuarioException {
-        UsuarioException UsuarioException = null;
         if (nombre == null || nombre.trim().isEmpty()) {
             throw UsuarioException.datosInvalidos("nombre");
         }
@@ -100,10 +94,6 @@ public class Usuario {
 
     public EstadoUsuario getEstado() { return estado; }
     public void setEstado(EstadoUsuario estado) { this.estado = estado; }
-
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
 
     public int getIntentosFallidos() { return intentosFallidos; }
     public void setIntentosFallidos(int intentosFallidos) {
