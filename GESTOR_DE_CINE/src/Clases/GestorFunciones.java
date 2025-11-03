@@ -1,11 +1,7 @@
 package Clases;
 
-import Clases.login.ListaGenerica;
 import Excepciones.FechaInvalidaException;
 import ManejoJSON.FuncionesJSON;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GestorFunciones {
     //private static List<Funcion> listaFunciones = new ArrayList<>();

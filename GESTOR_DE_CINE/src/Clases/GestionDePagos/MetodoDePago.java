@@ -1,16 +1,17 @@
-package Clases;
+package Clases.GestionDePagos;
 
-//crear metodo de pago con los atributos: id, nombre public class MetodoDePago {
 
 public class MetodoDePago {
     private int id;
     private String nombre;
 
+    //CONSTRUCTOR
     public MetodoDePago(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
 
+    //GETTERS Y SETTERS
     public int getId() {
         return id;
     }
@@ -28,6 +29,10 @@ public class MetodoDePago {
     }
 
 
-
+//TO STRING
+    @Override
+    public String toString() {
+        return "MetodoDePago : " + nombre + '\n';
+    }
 
 }

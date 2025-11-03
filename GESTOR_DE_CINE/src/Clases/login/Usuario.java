@@ -157,5 +157,8 @@ public class Usuario {
     }
 
 
-
+//    public void setFechaRegistro(LocalDateTime now) {
+//
+//        this.fechaRegistro = now;
+//    }
 }

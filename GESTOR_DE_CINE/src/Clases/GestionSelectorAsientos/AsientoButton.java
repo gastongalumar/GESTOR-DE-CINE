@@ -1,5 +1,6 @@
-package Clases;
+package Clases.GestionSelectorAsientos;
 
+import Clases.SalaCine;
 import Enumeradores.EstadoAsiento;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
@@ -18,18 +19,6 @@ public class AsientoButton extends StackPane {
     private EstadoAsiento estado;
     private Runnable onAsientoCambiado;
     private final List<Integer> columnasValidas;
-
-//    public AsientoButton(int fila, int columna, SalaCine sala) {
-//        this.fila = fila;
-//        this.columna = columna;
-//        this.sala = sala;
-//        this.estado = sala.getEstadoAsiento(fila, columna);
-//
-//        configurarApariencia();
-//        agregarListeners();
-//        actualizarToolTip();
-//        dibujarAsiento();
-//    }
 
     public AsientoButton(int fila, int columna, SalaCine sala, List<Integer> columnasValidas) {
         this.fila = fila;
@@ -192,7 +181,7 @@ public class AsientoButton extends StackPane {
                 asiento, respaldo, texto);
     }
 
-    // También corregir el Tooltip
+
     private void actualizarToolTip() {
         String estadoStr = "";
         switch (estado) {
@@ -207,7 +196,6 @@ public class AsientoButton extends StackPane {
                 break;
         }
 
-        // ✅ CORREGIR TOOLTIP también
         String letraFila = String.valueOf((char) ('A' + fila));
         int numeroColumnaVisible = -1;
         for (int i = 0; i < columnasValidas.size(); i++) {
@@ -221,7 +209,7 @@ public class AsientoButton extends StackPane {
         Tooltip.install(this, new Tooltip("Asiento " + asientoStr + " (" + estadoStr + ")"));
     }
         /**
-         * Método público para forzar el redibujado del asiento
+         * Metodo público para forzar el redibujado del asiento
          */
     public void redibujar() {
         this.estado = sala.getEstadoAsiento(fila, columna);
@@ -230,7 +218,7 @@ public class AsientoButton extends StackPane {
     }
 
     /**
-     * Método para establecer callback cuando el asiento cambia
+     * Metodo para establecer callback cuando el asiento cambia
      */
     public void setOnAsientoCambiado(Runnable callback) {
         this.onAsientoCambiado = callback;

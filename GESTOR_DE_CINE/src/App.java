@@ -1,7 +1,9 @@
 // App.java - JavaFX launcher para la cartelera
 import Clases.*;
+import Clases.login.GestorUsuarios;
 import Clases.login.LoginInterfaz;
 import ManejoJSON.FuncionesJSON;
+import ManejoJSON.GestorJsonLogin;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -75,8 +77,12 @@ public class App extends Application {
         FuncionesJSON.deserializarPeliculas();
         FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2), gestorFunciones);
 
+        
         abrirSistemaLogin();
+
     }
+
+    
 
     private void abrirSistemaLogin() {
         // Esto abre la ventana de login interactiva

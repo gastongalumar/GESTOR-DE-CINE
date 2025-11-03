@@ -1,4 +1,4 @@
-package Clases;
+package Clases.GestionDePagos;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +10,7 @@ public class Pago {
     private String fechaPago;
     private int idReserva;
 
+    //CONSTRUCTOR COMPLETO
     public Pago(int id, double monto, MetodoDePago metodoDePago, String fechaPago, int idReserva) {
         this.id = id;
         this.monto = monto;
@@ -18,7 +19,7 @@ public class Pago {
         this.idReserva = idReserva;
     }
 
-    // ✅ NUEVO: Constructor simplificado para uso en SelectorAsientos
+    //  NUEVO: Constructor simplificado para uso en SelectorAsientos
     public Pago(MetodoDePago metodoDePago, double monto, String descripcion) {
         this.id = generarIdPago();
         this.monto = monto;
@@ -77,17 +78,17 @@ public class Pago {
         return this.metodoDePago;
     }
 
-    // ✅ NUEVO: Método para generar ID único
+    // ✅ NUEVO: Metodo para generar ID único
     private int generarIdPago() {
         return (int) (System.currentTimeMillis() % 1000000);
     }
 
-    // ✅ NUEVO: Método para generar ID de reserva
+    // ✅ NUEVO: Metodo para generar ID de reserva
     private int generarIdReserva() {
         return (int) (System.currentTimeMillis() % 100000) + 1000;
     }
 
-    // ✅ NUEVO: Método toString para mejor visualización
+    // ✅ NUEVO: Metodo toString para mejor visualización
     @Override
     public String toString() {
         return String.format(
@@ -97,75 +98,3 @@ public class Pago {
     }
 }
 
-//package Clases;
-//import Clases.MetodoDePago;
-//
-//;
-//
-////crear la clase Pago con los atributos: id, monto, metodoDePago, fechaPago, idReserva
-//public class Pago {
-//    private int id;
-//    private double monto;
-//    private MetodoDePago metodoDePago;
-//    private String fechaPago;
-//    private int idReserva;
-//
-//    public Pago(int id, double monto, MetodoDePago metodoDePago, String fechaPago, int idReserva) {
-//        this.id = id;
-//        this.monto = monto;
-//        this.metodoDePago = metodoDePago;
-//        this.fechaPago = fechaPago;
-//        this.idReserva = idReserva;
-//    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public double getMonto() {
-//        return monto;
-//    }
-//
-//    public void setMonto(double monto) {
-//        this.monto = monto;
-//    }
-//
-//    public MetodoDePago getMetodoDePago() {
-//        return metodoDePago;
-//    }
-//
-//    public void setMetodoDePago(MetodoDePago metodoDePago) {
-//        this.metodoDePago = metodoDePago;
-//    }
-//
-//    public String getFechaPago() {
-//        return fechaPago;
-//    }
-//
-//    public void setFechaPago(String fechaPago) {
-//        this.fechaPago = fechaPago;
-//    }
-//
-//    public int getIdReserva() {
-//        return idReserva;
-//    }
-//
-//    public void setIdReserva(int idReserva) {
-//        this.idReserva = idReserva;
-//    }
-//
-//
-//    public boolean getIdPago() {
-//        return false;
-//
-//    }
-//
-//    public boolean getMetodoPago() {
-//
-//        return false;
-//    }
-//}

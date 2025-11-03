@@ -64,6 +64,14 @@ public class Funcion {
         gestorFunciones.agregarFuncion(this);
     }
 
+    public Funcion(SalaCine salaEncontrada, Pelicula peliculaEncontrada, LocalDateTime fechaHora, double precioFuncion) {
+
+        this.sala = salaEncontrada;
+        this.pelicula = peliculaEncontrada;
+        this.horarioFuncion = fechaHora;
+        this.precio = precioFuncion;
+    }
+
     //GETTER Y SETTER
     public LocalDateTime getHorarioFuncion() {
         return horarioFuncion;

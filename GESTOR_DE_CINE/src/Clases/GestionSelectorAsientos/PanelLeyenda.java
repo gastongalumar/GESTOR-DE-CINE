@@ -1,4 +1,4 @@
-package Clases;
+package Clases.GestionSelectorAsientos;
 
 import javax.swing.*;
 import java.awt.*;

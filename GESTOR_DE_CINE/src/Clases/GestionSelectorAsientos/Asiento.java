@@ -1,4 +1,4 @@
-package Clases;
+package Clases.GestionSelectorAsientos;
 
 import Enumeradores.EstadoAsiento;
 

@@ -1,6 +1,7 @@
 package ManejoJSON;
 
 import Clases.*;
+import Clases.GestionDePagos.Pago;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

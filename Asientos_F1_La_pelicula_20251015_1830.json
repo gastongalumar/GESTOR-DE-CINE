@@ -1,8 +1,8 @@
 {
-    "asientosOcupados": 6,
+    "asientosOcupados": 8,
     "totalColumnas": 16,
     "totalFilas": 10,
-    "fechaActualizacion": "2025-10-29T14:07:45.920739300",
+    "fechaActualizacion": "2025-11-03T00:00:47.038593",
     "matrizAsientos": [
         [
             {
@@ -760,7 +760,7 @@
             {
                 "columna": 11,
                 "etiqueta": "L8",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 7
             },
             {
@@ -858,7 +858,7 @@
             {
                 "columna": 11,
                 "etiqueta": "L9",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 8
             },
             {

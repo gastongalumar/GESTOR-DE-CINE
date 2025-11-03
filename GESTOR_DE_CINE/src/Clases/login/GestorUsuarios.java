@@ -1,5 +1,6 @@
 package Clases.login;
 
+import Clases.ListaGenerica;
 import Enumeradores.login.EstadoUsuario;
 import Enumeradores.login.TipoUsuario;
 import Excepciones.AutenticacionException;
@@ -14,10 +15,11 @@ import java.util.List;
 public class GestorUsuarios {
     private static final String ARCHIVO_USUARIOS = "usuarios.json";
     private static final int MAX_INTENTOS = 5;
-
     private ListaGenerica<Usuario> usuarios;
-    private GestorJsonLogin<Usuario> gestorJson;
+    private GestorJsonLogin gestorJson;
 
+
+    //CONSTRUCTOR
     public GestorUsuarios() {
         this.gestorJson = new GestorJsonLogin<>(
                 ARCHIVO_USUARIOS,
