@@ -1,5 +1,6 @@
 package Clases;
 
+import Clases.GestionSelectorAsientos.SelectorAsientos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -18,52 +19,61 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.SwingUtilities; // añadido para abrir la UI Swing desde JavaFX
-
+import javax.swing.SwingUtilities;
 public class VistaCartelera {
 
-    public static VBox crearVista(Pelicula pelicula){
-        String rutaImagen = "/img/" + pelicula.getNombrePelicula() + ".jpg";
-        InputStream is = VistaCartelera.class.getResourceAsStream(rutaImagen);
+    public static VBox crearVista(Pelicula pelicula, List<Funcion> listaFunciones){
+        String rutaImagen = pelicula.getRutaImagen();
 
         Node imageNode;
-        if(is != null){
-            Image imagen = new Image(is);
-            ImageView imgPelicula = new ImageView(imagen);
-            imgPelicula.setFitHeight(300);
-            imgPelicula.setFitWidth(220);
-            imgPelicula.setPreserveRatio(true);
-            imageNode = imgPelicula;
-        }else{
-            // Placeholder si no se encuentra la imagen
-            Label placeholder = new Label("[imagen no disponible]");
-            placeholder.setPrefSize(220,300);
-            placeholder.setStyle("-fx-background-color: #444; -fx-text-fill: white; -fx-alignment: center; -fx-padding: 10;");
-            imageNode = placeholder;
+        if(rutaImagen != null && !rutaImagen.isEmpty()){
+            try (InputStream is = VistaCartelera.class.getResourceAsStream(rutaImagen)) {
+                if(is != null){
+                    Image imagen = new Image(is);
+                    ImageView imgPelicula = new ImageView(imagen);
+                    imgPelicula.setFitHeight(300);
+                    imgPelicula.setFitWidth(220);
+                    imgPelicula.setPreserveRatio(true);
+                    imageNode = imgPelicula;
+                } else {
+                    imageNode = crearPlaceholder();
+                }
+            } catch(Exception ex){
+                ex.printStackTrace();
+                imageNode = crearPlaceholder();
+            }
+        } else {
+            imageNode = crearPlaceholder();
         }
 
         DateTimeFormatter fechaFormateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Label titulo = new Label(pelicula.getNombrePelicula());
         titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;");
 
-       // String fechaSalidaStr = pelicula.getFechaSalida() != null ? pelicula.getFechaSalida().format(fechaFormateador) : "N/A";
-        Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida());
-        ultimaFecha.setStyle("-fx-text-fill: red;");
+        Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida().format(fechaFormateador));
+        ultimaFecha.setStyle("-fx-text-fill: black;");
 
         VBox contenedor = new VBox(10, imageNode, titulo, ultimaFecha);
         contenedor.setAlignment(Pos.BASELINE_LEFT);
-        contenedor.setStyle("-fx-background-color: #2a2a2a; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
+        contenedor.setStyle("-fx-background-color: #0A6E61; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 
-        contenedor.setOnMouseClicked(e -> verFunciones(pelicula));
+        contenedor.setOnMouseClicked(e -> verFunciones(pelicula, listaFunciones));
 
         return contenedor;
     }
 
+    private static Label crearPlaceholder(){
+        Label placeholder = new Label("[imagen no disponible]");
+        placeholder.setPrefSize(220,300);
+        placeholder.setStyle("-fx-background-color: #444; -fx-text-fill: white; -fx-alignment: center; -fx-padding: 10;");
+        return placeholder;
+    }
 
-    public static void verFunciones(Pelicula pelicula){
+
+    public static void verFunciones(Pelicula pelicula, List<Funcion> listaFunciones){
         Stage ventana = new Stage();
 
-        VBox peliculaSeleccionada = crearVista(pelicula);
+        VBox peliculaSeleccionada = crearVista(pelicula, listaFunciones);
         peliculaSeleccionada.setScaleX(0.7);
         peliculaSeleccionada.setScaleY(0.7);
 
@@ -83,7 +93,7 @@ public class VistaCartelera {
 
 
         Map<LocalDate, List<Funcion>> funcionesPorDia = new TreeMap<>();
-        for(Funcion f : buscarFuncionesPorNombrePelicula(pelicula.getNombrePelicula())){
+        for(Funcion f : buscarFuncionesPorNombrePelicula(pelicula.getNombrePelicula(), listaFunciones)){
             LocalDate dia = f.getHorarioFuncion().toLocalDate();
 
 
@@ -109,18 +119,17 @@ public class VistaCartelera {
                 horario.setOnMouseEntered(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: yellow;"));
                 horario.setOnMouseExited(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: white;"));
 
-                // ✅ ÚNICO click handler correcto
+                /// ACA ES DONDE LLAMA AL METODO DE SELECCION DE ASIENTOS
+
                 horario.setOnMouseClicked(ev -> {
                     SwingUtilities.invokeLater(() -> {
-                        new SelectorAsientos(f).setVisible(true);
+                        SelectorAsientos.mostrarSelectorAsientos(f);
+
                     });
                 });
 
                 horariosDelDia.getChildren().add(horario);
             }
-
-
-
 
             contenedorFunciones.getChildren().addAll(fechaLabel, horariosDelDia);
         }
@@ -149,9 +158,9 @@ public class VistaCartelera {
     }
 
 
-    public static List<Funcion> buscarFuncionesPorNombrePelicula(String nombre){
+    public static List<Funcion> buscarFuncionesPorNombrePelicula(String nombre, List<Funcion> listaFuncionesGestor){
         List<Funcion> listaFunciones = new ArrayList<>();
-        for(Funcion f: GestorFunciones.getListaFunciones()){
+        for(Funcion f: listaFuncionesGestor){
             if(f.getPelicula().getNombrePelicula().equals(nombre)){
                 listaFunciones.add(f);
             }

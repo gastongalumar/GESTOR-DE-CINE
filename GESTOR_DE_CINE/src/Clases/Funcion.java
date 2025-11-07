@@ -7,20 +7,33 @@ public class Funcion {
     private SalaCine sala;
     private Pelicula pelicula;
     private LocalDateTime horarioFuncion;
+    private double precio = 5000.0;
 
-    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion) {
+
+    //CONSTRUCTOR
+
+
+    public Funcion(SalaCine sala, double precio, LocalDateTime horarioFuncion, Pelicula pelicula) {
+        this.sala = sala;
+        this.precio = precio;
+        this.horarioFuncion = horarioFuncion;
+        this.pelicula = pelicula;
+    }
+
+    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, GestorFunciones gestorFunciones) {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
         // Registrar automáticamente la función en el gestor
-        GestorFunciones.agregarFuncion(this);
+        //GestorFunciones.agregarFuncion(this);
+        gestorFunciones.agregarFuncion(this);
     }
 
-    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas){
+    public Funcion(String nombreSala, String nombrePelicula, LocalDateTime horarioFuncion, List<Pelicula> listaPeliculas, double precio, GestorFunciones gestorFunciones){
         boolean encontrado = true;
         SalaCine salaEncontrada = null;
         Pelicula peliculaEncontrada = null;
-        for(Funcion f: GestorFunciones.getListaFunciones()){
+        for(Funcion f: gestorFunciones.getListaFunciones().getElementos()){
             if(f.getSala().getNombreSala().equalsIgnoreCase(nombreSala)){
                 salaEncontrada = f.getSala();
                 encontrado = true;
@@ -40,6 +53,26 @@ public class Funcion {
             GestorFunciones.agregarFuncion(this);
         }*/
     }
+
+    public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, double precio, GestorFunciones gestorFunciones) {
+        this.sala = sala;
+        this.pelicula = pelicula;
+        this.horarioFuncion = horarioFuncion;
+        this.precio = precio;
+        // Registrar automáticamente la función en el gestor
+        //GestorFunciones.agregarFuncion(this);
+        gestorFunciones.agregarFuncion(this);
+    }
+
+    public Funcion(SalaCine salaEncontrada, Pelicula peliculaEncontrada, LocalDateTime fechaHora, double precioFuncion) {
+
+        this.sala = salaEncontrada;
+        this.pelicula = peliculaEncontrada;
+        this.horarioFuncion = fechaHora;
+        this.precio = precioFuncion;
+    }
+
+    //GETTER Y SETTER
     public LocalDateTime getHorarioFuncion() {
         return horarioFuncion;
     }
@@ -64,7 +97,15 @@ public class Funcion {
         this.pelicula = pelicula;
     }
 
+    public double getPrecio() {
+        return precio;
+    }
 
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    //TO STRING
     @Override
     public String toString() {
         return "Funcion{" +
