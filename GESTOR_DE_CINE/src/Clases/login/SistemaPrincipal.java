@@ -1,5 +1,11 @@
 package Clases.login;
 
+import Clases.*;
+import Clases.login.HistorialCompras;
+import Clases.login.GestorCompras;
+import Clases.login.DashboardAdmin;
+import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -7,22 +13,40 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class SistemaPrincipal extends Application {
     private String usuarioActual;
     private String tipoUsuario;
     private Stage stage;
+    private GestorFunciones gestorFunciones;
+    private GestorUsuarios gestorUsuarios;
+    private BorderPane mainPanel;
+    private StackPane contentPanel;
 
     public SistemaPrincipal(String usuario, String tipoUsuario) {
         this.usuarioActual = usuario;
         this.tipoUsuario = tipoUsuario;
+        this.gestorFunciones = new GestorFunciones();
+        this.gestorUsuarios = new GestorUsuarios();
     }
 
     @Override
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
+
+        // Si es cliente, abrir directamente la vista de cliente
+        if (tipoUsuario.equalsIgnoreCase("cliente")) {
+            Cliente cliente = obtenerClienteActual();
+            if (cliente != null) {
+                GestorCliente.iniciarCliente(gestorFunciones);
+                stage.close();
+                return;
+            }
+        }
+
         inicializarInterfaz();
     }
 
@@ -34,7 +58,7 @@ public class SistemaPrincipal extends Application {
         stage.setMaximized(true);
 
         // Panel principal
-        BorderPane mainPanel = new BorderPane();
+        mainPanel = new BorderPane();
 
         // Header
         HBox headerPanel = crearHeaderPanel();
@@ -45,7 +69,7 @@ public class SistemaPrincipal extends Application {
         mainPanel.setLeft(menuPanel);
 
         // Contenido principal
-        StackPane contentPanel = crearContentPanel();
+        contentPanel = crearContentPanel();
         mainPanel.setCenter(contentPanel);
 
         Scene scene = new Scene(mainPanel);
@@ -157,10 +181,226 @@ public class SistemaPrincipal extends Application {
     }
 
     private void manejarOpcionMenu(String opcion) {
+        switch (opcion) {
+            case "Dashboard":
+                if (esAdministrador()) {
+                    new DashboardAdmin(gestorUsuarios).mostrarDashboard();
+                }
+                break;
+
+            case "Gestión de Películas":
+            case "Gestión de Salas":
+            case "Gestión de Usuarios":
+            case "Reportes y Estadísticas":
+            case "Configuración del Sistema":
+                if (esAdministrador()) {
+                    GestorAdministrador.iniciarAdministrador(gestorFunciones);
+                }
+                break;
+
+            case "Venta de Entradas":
+            case "Clientes":
+            case "Reportes de Ventas":
+            case "Configuración Horarios":
+                if (esEmpleado()) {
+                    mostrarFuncionalidadEmpleado(opcion);
+                }
+                break;
+
+            case "Cartelera":
+            case "Comprar Entradas":
+                if (esCliente()) {
+                    Cliente cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        GestorCliente.iniciarCliente(gestorFunciones);
+                    }
+                } else {
+                    abrirCarteleraGeneral();
+                }
+                break;
+
+            case "Mis Compras":
+                if (esCliente()) {
+                    Cliente cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        HistorialCompras.mostrarHistorial(cliente);
+                    }
+                }
+                break;
+
+            case "Promociones":
+                if (esCliente()) {
+                    Cliente cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        mostrarPromocionesCliente(cliente);
+                    }
+                }
+                break;
+
+            case "Perfil":
+                if (esCliente()) {
+                    Cliente cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        mostrarPerfilCliente(cliente);
+                    }
+                }
+                break;
+
+            case "Ventas y Facturación":
+                if (esAdministrador()) {
+                    mostrarVentasFacturacion();
+                }
+                break;
+
+            default:
+                mostrarMensajeDesarrollo(opcion);
+                break;
+        }
+    }
+
+    // ===== MÉTODOS AUXILIARES =====
+
+    private boolean esAdministrador() {
+        return tipoUsuario.equalsIgnoreCase("administrador");
+    }
+
+    private boolean esEmpleado() {
+        return tipoUsuario.equalsIgnoreCase("empleado");
+    }
+
+    private boolean esCliente() {
+        return tipoUsuario.equalsIgnoreCase("cliente");
+    }
+
+    private Cliente obtenerClienteActual() {
+        try {
+            Usuario usuario = gestorUsuarios.buscarPorEmail(usuarioActual);
+            if (usuario instanceof Cliente) {
+                return (Cliente) usuario;
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Error obteniendo cliente: " + e.getMessage());
+            mostrarAlerta("Error", "No se pudo obtener la información del cliente");
+        }
+        return null;
+    }
+
+    private void abrirCarteleraGeneral() {
+        Stage carteleraStage = new Stage();
+        carteleraStage.setTitle("Cartelera - CINE LOS CULIA");
+
+        HBox contenedor = new HBox(20);
+        contenedor.setStyle("-fx-background-color: #6E0A17; -fx-padding: 20;");
+
+        // Cargar películas
+        GestorPeliculas.setListaPeliculas(ManejoJSON.FuncionesJSON.deserializarPeliculas());
+        List<Pelicula> listaPeliculas = GestorPeliculas.getListaPeliculas();
+
+        for(Pelicula p: listaPeliculas){
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+            contenedor.getChildren().add(vista);
+        }
+
+        Scene escena = new Scene(contenedor, 1200, 500);
+        carteleraStage.setScene(escena);
+        carteleraStage.show();
+    }
+
+    private void mostrarFuncionalidadEmpleado(String opcion) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Funcionalidad Empleado");
+        alert.setHeaderText(opcion);
+        alert.setContentText("Esta funcionalidad está disponible para empleados.\n\n" +
+                "Próximamente: Gestión de ventas y atención al cliente.");
+        alert.showAndWait();
+    }
+
+    private void mostrarPromocionesCliente(Cliente cliente) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Promociones Activas");
+        alert.setHeaderText("¡Aprovecha nuestras promociones!");
+        alert.setContentText("🎁 PROMOCIONES PARA TI:\n\n" +
+                "• Martes de Descuento: 20% OFF\n" +
+                "• Combo Familiar: 25% OFF\n" +
+                "• Canje de Puntos: " + cliente.getPuntosFidelidad() + " puntos disponibles\n\n" +
+                "¡Disfruta del cine con los mejores precios!");
+        alert.showAndWait();
+    }
+
+    private void mostrarPerfilCliente(Cliente cliente) {
+        Stage perfilStage = new Stage();
+        perfilStage.setTitle("Mi Perfil - " + cliente.getNombre());
+
+        VBox panel = new VBox(15);
+        panel.setPadding(new Insets(20));
+        panel.setAlignment(Pos.CENTER_LEFT);
+        panel.setStyle("-fx-background-color: #2a2a2a;");
+
+        Label titulo = new Label("👤 MI PERFIL");
+        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffcc00;");
+
+        // Información del cliente
+        VBox info = new VBox(8);
+        info.setStyle("-fx-background-color: #34495e; -fx-padding: 15; -fx-border-radius: 5;");
+
+        info.getChildren().addAll(
+                crearFilaPerfil("Nombre:", cliente.getNombre() + " " + cliente.getApellido()),
+                crearFilaPerfil("Email:", cliente.getEmail()),
+                crearFilaPerfil("Teléfono:", cliente.getTelefono()),
+                crearFilaPerfil("Puntos de fidelidad:", String.valueOf(cliente.getPuntosFidelidad())),
+                crearFilaPerfil("Tipo de cuenta:", "Cliente")
+        );
+
+        Button btnCerrar = new Button("Cerrar");
+        btnCerrar.setStyle("-fx-background-color: #3498db; -fx-text-fill: white;");
+        btnCerrar.setOnAction(e -> perfilStage.close());
+
+        panel.getChildren().addAll(titulo, info, btnCerrar);
+
+        Scene escena = new Scene(panel, 400, 350);
+        perfilStage.setScene(escena);
+        perfilStage.show();
+    }
+
+    private HBox crearFilaPerfil(String etiqueta, String valor) {
+        HBox fila = new HBox(10);
+
+        Label lblEtiqueta = new Label(etiqueta);
+        lblEtiqueta.setStyle("-fx-font-weight: bold; -fx-text-fill: #1abc9c; -fx-min-width: 150;");
+
+        Label lblValor = new Label(valor);
+        lblValor.setStyle("-fx-text-fill: white;");
+
+        fila.getChildren().addAll(lblEtiqueta, lblValor);
+        return fila;
+    }
+
+    private void mostrarVentasFacturacion() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Ventas y Facturación");
+        alert.setHeaderText("Módulo de Ventas y Facturación");
+        alert.setContentText("Esta funcionalidad permite:\n\n" +
+                "• Gestión de ventas de entradas\n" +
+                "• Facturación electrónica\n" +
+                "• Reportes de ingresos\n" +
+                "• Control de inventario\n\n" +
+                "Próximamente disponible...");
+        alert.showAndWait();
+    }
+
+    private void mostrarMensajeDesarrollo(String opcion) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Opción del Menú");
         alert.setHeaderText(null);
         alert.setContentText("Has seleccionado: " + opcion + "\n\nEsta funcionalidad está en desarrollo.");
+        alert.showAndWait();
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
         alert.showAndWait();
     }
 
@@ -173,10 +413,10 @@ public class SistemaPrincipal extends Application {
         if (alert.showAndWait().get() == ButtonType.OK) {
             stage.close();
             // Volver al login
-            CineLogin cineLogin = new CineLogin();
-            cineLogin.start(new Stage());
+            Platform.runLater(() -> {
+                LoginInterfaz login = new LoginInterfaz();
+                login.start(new Stage());
+            });
         }
     }
-
-
 }

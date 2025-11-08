@@ -1,5 +1,7 @@
 package Clases.login;
 
+import Clases.login.usuario.Administrador;
+import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Enumeradores.login.TipoUsuario;
 import Excepciones.UsuarioException;
@@ -17,13 +19,13 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 
-public class RegistroUsuario extends Application {
+public class RegistroUsuario  {
     private TextField nombreField, apellidoField, emailField, telefonoField;
     private PasswordField passwordField, confirmPasswordField;
     private ComboBox<TipoUsuario> tipoUsuarioCombo;
     private Button registrarButton, cancelarButton;
     private boolean esAdministrador;
-    private GestorJsonLogin gestorJson;
+//    private GestorJsonLogin gestorJson;
     private Stage stage;
     private GestorUsuarios gestorUsuarios;
 
@@ -37,11 +39,6 @@ public class RegistroUsuario extends Application {
         this.gestorUsuarios.cargarUsuariosPrueba();
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        this.stage = primaryStage;
-        inicializarInterfaz();
-    }
 
 
     private void inicializarInterfaz() {
@@ -78,8 +75,13 @@ public class RegistroUsuario extends Application {
         Scene scene = new Scene(mainPanel);
         stage.setScene(scene);
         stage.centerOnScreen();
+
         configurarComponentes();
+        stage.show(); // ✅ IMPORTANTE: Mostrar la ventana
+
+        System.out.println("🎯 VENTANA REGISTRO MOSTRADA - Botones configurados");
     }
+
 
     private VBox crearHeaderPanel() {
         VBox headerPanel = new VBox();
@@ -207,12 +209,19 @@ public class RegistroUsuario extends Application {
     }
 
     private void configurarComponentes() {
-        registrarButton.setOnAction(e -> registrarUsuario());
-        cancelarButton.setOnAction(e -> cancelarRegistro());
+        System.out.println("🎯 CONFIGURANDO BOTONES...");
 
-        // Enter key listener
-        emailField.setOnAction(e -> registrarUsuario());
-        passwordField.setOnAction(e -> registrarUsuario());
+        registrarButton.setOnAction(e -> {
+            System.out.println("🎯 ¡BOTÓN REGISTRAR PRESIONADO!");
+            registrarUsuario();
+        });
+
+        cancelarButton.setOnAction(e -> {
+            System.out.println("🎯 BOTÓN CANCELAR PRESIONADO");
+            cancelarRegistro();
+        });
+
+        System.out.println("🎯 BOTONES CONFIGURADOS - Registrar: " + registrarButton + ", Cancelar: " + cancelarButton);
     }
 
     private void registrarUsuario() {
@@ -221,22 +230,45 @@ public class RegistroUsuario extends Application {
                 return;
             }
 
-            // Crear nuevo usuario
-            Usuario nuevoUsuario = new Usuario(
-                    nombreField.getText().trim(),
-                    apellidoField.getText().trim(),
-                    emailField.getText().trim().toLowerCase(), // Normalizar email
-                    new String(passwordField.getText()),
-                    telefonoField.getText().trim(),
-                    esAdministrador ? tipoUsuarioCombo.getValue() : TipoUsuario.CLIENTE
-            ) {
-                @Override
-                public boolean puedeRealizarAccion(String accion) {
-                    return false;
+            // ✅ CORREGIDO: SOLO CLIENTES Y ADMINISTRADORES
+            TipoUsuario tipo;
+            if (esAdministrador) {
+                tipo = tipoUsuarioCombo.getValue();
+                if (tipo == null) {
+                    mostrarError("Por favor seleccione un tipo de usuario");
+                    return;
                 }
-            };
+                // ✅ Forzar solo CLIENTE o ADMINISTRADOR
+                if (tipo != TipoUsuario.CLIENTE && tipo != TipoUsuario.ADMINISTRADOR) {
+                    tipo = TipoUsuario.CLIENTE; // Por defecto cliente
+                }
+            } else {
+                tipo = TipoUsuario.CLIENTE;
+            }
 
-            // Registrar el usuario
+            // ✅ CORREGIDO: SOLO DOS CASOS
+            Usuario nuevoUsuario;
+
+            if (tipo == TipoUsuario.CLIENTE) {
+                nuevoUsuario = new Cliente(
+                        nombreField.getText().trim(),
+                        apellidoField.getText().trim(),
+                        emailField.getText().trim().toLowerCase(),
+                        new String(passwordField.getText()),
+                        telefonoField.getText().trim()
+                );
+            } else {
+                // Solo queda ADMINISTRADOR
+                nuevoUsuario = new Administrador(
+                        nombreField.getText().trim(),
+                        apellidoField.getText().trim(),
+                        emailField.getText().trim().toLowerCase(),
+                        new String(passwordField.getText()),
+                        telefonoField.getText().trim()
+                );
+            }
+
+            // ✅ ESTO YA DEBERÍA GUARDAR EN JSON AUTOMÁTICAMENTE
             gestorUsuarios.registrarUsuario(nuevoUsuario);
 
             // Mostrar mensaje de éxito
@@ -354,17 +386,57 @@ public class RegistroUsuario extends Application {
     }
 
     // Métodos estáticos para abrir ventanas
+//    public static void abrirRegistroCliente() {
+//        Platform.runLater(() -> {
+//            System.out.println("🎯 SOLICITANDO REGISTRO CLIENTE...");
+//            RegistroUsuario registro = new RegistroUsuario(false);
+//            registro.mostrarVentana(); // ✅ Cambio aquí
+//        });
+//    }
     public static void abrirRegistroCliente() {
+        System.out.println("🎯 abrirRegistroCliente() EJECUTADO");
+
         Platform.runLater(() -> {
-            RegistroUsuario registro = new RegistroUsuario(false);
-            registro.start(new Stage());
+            System.out.println("🎯 Platform.runLater EN RegistroUsuario EJECUTADO");
+
+            try {
+                System.out.println("🎯 CREANDO NUEVA INSTANCIA RegistroUsuario");
+                RegistroUsuario registro = new RegistroUsuario(false);
+                System.out.println("🎯 INSTANCIA CREADA: " + registro);
+
+                System.out.println("🎯 LLAMANDO mostrarVentana()");
+                registro.mostrarVentana();
+                System.out.println("🎯 mostrarVentana() COMPLETADO");
+
+            } catch (Exception e) {
+                System.out.println("❌ ERROR EN RegistroUsuario: " + e.getMessage());
+                e.printStackTrace();
+            }
         });
     }
+    public void mostrarVentana() {
+        System.out.println("🎯 mostrarVentana() EJECUTADO");
+        this.stage = new Stage();
+        System.out.println("🎯 STAGE CREADO: " + this.stage);
+        inicializarInterfaz();
+    }
+
+//    public void mostrarVentana() {
+//        System.out.println("🎯 mostrarVentana() EJECUTADO");
+//        this.stage = new Stage();
+//        System.out.println("🎯 STAGE CREADO: " + this.stage);
+//        inicializarInterfaz();
+//    }
+
+
+
+
 
     public static void abrirRegistroAdministrativo() {
         Platform.runLater(() -> {
+            System.out.println("🎯 SOLICITANDO REGISTRO ADMINISTRATIVO...");
             RegistroUsuario registro = new RegistroUsuario(true);
-            registro.start(new Stage());
+            registro.mostrarVentana(); // ✅ Cambio aquí
         });
     }
 

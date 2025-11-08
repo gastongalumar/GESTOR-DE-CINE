@@ -1,5 +1,6 @@
 package Clases.login;
 
+import Clases.ListaGenerica;
 import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
@@ -213,7 +214,7 @@ public class GestorUsuarios {
             throw UsuarioException.usuarioDuplicado(nuevoUsuario.getEmail());
         }
 
-        // CREAR LA INSTANCIA CORRECTA SEGÚN EL TIPO
+        // ✅ CORREGIDO: SOLO CLIENTES Y ADMINISTRADORES
         Usuario usuarioParaGuardar;
         if (nuevoUsuario.getTipoUsuario() == TipoUsuario.CLIENTE) {
             usuarioParaGuardar = new Cliente(
@@ -223,7 +224,8 @@ public class GestorUsuarios {
                     nuevoUsuario.getPassword(),
                     nuevoUsuario.getTelefono()
             );
-        } else if (nuevoUsuario.getTipoUsuario() == TipoUsuario.ADMINISTRADOR) {
+        } else {
+            // ✅ Solo administradores - eliminar la parte de empleados
             usuarioParaGuardar = new Administrador(
                     nuevoUsuario.getNombre(),
                     nuevoUsuario.getApellido(),
@@ -231,29 +233,6 @@ public class GestorUsuarios {
                     nuevoUsuario.getPassword(),
                     nuevoUsuario.getTelefono()
             );
-        } else {
-            // Para empleados, crear clase anónima
-            usuarioParaGuardar = new Usuario(
-                    nuevoUsuario.getNombre(),
-                    nuevoUsuario.getApellido(),
-                    nuevoUsuario.getEmail(),
-                    nuevoUsuario.getPassword(),
-                    nuevoUsuario.getTelefono(),
-                    nuevoUsuario.getTipoUsuario()
-            ) {
-                @Override
-                public boolean puedeRealizarAccion(String accion) {
-                    if (!isActivo()) return false;
-
-                    switch (getTipoUsuario()) {
-                        case EMPLEADO:
-                            return accion.equals("vender_entradas") ||
-                                    accion.equals("ver_cartelera");
-                        default:
-                            return true;
-                    }
-                }
-            };
         }
 
         // Asignar fechas y estado
@@ -269,7 +248,6 @@ public class GestorUsuarios {
         System.out.println("✅ Nuevo usuario registrado: " + usuarioParaGuardar.getEmail() +
                 " - Tipo: " + usuarioParaGuardar.getTipoUsuario().getDescripcion());
     }
-
     // Mantener usuarios de prueba SOLO si no hay usuarios reales
     public void cargarUsuariosPrueba() {
         if (usuarios.estaVacia()) {
