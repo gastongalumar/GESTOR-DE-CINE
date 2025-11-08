@@ -43,7 +43,7 @@ public class LoginInterfaz extends Application {
 
     public LoginInterfaz() {
         this.gestorUsuarios = new GestorUsuarios();
-        this.gestorUsuarios.cargarUsuariosPrueba(); // Solo carga admin/empleado si no existen
+        //this.gestorUsuarios.cargarUsuariosPrueba(); // Solo carga admin/empleado si no existen
     }
 
 
@@ -290,7 +290,7 @@ public class LoginInterfaz extends Application {
         }
     }
 
-    // En LoginInterfaz.java - Modificar el método autenticarUsuario
+    // En LoginInterfaz.java - Modificar el métoo autenticarUsuario
     private boolean autenticarUsuario(String email, String password) {
         try {
             Usuario usuario = gestorUsuarios.autenticarUsuario(email, password);

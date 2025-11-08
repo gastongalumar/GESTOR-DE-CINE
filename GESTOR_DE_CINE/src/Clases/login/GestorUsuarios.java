@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class GestorUsuarios {
-    private static final String ARCHIVO_USUARIOS = "usuarios.json";
     private static final int MAX_INTENTOS = 5;
 
     private ListaGenerica<Usuario> usuarios;
@@ -113,110 +112,6 @@ public class GestorUsuarios {
         return usuarios.obtenerTodos();
     }
 
-    // ✅ MÉTODO jsonToUsuario
-   /* private Usuario jsonToUsuario(JSONObject jsonUser) {
-        try {
-            TipoUsuario tipo = TipoUsuario.valueOf(jsonUser.getString("tipoUsuario"));
-            Usuario usuario;
-
-            // CREAR LA INSTANCIA CORRECTA SEGÚN EL TIPO
-            if (tipo == TipoUsuario.CLIENTE) {
-                Cliente cliente = new Cliente(
-                        jsonUser.getString("nombre"),
-                        jsonUser.getString("apellido"),
-                        jsonUser.getString("email"),
-                        jsonUser.getString("password"),
-                        jsonUser.getString("telefono")
-                );
-                // CARGAR PUNTOS DE FIDELIDAD SI EXISTEN
-                if (jsonUser.has("puntosFidelidad")) {
-                    cliente.setPuntosFidelidad(jsonUser.getInt("puntosFidelidad"));
-                }
-                usuario = cliente;
-
-            } else if (tipo == TipoUsuario.ADMINISTRADOR) {
-                Administrador admin = new Administrador(
-                        jsonUser.getString("nombre"),
-                        jsonUser.getString("apellido"),
-                        jsonUser.getString("email"),
-                        jsonUser.getString("password"),
-                        jsonUser.getString("telefono")
-                );
-                // CARGAR NIVEL DE ACCESO SI EXISTE
-                if (jsonUser.has("nivelAcceso")) {
-                    admin.setNivelAcceso(jsonUser.getString("nivelAcceso"));
-                }
-                usuario = admin;
-
-            } else {
-                // Para EMPLEADO - crear clase anónima
-                usuario = new Usuario(
-                        jsonUser.getString("nombre"),
-                        jsonUser.getString("apellido"),
-                        jsonUser.getString("email"),
-                        jsonUser.getString("password"),
-                        jsonUser.getString("telefono"),
-                        tipo
-                ) {
-                    @Override
-                    public boolean puedeRealizarAccion(String accion) {
-                        if (!isActivo()) return false;
-
-                        switch (getTipoUsuario()) {
-                            case EMPLEADO:
-                                return accion.equals("vender_entradas") ||
-                                        accion.equals("ver_cartelera") ||
-                                        accion.equals("atender_clientes");
-                            default:
-                                return true;
-                        }
-                    }
-                };
-            }
-
-            // ✅ SOLO UNA VEZ ESTE BLOQUE - ELIMINAR EL DUPLICADO
-            usuario.setEstado(EstadoUsuario.valueOf(jsonUser.getString("estado")));
-            usuario.setIntentosFallidos(jsonUser.getInt("intentosFallidos"));
-
-            if (jsonUser.has("fechaUltimoAcceso")) {
-                usuario.setFechaUltimoAcceso(LocalDateTime.parse(jsonUser.getString("fechaUltimoAcceso")));
-            }
-
-            return usuario;
-
-        } catch (JSONException e) {
-            throw new RuntimeException("Error convirtiendo JSON a Usuario", e);
-        }
-    }
-
-    // ✅ MÉTODO usuarioToJson ACTUALIZADO
-    private JSONObject usuarioToJson(Usuario usuario) {
-        try {
-            JSONObject jsonUser = new JSONObject();
-            jsonUser.put("nombre", usuario.getNombre());
-            jsonUser.put("apellido", usuario.getApellido());
-            jsonUser.put("email", usuario.getEmail());
-            jsonUser.put("password", usuario.getPassword());
-            jsonUser.put("telefono", usuario.getTelefono());
-            jsonUser.put("tipoUsuario", usuario.getTipoUsuario().name());
-            jsonUser.put("fechaRegistro", usuario.getFechaRegistro().toString());
-            jsonUser.put("fechaUltimoAcceso", usuario.getFechaUltimoAcceso().toString());
-            jsonUser.put("estado", usuario.getEstado().name());
-            jsonUser.put("intentosFallidos", usuario.getIntentosFallidos());
-
-            // AGREGAR ATRIBUTOS ESPECÍFICOS DE LAS SUBCLASES
-            if (usuario instanceof Cliente cliente) {
-                jsonUser.put("puntosFidelidad", cliente.getPuntosFidelidad());
-            } else if (usuario instanceof Administrador admin) {
-                jsonUser.put("nivelAcceso", admin.getNivelAcceso());
-            }
-
-            return jsonUser;
-        } catch (JSONException e) {
-            throw new RuntimeException("Error convirtiendo Usuario a JSON", e);
-        }
-    }
-*/
     public boolean existeUsuario(String email) {
         return usuarios.existe(u -> u.getEmail().equalsIgnoreCase(email));
     }
@@ -265,7 +160,7 @@ public class GestorUsuarios {
                 " - Tipo: " + usuarioParaGuardar.getTipoUsuario().getDescripcion());
     }
     // Mantener usuarios de prueba SOLO si no hay usuarios reales
-    public void cargarUsuariosPrueba() {
+    /*public void cargarUsuariosPrueba() {
         if (usuarios.estaVacia()) {
             System.out.println("🎬 Cargando usuarios de prueba...");
 
@@ -289,5 +184,5 @@ public class GestorUsuarios {
         } else {
             System.out.println("📊 Usuarios existentes: " + usuarios.tamaño());
         }
-    }
+    }*/
 }

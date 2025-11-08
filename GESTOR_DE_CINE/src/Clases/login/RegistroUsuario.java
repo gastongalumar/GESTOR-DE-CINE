@@ -36,7 +36,7 @@ public class RegistroUsuario  {
     public RegistroUsuario(boolean esAdministrador) {
         this.esAdministrador = esAdministrador;
         this.gestorUsuarios = new GestorUsuarios();
-        this.gestorUsuarios.cargarUsuariosPrueba();
+       // this.gestorUsuarios.cargarUsuariosPrueba();
     }
 
 
@@ -254,7 +254,7 @@ public class RegistroUsuario  {
                         nombreField.getText().trim(),
                         apellidoField.getText().trim(),
                         emailField.getText().trim().toLowerCase(),
-                        new String(passwordField.getText()),
+                        passwordField.getText(),
                         telefonoField.getText().trim()
                 );
             } else {
@@ -263,7 +263,7 @@ public class RegistroUsuario  {
                         nombreField.getText().trim(),
                         apellidoField.getText().trim(),
                         emailField.getText().trim().toLowerCase(),
-                        new String(passwordField.getText()),
+                        passwordField.getText(),
                         telefonoField.getText().trim()
                 );
             }
