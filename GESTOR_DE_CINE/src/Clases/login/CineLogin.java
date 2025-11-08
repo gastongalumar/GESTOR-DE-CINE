@@ -60,15 +60,30 @@ public class CineLogin extends Application {
         stage.centerOnScreen();
     }
 
-    private void configurarComponentes() {
-        loginButton.setOnAction(e -> realizarLogin());
-        recoverButton.setOnAction(e -> recuperarContrasena());
-        registerButton.setOnAction(e -> registrarUsuario());
+//    private void configurarComponentes() {
+//        loginButton.setOnAction(e -> realizarLogin());
+//        recoverButton.setOnAction(e -> recuperarContrasena());
+//        registerButton.setOnAction(e -> registrarUsuario());
+//
+//        // Enter key listener
+//        emailField.setOnAction(e -> realizarLogin());
+//        passwordField.setOnAction(e -> realizarLogin());
+//    }
+private void configurarComponentes() {
+    System.out.println("🎯 CONFIGURANDO COMPONENTES CineLogin");
 
-        // Enter key listener
-        emailField.setOnAction(e -> realizarLogin());
-        passwordField.setOnAction(e -> realizarLogin());
-    }
+    loginButton.setOnAction(e -> {
+        System.out.println("🎯 BOTÓN LOGIN PRESIONADO");
+        realizarLogin();
+    });
+
+    registerButton.setOnAction(e -> {
+        System.out.println("🎯 BOTÓN REGISTRAR PRESIONADO");
+        registrarUsuario();
+    });
+
+    System.out.println("🎯 BOTONES CONECTADOS - Login: " + loginButton + ", Registrar: " + registerButton);
+}
 
     private VBox createHeaderPanel() {
         VBox headerPanel = new VBox();
@@ -218,12 +233,28 @@ public class CineLogin extends Application {
         });
     }
 
-    private void registrarUsuario() {
-        Platform.runLater(() -> {
-            RegistroUsuario registro = new RegistroUsuario();
-            registro.start(new Stage());
-        });
-    }
+//    private void registrarUsuario() {
+//        Platform.runLater(() -> {
+//            RegistroUsuario registro = new RegistroUsuario(false);
+//            registro.mostrarVentana();
+//        });
+//    }
+private void registrarUsuario() {
+    System.out.println("🎯 MÉTODO registrarUsuario EJECUTADO EN CineLogin");
+
+    Platform.runLater(() -> {
+        System.out.println("🎯 Platform.runLater EJECUTADO");
+
+        try {
+            System.out.println("🎯 LLAMANDO RegistroUsuario.abrirRegistroCliente()");
+            RegistroUsuario.abrirRegistroCliente();
+            System.out.println("🎯 LLAMADA EXITOSA");
+        } catch (Exception e) {
+            System.out.println("❌ ERROR: " + e.getMessage());
+            e.printStackTrace();
+        }
+    });
+}
 
     private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
         Alert alert = new Alert(tipo);
@@ -232,5 +263,6 @@ public class CineLogin extends Application {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
 
 }

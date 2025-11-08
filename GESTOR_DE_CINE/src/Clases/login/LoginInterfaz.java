@@ -1,7 +1,11 @@
 package Clases.login;
 
+import Clases.*;
+import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import Excepciones.AutenticacionException;
 import Excepciones.UsuarioException;
+import ManejoJSON.FuncionesJSON;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -15,6 +19,8 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class LoginInterfaz extends Application {
     private Stage stage;
     private TextField emailField;
@@ -23,11 +29,14 @@ public class LoginInterfaz extends Application {
     private int intentosLogin = 0;
     private GestorUsuarios gestorUsuarios;
 
+
     @Override
     public void start(Stage primaryStage) {
         this.stage = primaryStage;
+        GestorFunciones gestorFunciones = new GestorFunciones();
+        cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 200), new SalaCine("Sala 2", 200));
         crearInterfaz();
-        configurarEventos();
+        configurarEventos(gestorFunciones);
         stage.show();
     }
 
@@ -71,7 +80,7 @@ public class LoginInterfaz extends Application {
         Scene scene = new Scene(mainPanel);
         stage.setScene(scene);
         stage.centerOnScreen();
-        configurarEventos();
+        configurarEventos(new GestorFunciones());
     }
 
     private VBox crearHeaderPanel() {
@@ -102,16 +111,75 @@ public class LoginInterfaz extends Application {
         emailLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
         emailField = new TextField();
-        emailField.setPrefSize(300, 40);
+        emailField.setPrefSize(300, 40);  // ✅ Mismo tamaño
+        emailField.setMaxWidth(280);      // ✅ Importante: forzar el ancho máximo
         emailField.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 10;");
 
-        // Contraseña
+// Contraseña CON OJITO
         Label passLabel = new Label("CONTRASEÑA:");
         passLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
+// Crear contenedor para password field + ojito
+        HBox passwordContainer = new HBox();
+        passwordContainer.setSpacing(5);
+        passwordContainer.setAlignment(Pos.CENTER_LEFT);
+        passwordContainer.setPrefWidth(300);  // ✅ Mismo ancho total
+        passwordContainer.setMaxWidth(300);   // ✅ Forzar ancho máximo
+
         passwordField = new PasswordField();
-        passwordField.setPrefSize(300, 40);
+        passwordField.setPrefSize(280, 40);   // ✅ Un poco menos para el ojito
         passwordField.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 10;");
+
+// Campo de texto visible (oculto inicialmente)
+        TextField visiblePasswordField = new TextField();
+        visiblePasswordField.setPrefSize(270, 40);
+        visiblePasswordField.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 10;");
+        visiblePasswordField.setVisible(false);
+        visiblePasswordField.setManaged(false);
+
+// Botón ojito
+        Button eyeButton = new Button("👁");
+        eyeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: #646496; -fx-font-size: 16; -fx-padding: 5;");
+        eyeButton.setPrefSize(30, 40);
+
+// ... resto del código del ojito igual
+        // Tooltip para el ojito
+        Tooltip eyeTooltip = new Tooltip("Mostrar/Ocultar contraseña");
+        eyeButton.setTooltip(eyeTooltip);
+
+        // Lógica del ojito
+        eyeButton.setOnAction(e -> {
+            if (passwordField.isVisible()) {
+                // Mostrar contraseña
+                visiblePasswordField.setText(passwordField.getText());
+                visiblePasswordField.setVisible(true);
+                visiblePasswordField.setManaged(true);
+                passwordField.setVisible(false);
+                passwordField.setManaged(false);
+                eyeButton.setText("🔒");
+                eyeTooltip.setText("Ocultar contraseña");
+            } else {
+                // Ocultar contraseña
+                passwordField.setText(visiblePasswordField.getText());
+                passwordField.setVisible(true);
+                passwordField.setManaged(true);
+                visiblePasswordField.setVisible(false);
+                visiblePasswordField.setManaged(false);
+                eyeButton.setText("👁");
+                eyeTooltip.setText("Mostrar contraseña");
+            }
+        });
+
+        // Sincronizar los dos campos
+        passwordField.textProperty().addListener((obs, oldVal, newVal) -> {
+            visiblePasswordField.setText(newVal);
+        });
+
+        visiblePasswordField.textProperty().addListener((obs, oldVal, newVal) -> {
+            passwordField.setText(newVal);
+        });
+
+        passwordContainer.getChildren().addAll(passwordField, visiblePasswordField, eyeButton);
 
         // Botones
         HBox buttonPanel = new HBox(20);
@@ -131,7 +199,7 @@ public class LoginInterfaz extends Application {
         formPanel.add(emailLabel, 0, 0, 2, 1);
         formPanel.add(emailField, 0, 1, 2, 1);
         formPanel.add(passLabel, 0, 2, 2, 1);
-        formPanel.add(passwordField, 0, 3, 2, 1);
+        formPanel.add(passwordContainer, 0, 3, 2, 1);
         formPanel.add(buttonPanel, 0, 4, 2, 1);
 
         return formPanel;
@@ -149,16 +217,39 @@ public class LoginInterfaz extends Application {
         return footerPanel;
     }
 
-    private void configurarEventos() {
-        loginButton.setOnAction(e -> realizarLogin());
+    private void configurarEventos(GestorFunciones gestorFunciones) {
+        loginButton.setOnAction(e -> realizarLogin(gestorFunciones));
         registerButton.setOnAction(e -> registrarUsuario());
 
         // Enter para login
-        emailField.setOnAction(e -> realizarLogin());
-        passwordField.setOnAction(e -> realizarLogin());
+        emailField.setOnAction(e -> realizarLogin(gestorFunciones));
+        passwordField.setOnAction(e -> realizarLogin(gestorFunciones));
     }
 
-    private void realizarLogin() {
+    private void registrarUsuario() {
+        System.out.println("🎯 BOTÓN REGISTRAR PRESIONADO EN LOGININTERFAZ");
+
+        Platform.runLater(() -> {
+            try {
+                System.out.println("🎯 ABRIENDO FORMULARIO DE REGISTRO...");
+                // ✅ Esto abre tu formulario de registro que YA funciona
+                RegistroUsuario.abrirRegistroCliente();
+                System.out.println("🎯 FORMULARIO ABIERTO EXITOSAMENTE");
+
+            } catch (Exception e) {
+                System.out.println("❌ ERROR AL ABRIR REGISTRO: " + e.getMessage());
+                e.printStackTrace();
+
+                // Mensaje de emergencia si falla
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("No se pudo abrir el formulario de registro");
+                alert.setContentText("Error: " + e.getMessage());
+                alert.showAndWait();
+            }
+        });
+    }
+    private void realizarLogin(GestorFunciones gestorFunciones) {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
 
@@ -180,7 +271,8 @@ public class LoginInterfaz extends Application {
             intentosLogin = 0;
             stage.close();
 
-            abrirSistemaPrincipal(email, tipoUsuario);
+
+            abrirSistemaPrincipal(email, tipoUsuario, gestorFunciones);
 
         } else {
             intentosLogin++;
@@ -197,6 +289,7 @@ public class LoginInterfaz extends Application {
         }
     }
 
+    // En LoginInterfaz.java - Modificar el método autenticarUsuario
     private boolean autenticarUsuario(String email, String password) {
         try {
             Usuario usuario = gestorUsuarios.autenticarUsuario(email, password);
@@ -216,27 +309,242 @@ public class LoginInterfaz extends Application {
     }
 
     private String determinarTipoUsuario(String email) {
-        if (email.equals("admin@cine.com")) return "Administrador";
-        if (email.equals("empleado@cine.com")) return "Empleado";
-        return "Cliente";
-    }
-
-    private void abrirSistemaPrincipal(String usuario, String tipoUsuario) {
-        mostrarAlerta("Redirigiendo",
-                "Abriendo sistema para: " + tipoUsuario + "\nUsuario: " + usuario,
-                Alert.AlertType.INFORMATION);
-
-        if (tipoUsuario.equals("Administrador")) {
-            GestorEstadisticasLogin.getInstance().mostrarGraficaLogins();
+        try {
+            Usuario usuario = gestorUsuarios.buscarPorEmail(email);
+            return usuario.getTipoUsuario().getDescripcion();
+        } catch (UsuarioException e) {
+            return "Cliente"; // Por defecto si hay algún error
         }
     }
 
-    private void registrarUsuario() {
-        // ✅ Ahora abre el formulario REAL de registro
+
+    // En LoginInterfaz.java - Modificar el método abrirSistemaPrincipal
+    private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones) {
+        mostrarAlerta("Login Exitoso",
+                "¡Bienvenido " + usuario + "!\nTipo: " + tipoUsuario,
+                Alert.AlertType.INFORMATION);
+
+        stage.close();
+
+        // Redirigir según el tipo de usuario
+        if (tipoUsuario.equals("Administrador")) {
+            abrirPanelAdministrador();
+        } else {
+            abrirPanelCliente(usuario, gestorFunciones);
+        }
+    }
+
+    private void abrirPanelAdministrador() {
         Platform.runLater(() -> {
-            RegistroUsuario registro = new RegistroUsuario(false); // false = registro normal de cliente
-            registro.start(new Stage());
+
+            DashboardAdmin dashboard = new DashboardAdmin(
+                    gestorUsuarios
+            );
+            dashboard.mostrarDashboard();
         });
+    }
+
+    private void abrirPanelCliente(String usuario, GestorFunciones gestorFunciones) {
+        Platform.runLater(() -> {
+            // Buscar el cliente por email (necesitas implementar esto)
+            Cliente cliente = buscarClientePorEmail(usuario);
+
+            if (cliente == null) {
+                // Cliente temporal si no lo encuentras
+                cliente = new Cliente();
+            }
+
+            // Crear UNA sola ventana que integre todo
+            Stage clienteStage = new Stage();
+            clienteStage.setTitle("CINE LOS CULIA - Cartelera");
+
+            // Contenedor principal
+            VBox panelPrincipal = new VBox();
+            panelPrincipal.setStyle("-fx-background-color: #1a1a2a;");
+
+            // === HEADER CON BIENVENIDA ===
+            VBox header = new VBox(10);
+            header.setPadding(new Insets(20));
+            header.setAlignment(Pos.CENTER);
+            header.setStyle("-fx-background-color: #2a2a3a;");
+
+            Label titulo = new Label("BIENVENIDO CLIENTE: " + usuario);
+            titulo.setStyle("-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;");
+
+            Label mensaje = new Label("Interfaz para seleccionar películas y asientos");
+            mensaje.setStyle("-fx-text-fill: #cccccc; -fx-font-size: 14;");
+
+            Button btnCerrar = new Button("Cerrar Sesión");
+            btnCerrar.setStyle("-fx-background-color: #ff4444; -fx-text-fill: white; -fx-font-weight: bold;");
+            btnCerrar.setOnAction(e -> {
+                clienteStage.close();
+                abrirLogin();
+            });
+
+            header.getChildren().addAll(titulo, mensaje, btnCerrar);
+
+            // === CONTENIDO PRINCIPAL (GESTOR CLIENTE) ===
+            HBox contenidoGestor = crearContenidoGestorCliente(gestorFunciones, cliente, clienteStage);
+
+            panelPrincipal.getChildren().addAll(header, contenidoGestor);
+
+            Scene scene = new Scene(panelPrincipal, 1300, 600);
+            clienteStage.setScene(scene);
+            clienteStage.show();
+        });
+    }
+
+    private HBox crearContenidoGestorCliente(GestorFunciones gestorFunciones, Cliente cliente, Stage ventana) {
+        HBox contenedor = new HBox(20);
+        contenedor.setPadding(new Insets(20));
+        contenedor.setStyle("-fx-background-color: #6E0A17;");
+
+        // Cargar películas
+        List<Pelicula> listaPeliculas = FuncionesJSON.deserializarPeliculas();
+
+        // Mostrar películas
+        for(Pelicula p: listaPeliculas) {
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+            contenedor.getChildren().add(vista);
+        }
+
+        // === PANEL LATERAL CON BOTONES ===
+        VBox panelLateral = crearPanelLateralCliente(cliente, gestorFunciones, ventana);
+        contenedor.getChildren().add(panelLateral);
+
+        return contenedor;
+    }
+
+    private VBox crearPanelLateralCliente(Cliente cliente, GestorFunciones gestorFunciones, Stage ventana) {
+        // Títulos
+        Label tituloFunciones = new Label("CARTELERA");
+        tituloFunciones.setStyle("-fx-font-size: 20px; -fx-text-fill: #0A6E61; -fx-font-weight: bold; -fx-padding: 5 10 5 10;");
+
+        Label tituloPeliculas = new Label("MI CUENTA");
+        tituloPeliculas.setStyle("-fx-font-size: 20px; -fx-text-fill: #0A6E61; -fx-font-weight: bold; -fx-padding: 5 10 5 10;");
+
+        Separator separacion = new Separator();
+        separacion.setStyle("-fx-background-color: #800080;");
+        separacion.setPrefWidth(150);
+
+        // === BOTONES DEL CLIENTE ===
+
+        // Historial de Compras
+        Button botonHistorial = new Button("Mi Historial de Compras");
+        botonHistorial.setStyle("-fx-background-color: #4169E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
+        botonHistorial.setOnAction(e -> HistorialCompras.mostrarHistorial(cliente));
+
+        // Puntos de Fidelidad
+        Button botonPuntos = new Button("Mis Puntos: " + cliente.getPuntosFidelidad());
+        botonPuntos.setStyle("-fx-background-color: #FFAA4A; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
+        botonPuntos.setOnAction(e -> mostrarInfoPuntos(cliente));
+
+        // Promociones
+        Button botonPromociones = new Button("Promociones Activas");
+        botonPromociones.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
+        botonPromociones.setOnAction(e -> mostrarPromociones(cliente));
+
+        // Cancelar Reserva
+        Button botonCancelarReserva = new Button("Cancelar Reserva");
+        botonCancelarReserva.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
+        botonCancelarReserva.setOnAction(e -> mostrarCancelarReserva(cliente, gestorFunciones));
+
+        // Mi Perfil
+        Button botonPerfil = new Button("Mi Perfil");
+        botonPerfil.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
+        botonPerfil.setOnAction(e -> mostrarPerfil(cliente));
+
+        VBox panelBotones = new VBox(10,
+                tituloFunciones,
+                botonHistorial,
+                botonPuntos,
+                botonPromociones,
+                botonCancelarReserva,
+                separacion,
+                tituloPeliculas,
+                botonPerfil
+        );
+
+        return panelBotones;
+    }
+
+    // Métodos auxiliares (agrégalos en la misma clase)
+    private void mostrarInfoPuntos(Cliente cliente) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Mis Puntos de Fidelidad");
+        alert.setHeaderText("Tus puntos: " + cliente.getPuntosFidelidad());
+        alert.setContentText("💡 Canjea 100 puntos por un 10% de descuento en tu próxima compra!");
+        alert.showAndWait();
+    }
+
+    private void mostrarPromociones(Cliente cliente) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Promociones Activas");
+        alert.setHeaderText("🎁 PROMOCIONES ESPECIALES");
+        alert.setContentText("• Miercoles de Descuento: 20% OFF\n• Combo Familiar: 25% OFF\n• Canje de Puntos: 100 pts = 10% OFF");
+        alert.showAndWait();
+    }
+
+    private void mostrarPerfil(Cliente cliente) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Mi Perfil");
+        alert.setHeaderText("👤 " + cliente.getNombre() + " " + cliente.getApellido());
+        alert.setContentText("Email: " + cliente.getEmail() + "\nTeléfono: " + cliente.getTelefono() + "\nPuntos: " + cliente.getPuntosFidelidad());
+        alert.showAndWait();
+    }
+
+    private void mostrarCancelarReserva(Cliente cliente, GestorFunciones gestorFunciones) {
+
+        // o implementar la lógica directamente
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Cancelar Reserva");
+        alert.setHeaderText("Funcionalidad de Cancelación");
+        alert.setContentText("Aquí se mostrarían tus reservas activas para cancelar.");
+        alert.showAndWait();
+    }
+
+    private Cliente buscarClientePorEmail(String email) {
+        try {
+            System.out.println("🔍 BUSCANDO CLIENTE: " + email);
+
+            // Buscar el usuario en el GestorUsuarios
+            Usuario usuario = gestorUsuarios.buscarPorEmail(email);
+
+            if (usuario instanceof Cliente) {
+                Cliente cliente = (Cliente) usuario;
+                System.out.println("✅ CLIENTE ENCONTRADO: " + cliente.getNombre() + " " + cliente.getApellido());
+                return cliente;
+            } else {
+                System.out.println("❌ El usuario no es un Cliente: " + usuario.getTipoUsuario());
+                // Si no es cliente, crear uno temporal con los datos básicos
+                return crearClienteTemporal(usuario);
+            }
+
+        } catch (UsuarioException e) {
+            System.out.println("❌ CLIENTE NO ENCONTRADO: " + e.getMessage());
+            // Crear cliente temporal con el email
+            return crearClienteTemporal(email);
+        }
+    }
+    private Cliente crearClienteTemporal(Usuario usuario) {
+        Cliente temp = new Cliente(
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getEmail(),
+                "", // password vacío
+                usuario.getTelefono()
+        );
+        temp.setPuntosFidelidad(0);
+        return temp;
+    }
+
+    private Cliente crearClienteTemporal(String email) {
+        Cliente temp = new Cliente();
+        temp.setEmail(email);
+        temp.setNombre("Cliente");
+        temp.setApellido("Temporal");
+        temp.setPuntosFidelidad(0);
+        return temp;
     }
 
 
@@ -256,5 +564,8 @@ public class LoginInterfaz extends Application {
         });
     }
 
-
+    public void cargarPeliculasActualizadas(GestorFunciones gestorFunciones, SalaCine s1, SalaCine s2) {
+        FuncionesJSON.deserializarPeliculas();
+        FuncionesJSON.deserializarFunciones(GestorPeliculas.getListaPeliculas(), List.of(s1, s2), gestorFunciones);
+    }
 }

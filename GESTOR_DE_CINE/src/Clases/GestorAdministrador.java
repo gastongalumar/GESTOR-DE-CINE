@@ -1,5 +1,6 @@
 package Clases;
 
+import Clases.login.GestorEstadisticasLogin;
 import ManejoJSON.FuncionesJSON;
 import ManejoJSON.GestorJsonAsientos;
 import javafx.geometry.Insets;
@@ -46,124 +47,145 @@ public class GestorAdministrador {
         vistaAdministrador(GestorPeliculas.getListaPeliculas(), gestorFunciones);
     }
     public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones){
-
         Stage ventana = new Stage();
         int i = 0;
         HBox contenedor = new HBox(20);
         contenedor.setStyle("""
-            -fx-background-color: #6E0A17;
-        """);
+        -fx-background-color: #6E0A17;
+    """);
+
         for(Pelicula p: listaPeliculas){
             VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
             contenedor.getChildren().add(vista);
-
         }
+
+//        // === AGREGAR ESTE BOTÓN NUEVO ===
+//        Label tituloEstadisticas = new Label("ESTADÍSTICAS");
+//        tituloEstadisticas.setStyle("""
+//        -fx-font-size: 20px;
+//        -fx-text-fill: #0A6E61;
+//        -fx-font-weight: bold ;
+//        -fx-padding: 5 10 5 10;
+//        -fx-background-radius: 2;
+//    """);
+
+        Button botonEstadisticas = new Button("Ver Estadísticas de Login");
+        botonEstadisticas.setStyle("""
+        -fx-background-color: #4169E1;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
+
+        botonEstadisticas.setOnAction(e -> {
+            // Esto abre la ventana de estadísticas que ya tienes
+            GestorEstadisticasLogin.getInstance().mostrarGraficaLogins();
+        });
+        // === FIN DEL BOTÓN NUEVO ===
 
         Label tituloFunciones = new Label("FUNCIONES");
         tituloFunciones.setStyle("""
-            -fx-font-size: 20px;
-            -fx-text-fill: #0A6E61;
-            -fx-font-weight: bold ;
-            -fx-padding: 5 10 5 10;
-            -fx-background-radius: 2;
-        """);
+        -fx-font-size: 20px;
+        -fx-text-fill: #0A6E61;
+        -fx-font-weight: bold ;
+        -fx-padding: 5 10 5 10;
+        -fx-background-radius: 2;
+    """);
+
+        // === AGREGAR ESTAS DECLARACIONES QUE TE FALTAN ===
         Button botonAgregar = new Button("Agregar función");
         botonAgregar.setStyle("""
-            -fx-background-color: #006600;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
-        """);
+        -fx-background-color: #006600;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
         botonAgregar.setOnAction(e -> {
             formularioAgregar(listaPeliculas, gestorFunciones);
         });
 
-
         Button botonEliminar = new Button("Eliminar función");
         botonEliminar.setStyle("""
-            -fx-background-color: red;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
-        """);
-
+        -fx-background-color: red;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
         botonEliminar.setOnAction(e -> {
-           // formularioEliminarFuncion(GestorFunciones.getListaFunciones());
             formularioEliminarFuncion(gestorFunciones);
         });
 
         Button botonModificarFuncion = new Button("Modificar función");
         botonModificarFuncion.setStyle("""
-            -fx-background-color: #FFAA4A;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
-        """);
-
+        -fx-background-color: #FFAA4A;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
         botonModificarFuncion.setOnAction(e -> {
-            //editarFuncion(GestorFunciones.getListaFunciones().get(2));
             formularioEditarFuncion(gestorFunciones);
         });
+
         Separator separacion = new Separator();
         separacion.setStyle("-fx-background-color: #800080;");
         separacion.setPrefWidth(150);
 
         Label tituloPeliculas = new Label("PELICULAS");
         tituloPeliculas.setStyle("""
-            -fx-font-size: 20px;
-            -fx-text-fill: #0A6E61;
-            -fx-font-weight: bold ;
-            -fx-padding: 5 10 5 10;
-            -fx-background-radius: 2;
-        """);
+        -fx-font-size: 20px;
+        -fx-text-fill: #0A6E61;
+        -fx-font-weight: bold ;
+        -fx-padding: 5 10 5 10;
+        -fx-background-radius: 2;
+    """);
 
+        // === AGREGAR ESTOS BOTONES DE PELÍCULAS TAMBIÉN ===
         Button botonAgregarPelicula = new Button("Agregar pelicula");
         botonAgregarPelicula.setStyle("""
-            -fx-background-color: #006600;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
-        """);
+        -fx-background-color: #006600;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
         botonAgregarPelicula.setOnAction(e -> {
-           //formularioAgregarPelicula();
             Formularios.formularioAgregarPelicula(gestorFunciones);
         });
 
-
-
         Button botonEliminarPelicula = new Button("Eliminar pelicula");
         botonEliminarPelicula.setStyle("""
-            -fx-background-color: red;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
-        """);
-
+        -fx-background-color: red;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
         botonEliminarPelicula.setOnAction(e -> {
-            //formularioEliminarPelicula();
             Formularios.formularioEliminarPelicula(gestorFunciones);
         });
 
         Button botonModificarPelicula = new Button("Modificar pelicula");
         botonModificarPelicula.setStyle("""
-            -fx-background-color: #FFAA4A;
-            -fx-text-fill: white;
-            -fx-font-weight: bold;
-            -fx-padding: 10 20 10 20;
-            -fx-background-radius: 10;
-        """);
-
+        -fx-background-color: #FFAA4A;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
         botonModificarPelicula.setOnAction(e -> {
-           // formularioEditarPelicula();
             Formularios.formularioEditarPelicula(gestorFunciones);
         });
 
-        VBox contieneBotonesFunciones = new VBox(10,tituloFunciones, botonAgregar, botonEliminar,botonModificarFuncion, separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula, botonModificarPelicula);
+        // === MODIFICAR ESTA LÍNEA para incluir el nuevo botón ===
+        VBox contieneBotonesFunciones = new VBox(10,
+                tituloFunciones, botonAgregar, botonEliminar, botonModificarFuncion,
+                separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula, botonModificarPelicula
+        );
+
         contenedor.getChildren().add(contieneBotonesFunciones);
         Scene escena = new Scene(contenedor,1300,500);
         ventana.setTitle("GESTOR ADMINISTRADOR");

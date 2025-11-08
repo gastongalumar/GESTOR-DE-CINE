@@ -1,29 +1,28 @@
-package Clases.login;
+package Clases.login.usuario;
 
 import Enumeradores.login.TipoUsuario;
 import Enumeradores.login.EstadoUsuario;
-
 import Excepciones.UsuarioException;
-
 
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
-public class Usuario {
-    private String nombre;
-    private String apellido;
-    private String email;
-    private String password;
-    private String telefono;
-    private TipoUsuario tipoUsuario;
-    private LocalDateTime fechaRegistro;
-    private LocalDateTime fechaUltimoAcceso;
-    private EstadoUsuario estado;
-    private int intentosFallidos;
+public abstract class Usuario {
+    protected String nombre;
+    protected String apellido;
+    protected String email;
+    protected String password;
+    protected String telefono;
+    protected TipoUsuario tipoUsuario;
+    protected LocalDateTime fechaRegistro;
+    protected LocalDateTime fechaUltimoAcceso;
+    protected EstadoUsuario estado;
+    protected int intentosFallidos;
 
-    // Constructor principal
-    public Usuario(String nombre, String apellido, String email, String password,
-                   String telefono, TipoUsuario tipoUsuario) {
+    // Constructor protegido para las subclases
+    // Constructor para clases anónimas (empleados)
+    protected Usuario(String nombre, String apellido, String email, String password,
+                      String telefono, TipoUsuario tipoUsuario) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
@@ -36,10 +35,13 @@ public class Usuario {
         this.intentosFallidos = 0;
     }
 
-    public Usuario() {
+    protected Usuario() {
     }
 
-    // Métodos de validación
+    // Método abstracto que las subclases deben implementar
+    public abstract boolean puedeRealizarAccion(String accion);
+
+    // Métodos de validación (mantener igual)
     public static boolean validarEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
         return Pattern.compile(emailRegex).matcher(email).matches();
@@ -54,7 +56,6 @@ public class Usuario {
     }
 
     public void validarDatos() throws UsuarioException {
-        UsuarioException UsuarioException = null;
         if (nombre == null || nombre.trim().isEmpty()) {
             throw UsuarioException.datosInvalidos("nombre");
         }
@@ -72,7 +73,23 @@ public class Usuario {
         }
     }
 
-    // Getters y Setters
+    // Métodos comunes (mantener igual)
+    public void incrementarIntentosFallidos() {
+        this.intentosFallidos++;
+        if (this.intentosFallidos >= 5) {
+            this.estado = EstadoUsuario.BLOQUEADO;
+        }
+    }
+
+    public void resetearIntentosFallidos() {
+        this.intentosFallidos = 0;
+    }
+
+    public boolean isActivo() {
+        return estado == EstadoUsuario.ACTIVO;
+    }
+
+    // Getters y Setters (mantener igual)
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
@@ -92,6 +109,7 @@ public class Usuario {
     public void setTipoUsuario(TipoUsuario tipoUsuario) { this.tipoUsuario = tipoUsuario; }
 
     public LocalDateTime getFechaRegistro() { return fechaRegistro; }
+    public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
 
     public LocalDateTime getFechaUltimoAcceso() { return fechaUltimoAcceso; }
     public void setFechaUltimoAcceso(LocalDateTime fechaUltimoAcceso) {
@@ -101,43 +119,9 @@ public class Usuario {
     public EstadoUsuario getEstado() { return estado; }
     public void setEstado(EstadoUsuario estado) { this.estado = estado; }
 
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
-
     public int getIntentosFallidos() { return intentosFallidos; }
     public void setIntentosFallidos(int intentosFallidos) {
         this.intentosFallidos = intentosFallidos;
-    }
-    public void incrementarIntentosFallidos() {
-        this.intentosFallidos++;
-        if (this.intentosFallidos >= 5) {
-            this.estado = EstadoUsuario.BLOQUEADO;
-        }
-    }
-    public void resetearIntentosFallidos() {
-        this.intentosFallidos = 0;
-    }
-
-    public boolean isActivo() {
-        return estado == EstadoUsuario.ACTIVO;
-    }
-
-    public boolean puedeRealizarAccion(String accion) {
-        if (!isActivo()) return false;
-
-        switch (tipoUsuario) {
-            case ADMINISTRADOR:
-                return true;
-            case EMPLEADO:
-                return !accion.equals("gestion_usuarios");
-            case CLIENTE:
-                return accion.equals("comprar_entradas") ||
-                        accion.equals("ver_cartelera") ||
-                        accion.equals("ver_perfil");
-            default:
-                return false;
-        }
     }
 
     @Override
@@ -157,8 +141,4 @@ public class Usuario {
     }
 
 
-//    public void setFechaRegistro(LocalDateTime now) {
-//
-//        this.fechaRegistro = now;
-//    }
 }

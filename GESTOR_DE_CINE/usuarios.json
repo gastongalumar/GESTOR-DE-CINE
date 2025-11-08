@@ -1,30 +1,58 @@
 {
-    "ultimaActualizacion": "2025-11-03T20:54:47.273113700",
+    "ultimaActualizacion": "2025-11-07T21:24:57.315168800",
     "data": [
         {
+            "nivelAcceso": "avanzado",
             "password": "admin123",
             "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-03T20:54:47.270112",
+            "fechaRegistro": "2025-11-07T21:24:36.357426400",
             "apellido": "Sistema",
             "tipoUsuario": "ADMINISTRADOR",
             "telefono": "123456789",
             "nombre": "Admin",
             "email": "admin@cine.com",
-            "fechaUltimoAcceso": "2025-11-03T20:54:47.270112",
+            "fechaUltimoAcceso": "2025-11-07T16:06:58.048473400",
             "intentosFallidos": 0
         },
         {
-            "password": "empleado123",
+            "password": "123456",
             "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-03T20:54:47.273113700",
-            "apellido": "Ventas",
-            "tipoUsuario": "EMPLEADO",
+            "fechaRegistro": "2025-11-07T21:24:36.361428700",
+            "apellido": "petete",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
             "telefono": "987654321",
-            "nombre": "Empleado",
-            "email": "empleado@cine.com",
-            "fechaUltimoAcceso": "2025-11-03T20:54:47.273113700",
+            "nombre": "Pelon",
+            "email": "pelon@cine.com",
+            "fechaUltimoAcceso": "2025-11-07T20:53:28.855257800",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "654321",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-07T21:24:36.361428700",
+            "apellido": "ordonez",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
+            "telefono": "22356466887",
+            "nombre": "nahuel",
+            "email": "nahuel@cine.com",
+            "fechaUltimoAcceso": "2025-11-07T21:06:22.489520100",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "petete",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-07T21:24:36.361428700",
+            "apellido": "Stellatelli",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
+            "telefono": "2544632123",
+            "nombre": "Santiago",
+            "email": "santi@cine.com",
+            "fechaUltimoAcceso": "2025-11-07T21:24:57.314167300",
             "intentosFallidos": 0
         }
     ],
-    "totalElementos": 2
+    "totalElementos": 4
 }

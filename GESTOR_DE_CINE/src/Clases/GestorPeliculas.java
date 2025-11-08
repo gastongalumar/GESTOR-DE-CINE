@@ -9,7 +9,7 @@ public class GestorPeliculas {
 
     private static List<Pelicula> listaPeliculas = new ArrayList<>();
 
-    public GestorPeliculas(){
+    public GestorPeliculas() {
 
     }
 
@@ -21,12 +21,25 @@ public class GestorPeliculas {
         GestorPeliculas.listaPeliculas = listaPeliculas;
     }
 
-    public static void agregarPelicula(Pelicula p){
+    public static void agregarPelicula(Pelicula p) {
         listaPeliculas.add(p);
         FuncionesJSON.serializarPeliculas(listaPeliculas);
     }
-    public static void eliminarPelicula(Pelicula p){
+
+    public static void eliminarPelicula(Pelicula p) {
         listaPeliculas.remove(p);
         FuncionesJSON.serializarPeliculas(listaPeliculas);
+    }
+
+    public void cargarDatosEjemplo() {
+////        // Cargar algunas películas de ejemplo
+////        Pelicula p1 = new Pelicula("Inception", 12/, 148);
+////        Pelicula p2 = new Pelicula("The Dark Knight", "Acción", 152);
+////        Pelicula p3 = new Pelicula("Interstellar", "Ciencia Ficción", 169);
+//
+//        listaPeliculas.add(p1);
+//        listaPeliculas.add(p2);
+//        listaPeliculas.add(p3);
+//    }
     }
 }
