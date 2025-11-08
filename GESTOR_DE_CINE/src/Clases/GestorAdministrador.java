@@ -30,6 +30,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Clases.Formularios.compararFechas;
+
 public class GestorAdministrador {
 
     /*public static void PeliculaAdministrador(Pelicula pelicula, List<Pelicula> listaPeliculas){
@@ -43,9 +45,72 @@ public class GestorAdministrador {
 
     public static void iniciarAdministrador(GestorFunciones gestorFunciones) {
         Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
-
+        //filtrarFuncionesVigentes(gestorFunciones.getListaFunciones().getElementos());
         vistaAdministrador(GestorPeliculas.getListaPeliculas(), gestorFunciones);
     }
+
+
+
+    public static List<Funcion> filtrarFuncionesVigentes(List<Funcion> listaFunciones) {
+        List<Funcion> filtradas = new ArrayList<>();
+        LocalDateTime ahora = LocalDateTime.now();
+
+        for (Funcion f : listaFunciones) {
+            LocalDateTime fechaFuncion = f.getHorarioFuncion();
+            try {
+                if (compararFechas(ahora.toLocalDate(), fechaFuncion.toLocalDate())) {
+                    if (!fechaFuncion.isBefore(ahora)) {
+                        filtradas.add(f);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("⚠️ Error al comparar fechas para función: " + f);
+            }
+        }
+        System.out.println(listaFunciones);
+        System.out.println(filtradas);
+        return filtradas;
+    }
+
+
+    public static List<Funcion> filtrarYBorrarFuncionesPasadas(List<Funcion> funciones) {
+        List<Funcion> vigentes = new ArrayList<>();
+        LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+        for (Funcion f : funciones) {
+            if (f.getHorarioFuncion().isAfter(ahora)) {
+                vigentes.add(f);
+            } else {
+                try {
+                    String nombrePelicula = f.getPelicula().getNombrePelicula()
+                            .replace(" ", "_")
+                            .replaceAll("[^a-zA-Z0-9_]", ""); // limpiar caracteres raros
+
+                    String nombreArchivo = String.format(
+                            "Asientos_%s_%s.json",
+                            nombrePelicula,
+                            f.getHorarioFuncion().format(formatoFecha)
+                    );
+
+                    File archivo = new File(nombreArchivo);
+                    if (archivo.exists()) {
+                        if (archivo.delete()) {
+                            System.out.println("🗑️ Archivo eliminado: " + nombreArchivo);
+                        } else {
+                            System.err.println("⚠️ No se pudo eliminar: " + nombreArchivo);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println("❌ Error al intentar borrar JSON de " + f.getPelicula().getNombrePelicula() + ": " + e.getMessage());
+                }
+            }
+        }
+
+        return vigentes;
+    }
+
+
     public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
         int i = 0;
@@ -55,7 +120,9 @@ public class GestorAdministrador {
     """);
 
         for(Pelicula p: listaPeliculas){
-            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+           //VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+           // VBox vista = VistaCartelera.crearVista(p,filtrarFuncionesVigentes(gestorFunciones.getListaFunciones().getElementos()));
+            VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos()));
             contenedor.getChildren().add(vista);
         }
 
@@ -747,7 +814,7 @@ public class GestorAdministrador {
 
 
 
-    private static void formularioEditarPelicula(GestorFunciones gestorFunciones){
+   /* private static void formularioEditarPelicula(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
 
         ventana.setTitle("Formulario para modificar pelicula");
@@ -789,10 +856,10 @@ public class GestorAdministrador {
 
 
 
-    }
+    }*/
 
 
-    private static void editarPelicula (Pelicula p, GestorFunciones gestorFunciones){
+   /* private static void editarPelicula (Pelicula p, GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
 
         ventana.setTitle("Modificar pelicula");
@@ -891,7 +958,7 @@ public class GestorAdministrador {
         ventana.show();
     }
 
-
+*/
 
 
     public static String guardarImagenPelicula(File archivoOrigen) throws IOException {
