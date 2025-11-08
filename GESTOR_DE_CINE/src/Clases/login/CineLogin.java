@@ -60,15 +60,6 @@ public class CineLogin extends Application {
         stage.centerOnScreen();
     }
 
-//    private void configurarComponentes() {
-//        loginButton.setOnAction(e -> realizarLogin());
-//        recoverButton.setOnAction(e -> recuperarContrasena());
-//        registerButton.setOnAction(e -> registrarUsuario());
-//
-//        // Enter key listener
-//        emailField.setOnAction(e -> realizarLogin());
-//        passwordField.setOnAction(e -> realizarLogin());
-//    }
 private void configurarComponentes() {
     System.out.println("🎯 CONFIGURANDO COMPONENTES CineLogin");
 
@@ -233,12 +224,6 @@ private void configurarComponentes() {
         });
     }
 
-//    private void registrarUsuario() {
-//        Platform.runLater(() -> {
-//            RegistroUsuario registro = new RegistroUsuario(false);
-//            registro.mostrarVentana();
-//        });
-//    }
 private void registrarUsuario() {
     System.out.println("🎯 MÉTODO registrarUsuario EJECUTADO EN CineLogin");
 

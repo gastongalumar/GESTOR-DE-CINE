@@ -128,13 +128,11 @@ public class DashboardAdmin {
         List<Usuario> usuarios = gestorUsuarios.obtenerTodosUsuarios();
         long totalUsuarios = usuarios.size();
         long admins = usuarios.stream().filter(u -> u.getTipoUsuario() == TipoUsuario.ADMINISTRADOR).count();
-        long empleados = usuarios.stream().filter(u -> u.getTipoUsuario() == TipoUsuario.EMPLEADO).count();
         long clientes = usuarios.stream().filter(u -> u.getTipoUsuario() == TipoUsuario.CLIENTE).count();
 
         // Tarjetas de métricas
         metricas.add(crearTarjetaMetrica("Total Usuarios", String.valueOf(totalUsuarios), "#3498db"), 0, 0);
         metricas.add(crearTarjetaMetrica("Administradores", String.valueOf(admins), "#e74c3c"), 1, 0);
-        metricas.add(crearTarjetaMetrica("Empleados", String.valueOf(empleados), "#f39c12"), 2, 0);
         metricas.add(crearTarjetaMetrica("Clientes", String.valueOf(clientes), "#27ae60"), 3, 0);
 
         // Estadísticas de login
@@ -168,11 +166,15 @@ public class DashboardAdmin {
         panel.setPadding(new Insets(20));
 
         // Header con botones
-        HBox header = new HBox(10);
+        VBox header = new VBox(10);
         header.setPadding(new Insets(0, 0, 20, 0));
 
         Label titulo = new Label("Gestión de Usuarios");
         titulo.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Botones en horizontal
+        HBox botonesPanel = new HBox(10);
+        botonesPanel.setAlignment(Pos.CENTER_LEFT);
 
         Button btnActualizar = new Button("Actualizar Lista");
         btnActualizar.setOnAction(e -> actualizarTablaUsuarios(panel));
@@ -180,7 +182,18 @@ public class DashboardAdmin {
         Button btnEstadisticas = new Button("Ver Estadísticas Login");
         btnEstadisticas.setOnAction(e -> GestorEstadisticasLogin.getInstance().mostrarGraficaLogins());
 
-        header.getChildren().addAll(titulo, btnActualizar, btnEstadisticas);
+        // ✅ NUEVO BOTÓN: Registrar Administrador
+        Button btnRegistrarAdmin = new Button("Registrar Nuevo Administrador");
+        btnRegistrarAdmin.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
+        btnRegistrarAdmin.setOnAction(e -> {
+            System.out.println("🎯 ADMIN SOLICITA REGISTRAR NUEVO ADMIN");
+//            RegistroUsuario.abrirRegistroAdministrativo();
+            RegistroUsuario registro = new RegistroUsuario(true, gestorFunciones); // ✅ Pasar gestorFunciones
+            registro.mostrarVentana();
+        });
+
+        botonesPanel.getChildren().addAll(btnActualizar, btnEstadisticas, btnRegistrarAdmin);
+        header.getChildren().addAll(titulo, botonesPanel);
         panel.setTop(header);
 
         // Tabla de usuarios
@@ -188,7 +201,6 @@ public class DashboardAdmin {
 
         return panel;
     }
-
     private void actualizarTablaUsuarios(BorderPane panel) {
         TableView<Usuario> tabla = new TableView<>();
 
@@ -239,11 +251,9 @@ public class DashboardAdmin {
 
         List<Usuario> usuarios = gestorUsuarios.obtenerTodosUsuarios();
         long admins = usuarios.stream().filter(u -> u.getTipoUsuario() == TipoUsuario.ADMINISTRADOR).count();
-        long empleados = usuarios.stream().filter(u -> u.getTipoUsuario() == TipoUsuario.EMPLEADO).count();
         long clientes = usuarios.stream().filter(u -> u.getTipoUsuario() == TipoUsuario.CLIENTE).count();
 
         pieChart.getData().add(new PieChart.Data("Administradores", admins));
-        pieChart.getData().add(new PieChart.Data("Empleados", empleados));
         pieChart.getData().add(new PieChart.Data("Clientes", clientes));
 
         panel.getChildren().addAll(titulo, pieChart);
