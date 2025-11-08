@@ -73,7 +73,7 @@ public class GestorAdministrador {
     }
 
 
-    public static List<Funcion> filtrarYBorrarFuncionesPasadas(List<Funcion> funciones) {
+    public static List<Funcion> filtrarYBorrarFuncionesPasadas(List<Funcion> funciones, GestorFunciones gestorFunciones) {
         List<Funcion> vigentes = new ArrayList<>();
         LocalDateTime ahora = LocalDateTime.now();
         DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
@@ -107,6 +107,7 @@ public class GestorAdministrador {
             }
         }
 
+        gestorFunciones.setListaFunciones(new ListaGenerica<>(vigentes));
         return vigentes;
     }
 
@@ -122,7 +123,7 @@ public class GestorAdministrador {
         for(Pelicula p: listaPeliculas){
            //VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
            // VBox vista = VistaCartelera.crearVista(p,filtrarFuncionesVigentes(gestorFunciones.getListaFunciones().getElementos()));
-            VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos()));
+            VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos(), gestorFunciones));
             contenedor.getChildren().add(vista);
         }
 
