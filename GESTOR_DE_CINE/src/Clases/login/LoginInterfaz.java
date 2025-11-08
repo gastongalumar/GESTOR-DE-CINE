@@ -328,19 +328,37 @@ public class LoginInterfaz extends Application {
 
         // Redirigir según el tipo de usuario
         if (tipoUsuario.equals("Administrador")) {
-            abrirPanelAdministrador();
+            abrirPanelAdministrador(gestorFunciones);
         } else {
             abrirPanelCliente(usuario, gestorFunciones);
         }
     }
 
-    private void abrirPanelAdministrador() {
-        Platform.runLater(() -> {
+    private void abrirPanelAdministrador(GestorFunciones gestorFunciones) {
+        System.out.println("🎯 INTENTANDO ABRIR PANEL ADMIN...");
 
-            DashboardAdmin dashboard = new DashboardAdmin(
-                    gestorUsuarios
-            );
-            dashboard.mostrarDashboard();
+        Platform.runLater(() -> {
+            try {
+                System.out.println("🎯 CREANDO DASHBOARD ADMIN...");
+
+
+                DashboardAdmin dashboard = new DashboardAdmin(
+                        gestorUsuarios,
+                        gestorFunciones  // ✅ AGREGAR ESTO
+                );
+                dashboard.mostrarDashboard();
+
+            } catch (Exception e) {
+                System.out.println("❌ ERROR EN PANEL ADMIN: " + e.getMessage());
+                e.printStackTrace();
+
+                // Mensaje de error
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("No se pudo abrir el panel de administrador");
+                alert.setContentText("Error: " + e.getMessage());
+                alert.showAndWait();
+            }
         });
     }
 

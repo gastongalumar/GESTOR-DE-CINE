@@ -184,7 +184,7 @@ public class SistemaPrincipal extends Application {
         switch (opcion) {
             case "Dashboard":
                 if (esAdministrador()) {
-                    new DashboardAdmin(gestorUsuarios).mostrarDashboard();
+                    new DashboardAdmin(gestorUsuarios,gestorFunciones).mostrarDashboard();
                 }
                 break;
 
