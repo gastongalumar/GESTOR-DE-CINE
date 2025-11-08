@@ -1,5 +1,6 @@
 package Clases;
 
+import Clases.login.usuario.Cliente;
 import Excepciones.CamposIncompletosException;
 import Excepciones.FechaInvalidaException;
 import Excepciones.PeliculaInvalidaException;
@@ -25,7 +26,7 @@ import static Clases.GestorAdministrador.mostrarAlerta;
 
 public class Formularios {
 
-    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones) {
+    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones, Cliente cliente) {
         Stage ventana = crearVentana("Agregar nueva película");
         Label titulo = crearTitulo("Agregar nueva película");
 
@@ -88,7 +89,7 @@ public class Formularios {
             }
 
             ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
+            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
         });
 
         VBox layout = crearLayout(titulo, campoNombre, seccionFechas, seccionImagen, botonGuardar);
@@ -212,7 +213,7 @@ public class Formularios {
 
 
 
-    public static void formularioEliminarPelicula(GestorFunciones gestorFunciones) throws CamposIncompletosException, PeliculaInvalidaException {
+    public static void formularioEliminarPelicula(GestorFunciones gestorFunciones,Cliente cliente) throws CamposIncompletosException, PeliculaInvalidaException {
         Stage ventana = crearVentana("Eliminar película");
         Label titulo = crearTitulo("Eliminar película");
 
@@ -236,7 +237,7 @@ public class Formularios {
                 mostrarAlerta("Película eliminada correctamente.");
 
                 ventana.close();
-                ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
+                ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
 
             }catch (CamposIncompletosException | PeliculaInvalidaException ex){
                 mostrarAlerta(ex.getMessage());
@@ -254,7 +255,7 @@ public class Formularios {
 
 
 
-    public static void formularioEditarPelicula(GestorFunciones gestorFunciones) {
+    public static void formularioEditarPelicula(GestorFunciones gestorFunciones,Cliente cliente) {
         Stage ventana = crearVentana("Modificar película");
         Label titulo = crearTitulo("Buscar película para modificar");
 
@@ -274,7 +275,7 @@ public class Formularios {
                 return;
             }
 
-            editarPelicula(pelicula, gestorFunciones);
+            editarPelicula(pelicula, gestorFunciones,cliente);
             ventana.close();
         });
 
@@ -283,7 +284,7 @@ public class Formularios {
         ventana.show();
     }
 
-    private static void editarPelicula(Pelicula p, GestorFunciones gestorFunciones) throws CamposIncompletosException, FechaInvalidaException {
+    private static void editarPelicula(Pelicula p, GestorFunciones gestorFunciones,Cliente cliente) throws CamposIncompletosException, FechaInvalidaException {
         Stage ventana = crearVentana("Modificar película");
         Label titulo = crearTitulo("Modificar película");
 
@@ -371,7 +372,7 @@ public class Formularios {
             }
                 mostrarAlerta("Película modificada correctamente.");
                 ventana.close();
-                ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
+                ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
 
         });
 

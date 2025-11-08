@@ -4,6 +4,7 @@ package Clases.GestionSelectorAsientos;
 import Clases.Funcion;
 import Clases.GestionDePagos.GestorDePagos;
 import Clases.SalaCine;
+import Clases.login.usuario.Cliente;
 import ManejoJSON.GestorJsonAsientos;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -117,11 +118,11 @@ public class SelectorAsientos {
     /**
      * Método estático para mostrar el selector
      */
-    public static void mostrarSelectorAsientos(Funcion funcion) {
+    public static void mostrarSelectorAsientos(Funcion funcion,Cliente cliente) {
         Platform.runLater(() -> {
             SelectorAsientos selector = new SelectorAsientos(funcion);
             Stage stage = new Stage();
-            selector.inicializarSelectorAsientos(stage);
+            selector.inicializarSelectorAsientos(stage,cliente);
         });
     }
 
@@ -131,7 +132,7 @@ public class SelectorAsientos {
         String horarioStr = funcion.getHorarioFuncion() != null ? funcion.getHorarioFuncion().format(fmt) : "horaDesconocida";
         String archivo = String.format("Asientos_%s_%s.json", nombrePelicula.replaceAll("\\s+", "_"), horarioStr);
 
-        this.sala = new SalaCine(FILAS_ASIENTOS, COLUMNAS);
+        this.sala = new SalaCine(funcion.getSala().getNombreSala(),FILAS_ASIENTOS, COLUMNAS);
         this.gestorJson = new GestorJsonAsientos(sala, archivo);
     }
 
@@ -150,16 +151,16 @@ public class SelectorAsientos {
         System.out.println("📍 Columnas válidas (donde hay asientos): " + columnasValidas);
     }
 
-    private void inicializarSelectorAsientos(Stage stage) {
+    private void inicializarSelectorAsientos(Stage stage,Cliente cliente) {
 
         // Inicializar sala si no se hizo mediante constructor
         if (sala == null) {
-            this.sala = new SalaCine(FILAS_ASIENTOS, COLUMNAS);
+            this.sala = new SalaCine(funcion.getSala().getNombreSala(),FILAS_ASIENTOS, COLUMNAS);
             this.gestorJson = new GestorJsonAsientos(sala);
         }
 
         configurarVentana(stage);
-        inicializarComponentes(stage);
+        inicializarComponentes(stage,cliente);
 
         // Cargar estado guardado
         Platform.runLater(() -> {
@@ -187,14 +188,14 @@ public class SelectorAsientos {
         });
     }
 
-    private void inicializarComponentes(Stage stage) {
+    private void inicializarComponentes(Stage stage,Cliente cliente) {
         rootLayout = new VBox();
         rootLayout.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
 
         rootLayout.getChildren().addAll(
                 crearPanelPantalla(),
                 crearPanelCentral(),
-                crearPanelInferior()
+                crearPanelInferior(cliente)
         );
 
         Scene scene = new Scene(rootLayout, 1200, 900);
@@ -414,13 +415,13 @@ public class SelectorAsientos {
         }
     }
 
-    private BorderPane crearPanelInferior() {
+    private BorderPane crearPanelInferior(Cliente cliente) {
         BorderPane panelInferior = new BorderPane();
         panelInferior.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
         panelInferior.setPadding(new Insets(8, 12, 8, 12));
 
         HBox leyenda = crearPanelLeyenda();
-        VBox panelDerecho = crearPanelDerecho();
+        VBox panelDerecho = crearPanelDerecho(cliente);
 
         panelInferior.setLeft(leyenda);
         panelInferior.setRight(panelDerecho);
@@ -462,7 +463,7 @@ public class SelectorAsientos {
         return item;
     }
 
-    private VBox crearPanelDerecho() {
+    private VBox crearPanelDerecho(Cliente cliente) {
         VBox panelDerecho = new VBox(5);
         panelDerecho.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
         panelDerecho.setAlignment(Pos.CENTER_RIGHT);
@@ -488,7 +489,7 @@ public class SelectorAsientos {
 
         btnReporte.setOnAction(e -> generarReporte());
         btnLimpiar.setOnAction(e -> limpiarSelecciones());
-        btnConfirmar.setOnAction(e -> gestorDePagos.procesarPago());
+        btnConfirmar.setOnAction(e -> gestorDePagos.procesarPago(cliente));
 
         panelBotones.getChildren().addAll(btnReporte, btnLimpiar, btnConfirmar);
         panelDerecho.getChildren().addAll(contadorLabel, precioTotalLabel, panelBotones);
@@ -570,4 +571,9 @@ public class SelectorAsientos {
         }
     }
 
+
+    public Cliente getCliente() {
+        return gestorDePagos.getCliente();
+
+    }
 }

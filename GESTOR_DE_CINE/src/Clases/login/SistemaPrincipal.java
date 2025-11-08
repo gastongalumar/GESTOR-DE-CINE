@@ -1,9 +1,7 @@
 package Clases.login;
 
 import Clases.*;
-import Clases.login.HistorialCompras;
-import Clases.login.GestorCompras;
-import Clases.login.DashboardAdmin;
+import Clases.GestionDePagos.HistorialCompras;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import javafx.application.Application;
@@ -41,17 +39,17 @@ public class SistemaPrincipal extends Application {
         if (tipoUsuario.equalsIgnoreCase("cliente")) {
             Cliente cliente = obtenerClienteActual();
             if (cliente != null) {
-                GestorCliente.iniciarCliente(gestorFunciones);
+                GestorCliente.iniciarCliente(gestorFunciones,cliente);
                 stage.close();
                 return;
             }
         }
 
-        inicializarInterfaz();
+        inicializarInterfaz(obtenerClienteActual());
     }
 
-    private void inicializarInterfaz() {
-        stage.setTitle("CINE LOS CULIA - Sistema de Gestión");
+    private void inicializarInterfaz(Cliente cliente) {
+        stage.setTitle("CINEMAX - Sistema de Gestión");
         stage.setOnCloseRequest(e -> Platform.exit());
         stage.setWidth(1200);
         stage.setHeight(800);
@@ -61,11 +59,11 @@ public class SistemaPrincipal extends Application {
         mainPanel = new BorderPane();
 
         // Header
-        HBox headerPanel = crearHeaderPanel();
+        HBox headerPanel = crearHeaderPanel(cliente);
         mainPanel.setTop(headerPanel);
 
         // Menu lateral
-        VBox menuPanel = crearMenuPanel();
+        VBox menuPanel = crearMenuPanel(cliente);
         mainPanel.setLeft(menuPanel);
 
         // Contenido principal
@@ -77,7 +75,7 @@ public class SistemaPrincipal extends Application {
         stage.centerOnScreen();
     }
 
-    private HBox crearHeaderPanel() {
+    private HBox crearHeaderPanel(Cliente cliente) {
         HBox headerPanel = new HBox();
         headerPanel.setStyle("-fx-background-color: #191923;");
         headerPanel.setPadding(new Insets(10, 20, 10, 20));
@@ -98,7 +96,7 @@ public class SistemaPrincipal extends Application {
 
         Button logoutButton = new Button("Cerrar Sesión");
         logoutButton.setStyle("-fx-background-color: #963232; -fx-text-fill: white;");
-        logoutButton.setOnAction(e -> cerrarSesion());
+        logoutButton.setOnAction(e -> cerrarSesion(cliente));
 
         userPanel.getChildren().addAll(userLabel, logoutButton);
         headerPanel.getChildren().addAll(titleLabel, userPanel);
@@ -106,7 +104,7 @@ public class SistemaPrincipal extends Application {
         return headerPanel;
     }
 
-    private VBox crearMenuPanel() {
+    private VBox crearMenuPanel(Cliente cliente) {
         VBox menuPanel = new VBox();
         menuPanel.setStyle("-fx-background-color: #28283c;");
         menuPanel.setPrefWidth(250);
@@ -117,7 +115,7 @@ public class SistemaPrincipal extends Application {
         String[] opcionesMenu = getOpcionesMenu();
 
         for (String opcion : opcionesMenu) {
-            Button menuButton = crearBotonMenu(opcion);
+            Button menuButton = crearBotonMenu(opcion,cliente);
             menuPanel.getChildren().add(menuButton);
         }
 
@@ -147,12 +145,12 @@ public class SistemaPrincipal extends Application {
         }
     }
 
-    private Button crearBotonMenu(String texto) {
+    private Button crearBotonMenu(String texto,Cliente cliente) {
         Button button = new Button(texto);
         button.setMaxWidth(Double.MAX_VALUE);
         button.setPrefHeight(45);
         button.setStyle("-fx-background-color: #3c3c50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 15 10 15;");
-        button.setOnAction(e -> manejarOpcionMenu(texto));
+        button.setOnAction(e -> manejarOpcionMenu(texto,cliente));
         return button;
     }
 
@@ -180,11 +178,11 @@ public class SistemaPrincipal extends Application {
         return contentPanel;
     }
 
-    private void manejarOpcionMenu(String opcion) {
+    private void manejarOpcionMenu(String opcion,Cliente cliente) {
         switch (opcion) {
             case "Dashboard":
                 if (esAdministrador()) {
-                    new DashboardAdmin(gestorUsuarios,gestorFunciones).mostrarDashboard();
+                    new DashboardAdmin(gestorUsuarios,gestorFunciones,cliente).mostrarDashboard();
                 }
                 break;
 
@@ -194,7 +192,7 @@ public class SistemaPrincipal extends Application {
             case "Reportes y Estadísticas":
             case "Configuración del Sistema":
                 if (esAdministrador()) {
-                    GestorAdministrador.iniciarAdministrador(gestorFunciones);
+                    GestorAdministrador.iniciarAdministrador(gestorFunciones,cliente);
                 }
                 break;
 
@@ -210,18 +208,18 @@ public class SistemaPrincipal extends Application {
             case "Cartelera":
             case "Comprar Entradas":
                 if (esCliente()) {
-                    Cliente cliente = obtenerClienteActual();
+                   cliente = obtenerClienteActual();
                     if (cliente != null) {
-                        GestorCliente.iniciarCliente(gestorFunciones);
+                        GestorCliente.iniciarCliente(gestorFunciones,cliente);
                     }
                 } else {
-                    abrirCarteleraGeneral();
+                    abrirCarteleraGeneral(cliente);
                 }
                 break;
 
             case "Mis Compras":
                 if (esCliente()) {
-                    Cliente cliente = obtenerClienteActual();
+                    cliente = obtenerClienteActual();
                     if (cliente != null) {
                         HistorialCompras.mostrarHistorial(cliente);
                     }
@@ -230,7 +228,7 @@ public class SistemaPrincipal extends Application {
 
             case "Promociones":
                 if (esCliente()) {
-                    Cliente cliente = obtenerClienteActual();
+                   cliente = obtenerClienteActual();
                     if (cliente != null) {
                         mostrarPromocionesCliente(cliente);
                     }
@@ -239,7 +237,7 @@ public class SistemaPrincipal extends Application {
 
             case "Perfil":
                 if (esCliente()) {
-                    Cliente cliente = obtenerClienteActual();
+                     cliente = obtenerClienteActual();
                     if (cliente != null) {
                         mostrarPerfilCliente(cliente);
                     }
@@ -285,7 +283,7 @@ public class SistemaPrincipal extends Application {
         return null;
     }
 
-    private void abrirCarteleraGeneral() {
+    private void abrirCarteleraGeneral(Cliente cliente) {
         Stage carteleraStage = new Stage();
         carteleraStage.setTitle("Cartelera - CINE LOS CULIA");
 
@@ -297,7 +295,7 @@ public class SistemaPrincipal extends Application {
         List<Pelicula> listaPeliculas = GestorPeliculas.getListaPeliculas();
 
         for(Pelicula p: listaPeliculas){
-            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(),cliente);
             contenedor.getChildren().add(vista);
         }
 
@@ -404,7 +402,7 @@ public class SistemaPrincipal extends Application {
         alert.showAndWait();
     }
 
-    private void cerrarSesion() {
+    private void cerrarSesion(Cliente cliente) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Cierre de Sesión");
         alert.setHeaderText(null);
@@ -415,7 +413,7 @@ public class SistemaPrincipal extends Application {
             // Volver al login
             Platform.runLater(() -> {
                 LoginInterfaz login = new LoginInterfaz();
-                login.start(new Stage());
+                login.start(new Stage(),cliente);
             });
         }
     }
