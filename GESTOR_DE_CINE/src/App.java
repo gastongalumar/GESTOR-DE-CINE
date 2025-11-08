@@ -6,7 +6,7 @@ import Clases.login.LoginInterfaz;
 import ManejoJSON.FuncionesJSON;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+import Clases.PantallaInico;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,9 +34,10 @@ public class App extends Application {
        /* SalaCine s1 = new SalaCine("Sala 1", 200);
         SalaCine s2 = new SalaCine("Sala 2", 200);*/
 
-      //  gestorCine.inicializarSistema();
-        LoginInterfaz.abrirLogin();
-        //GestorAdministrador.iniciarAdministrador(gestorFunciones);
+       // gestorCine.inicializarSistema();
+//        LoginInterfaz.abrirLogin();
+
+       Clases.PantallaInico.mostrarInicio();
 
 //
 //        System.out.println("✅ Sistema inicializado con:");
