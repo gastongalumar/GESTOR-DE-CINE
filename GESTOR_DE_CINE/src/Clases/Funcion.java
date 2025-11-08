@@ -24,8 +24,6 @@ public class Funcion {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
-        // Registrar automáticamente la función en el gestor
-        //GestorFunciones.agregarFuncion(this);
         gestorFunciones.agregarFuncion(this);
     }
 
@@ -49,9 +47,6 @@ public class Funcion {
         this.sala = salaEncontrada;
         this.pelicula = peliculaEncontrada;
         this.horarioFuncion = horarioFuncion;
-       /* if(encontrado){
-            GestorFunciones.agregarFuncion(this);
-        }*/
     }
 
     public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, double precio, GestorFunciones gestorFunciones) {
@@ -59,8 +54,6 @@ public class Funcion {
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
         this.precio = precio;
-        // Registrar automáticamente la función en el gestor
-        //GestorFunciones.agregarFuncion(this);
         gestorFunciones.agregarFuncion(this);
     }
 

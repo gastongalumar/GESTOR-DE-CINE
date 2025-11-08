@@ -1,6 +1,7 @@
 package Clases.login;
 
 import Clases.GestorFunciones;
+import Clases.HashUtil;
 import Clases.ManejoVentanas;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
@@ -262,6 +263,7 @@ public class RegistroUsuario {
 
             // ✅ CREAR USUARIO SEGÚN MODO
             Usuario nuevoUsuario;
+            String passwordHasheada = HashUtil.hashSHA256(passwordField.getText());
 
             if (esAdministrador) {
                 // En modo administrativo, siempre crea ADMINISTRADOR
@@ -269,7 +271,7 @@ public class RegistroUsuario {
                         nombreField.getText().trim(),
                         apellidoField.getText().trim(),
                         emailField.getText().trim().toLowerCase(),
-                        passwordField.getText(),
+                        passwordHasheada,
                         telefonoField.getText().trim()
                 );
             } else {
@@ -278,7 +280,7 @@ public class RegistroUsuario {
                         nombreField.getText().trim(),
                         apellidoField.getText().trim(),
                         emailField.getText().trim().toLowerCase(),
-                        passwordField.getText(),
+                        passwordHasheada,
                         telefonoField.getText().trim()
                 );
             }

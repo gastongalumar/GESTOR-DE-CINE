@@ -21,6 +21,8 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+import static Clases.HashUtil.hashSHA256;
+
 public class LoginInterfaz extends Application {
     private Stage stage;
     private TextField emailField;
@@ -69,8 +71,11 @@ public class LoginInterfaz extends Application {
         mainPanel.getChildren().add(headerPanel);
 
         // Formulario
-        GridPane formPanel = crearFormPanel();
-        mainPanel.getChildren().add(formPanel);
+
+
+            GridPane formPanel = crearFormPanel();
+            mainPanel.getChildren().add(formPanel);
+
 
         // Footer
         HBox footerPanel = crearFooterPanel();
@@ -293,7 +298,9 @@ public class LoginInterfaz extends Application {
     // En LoginInterfaz.java - Modificar el métoo autenticarUsuario
     private boolean autenticarUsuario(String email, String password) {
         try {
-            Usuario usuario = gestorUsuarios.autenticarUsuario(email, password);
+           // Usuario usuario = gestorUsuarios.autenticarUsuario(email, password);
+            Usuario usuario = gestorUsuarios.autenticarUsuario(email, hashSHA256(password));
+
 
             // Registrar el login en estadísticas
             GestorEstadisticasLogin.getInstance().registrarLogin(

@@ -117,15 +117,12 @@ public class GestorUsuarios {
     }
 
     public void registrarUsuario(Usuario nuevoUsuario) throws UsuarioException {
-        // Validar datos del usuario
         nuevoUsuario.validarDatos();
 
-        // Verificar si el email ya está registrado
         if (existeUsuario(nuevoUsuario.getEmail())) {
             throw UsuarioException.usuarioDuplicado(nuevoUsuario.getEmail());
         }
 
-        // ✅ CORREGIDO: SOLO CLIENTES Y ADMINISTRADORES
         Usuario usuarioParaGuardar;
         if (nuevoUsuario.getTipoUsuario() == TipoUsuario.CLIENTE) {
             usuarioParaGuardar = new Cliente(
@@ -136,7 +133,6 @@ public class GestorUsuarios {
                     nuevoUsuario.getTelefono()
             );
         } else {
-            // ✅ Solo administradores - eliminar la parte de empleados
             usuarioParaGuardar = new Administrador(
                     nuevoUsuario.getNombre(),
                     nuevoUsuario.getApellido(),
@@ -146,18 +142,13 @@ public class GestorUsuarios {
             );
         }
 
-        // Asignar fechas y estado
         usuarioParaGuardar.setFechaRegistro(LocalDateTime.now());
         usuarioParaGuardar.setFechaUltimoAcceso(LocalDateTime.now());
         usuarioParaGuardar.setEstado(EstadoUsuario.ACTIVO);
         usuarioParaGuardar.setIntentosFallidos(0);
 
-        // Agregar y guardar
         usuarios.agregar(usuarioParaGuardar);
         guardarUsuarios();
 
-        System.out.println("✅ Nuevo usuario registrado: " + usuarioParaGuardar.getEmail() +
-                " - Tipo: " + usuarioParaGuardar.getTipoUsuario().getDescripcion());
     }
-
 }
