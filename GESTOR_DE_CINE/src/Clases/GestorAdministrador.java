@@ -30,6 +30,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static Clases.Formularios.compararFechas;
+
 public class GestorAdministrador {
 
     /*public static void PeliculaAdministrador(Pelicula pelicula, List<Pelicula> listaPeliculas){
@@ -43,9 +45,49 @@ public class GestorAdministrador {
 
     public static void iniciarAdministrador(GestorFunciones gestorFunciones) {
         Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
-
+        //filtrarFuncionesVigentes(gestorFunciones.getListaFunciones().getElementos());
         vistaAdministrador(GestorPeliculas.getListaPeliculas(), gestorFunciones);
     }
+
+    public static List<Funcion> filtrarYBorrarFuncionesPasadas(List<Funcion> funciones, GestorFunciones gestorFunciones) {
+        List<Funcion> vigentes = new ArrayList<>();
+        LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+        for (Funcion f : funciones) {
+            if (f.getHorarioFuncion().isAfter(ahora)) {
+                vigentes.add(f);
+            } else {
+                try {
+                    String nombrePelicula = f.getPelicula().getNombrePelicula()
+                            .replace(" ", "_")
+                            .replaceAll("[^a-zA-Z0-9_]", ""); // limpiar caracteres raros
+
+                    String nombreArchivo = String.format(
+                            "Asientos_%s_%s.json",
+                            nombrePelicula,
+                            f.getHorarioFuncion().format(formatoFecha)
+                    );
+
+                    File archivo = new File(nombreArchivo);
+                    if (archivo.exists()) {
+                        if (archivo.delete()) {
+                            System.out.println("🗑️ Archivo eliminado: " + nombreArchivo);
+                        } else {
+                            System.err.println("⚠️ No se pudo eliminar: " + nombreArchivo);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println("❌ Error al intentar borrar JSON de " + f.getPelicula().getNombrePelicula() + ": " + e.getMessage());
+                }
+            }
+        }
+
+        gestorFunciones.setListaFunciones(new ListaGenerica<>(vigentes));
+        return vigentes;
+    }
+
+
     public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
         int i = 0;
@@ -55,19 +97,11 @@ public class GestorAdministrador {
     """);
 
         for(Pelicula p: listaPeliculas){
-            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+           //VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+           // VBox vista = VistaCartelera.crearVista(p,filtrarFuncionesVigentes(gestorFunciones.getListaFunciones().getElementos()));
+            VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos(), gestorFunciones));
             contenedor.getChildren().add(vista);
         }
-
-//        // === AGREGAR ESTE BOTÓN NUEVO ===
-//        Label tituloEstadisticas = new Label("ESTADÍSTICAS");
-//        tituloEstadisticas.setStyle("""
-//        -fx-font-size: 20px;
-//        -fx-text-fill: #0A6E61;
-//        -fx-font-weight: bold ;
-//        -fx-padding: 5 10 5 10;
-//        -fx-background-radius: 2;
-//    """);
 
         Button botonEstadisticas = new Button("Ver Estadísticas de Login");
         botonEstadisticas.setStyle("""
@@ -82,7 +116,6 @@ public class GestorAdministrador {
             // Esto abre la ventana de estadísticas que ya tienes
             GestorEstadisticasLogin.getInstance().mostrarGraficaLogins();
         });
-        // === FIN DEL BOTÓN NUEVO ===
 
         Label tituloFunciones = new Label("FUNCIONES");
         tituloFunciones.setStyle("""
@@ -180,14 +213,26 @@ public class GestorAdministrador {
             Formularios.formularioEditarPelicula(gestorFunciones);
         });
 
+        Button botonVolver = new Button("Volver atras");
+        botonVolver.setStyle("""
+        -fx-background-color: grey;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
+        botonVolver.setOnAction(e -> {
+            ventana.close();
+        });
+
         // === MODIFICAR ESTA LÍNEA para incluir el nuevo botón ===
         VBox contieneBotonesFunciones = new VBox(10,
                 tituloFunciones, botonAgregar, botonEliminar, botonModificarFuncion,
                 separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula, botonModificarPelicula
         );
 
-        contenedor.getChildren().add(contieneBotonesFunciones);
-        Scene escena = new Scene(contenedor,1300,500);
+        contenedor.getChildren().addAll(contieneBotonesFunciones, botonVolver);
+        Scene escena = new Scene(contenedor,1350,500);
         ventana.setTitle("GESTOR ADMINISTRADOR");
         ventana.setScene(escena);
         ventana.show();
@@ -455,7 +500,7 @@ public class GestorAdministrador {
 
     /*----------------------------------------------------------------------------------------------------------------------*/
 
-    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones){
+/*    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
         ventana.setTitle("Agregar nueva película");
 
@@ -562,10 +607,10 @@ public class GestorAdministrador {
         ventana.setScene(escena);
         ventana.show();
     }
+*/
 
 
-
-    private static void formularioEliminarPelicula(GestorFunciones gestorFunciones){
+    /*private static void formularioEliminarPelicula(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
         ventana.setTitle("Eliminar película");
 
@@ -622,7 +667,7 @@ public class GestorAdministrador {
         ventana.setScene(escena);
         ventana.show();
     }
-
+*/
 
     private static void formularioEditarFuncion(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
@@ -747,7 +792,7 @@ public class GestorAdministrador {
 
 
 
-    private static void formularioEditarPelicula(GestorFunciones gestorFunciones){
+   /* private static void formularioEditarPelicula(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
 
         ventana.setTitle("Formulario para modificar pelicula");
@@ -789,10 +834,10 @@ public class GestorAdministrador {
 
 
 
-    }
+    }*/
 
 
-    private static void editarPelicula (Pelicula p, GestorFunciones gestorFunciones){
+   /* private static void editarPelicula (Pelicula p, GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
 
         ventana.setTitle("Modificar pelicula");
@@ -891,7 +936,7 @@ public class GestorAdministrador {
         ventana.show();
     }
 
-
+*/
 
 
     public static String guardarImagenPelicula(File archivoOrigen) throws IOException {

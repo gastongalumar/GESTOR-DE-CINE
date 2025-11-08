@@ -114,9 +114,7 @@ public class SelectorAsientos {
         System.out.println("🔄 Visualización actualizada");
     }
 
-    /**
-     * Método estático para mostrar el selector
-     */
+
     public static void mostrarSelectorAsientos(Funcion funcion) {
         Platform.runLater(() -> {
             SelectorAsientos selector = new SelectorAsientos(funcion);
