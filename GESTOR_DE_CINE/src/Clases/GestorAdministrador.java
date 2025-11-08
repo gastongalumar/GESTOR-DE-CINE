@@ -49,30 +49,6 @@ public class GestorAdministrador {
         vistaAdministrador(GestorPeliculas.getListaPeliculas(), gestorFunciones);
     }
 
-
-
-    public static List<Funcion> filtrarFuncionesVigentes(List<Funcion> listaFunciones) {
-        List<Funcion> filtradas = new ArrayList<>();
-        LocalDateTime ahora = LocalDateTime.now();
-
-        for (Funcion f : listaFunciones) {
-            LocalDateTime fechaFuncion = f.getHorarioFuncion();
-            try {
-                if (compararFechas(ahora.toLocalDate(), fechaFuncion.toLocalDate())) {
-                    if (!fechaFuncion.isBefore(ahora)) {
-                        filtradas.add(f);
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("⚠️ Error al comparar fechas para función: " + f);
-            }
-        }
-        System.out.println(listaFunciones);
-        System.out.println(filtradas);
-        return filtradas;
-    }
-
-
     public static List<Funcion> filtrarYBorrarFuncionesPasadas(List<Funcion> funciones, GestorFunciones gestorFunciones) {
         List<Funcion> vigentes = new ArrayList<>();
         LocalDateTime ahora = LocalDateTime.now();
@@ -127,16 +103,6 @@ public class GestorAdministrador {
             contenedor.getChildren().add(vista);
         }
 
-//        // === AGREGAR ESTE BOTÓN NUEVO ===
-//        Label tituloEstadisticas = new Label("ESTADÍSTICAS");
-//        tituloEstadisticas.setStyle("""
-//        -fx-font-size: 20px;
-//        -fx-text-fill: #0A6E61;
-//        -fx-font-weight: bold ;
-//        -fx-padding: 5 10 5 10;
-//        -fx-background-radius: 2;
-//    """);
-
         Button botonEstadisticas = new Button("Ver Estadísticas de Login");
         botonEstadisticas.setStyle("""
         -fx-background-color: #4169E1;
@@ -150,7 +116,6 @@ public class GestorAdministrador {
             // Esto abre la ventana de estadísticas que ya tienes
             GestorEstadisticasLogin.getInstance().mostrarGraficaLogins();
         });
-        // === FIN DEL BOTÓN NUEVO ===
 
         Label tituloFunciones = new Label("FUNCIONES");
         tituloFunciones.setStyle("""
@@ -248,14 +213,26 @@ public class GestorAdministrador {
             Formularios.formularioEditarPelicula(gestorFunciones);
         });
 
+        Button botonVolver = new Button("Volver atras");
+        botonVolver.setStyle("""
+        -fx-background-color: grey;
+        -fx-text-fill: white;
+        -fx-font-weight: bold;
+        -fx-padding: 10 20 10 20;
+        -fx-background-radius: 10;
+    """);
+        botonVolver.setOnAction(e -> {
+            ventana.close();
+        });
+
         // === MODIFICAR ESTA LÍNEA para incluir el nuevo botón ===
         VBox contieneBotonesFunciones = new VBox(10,
                 tituloFunciones, botonAgregar, botonEliminar, botonModificarFuncion,
                 separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula, botonModificarPelicula
         );
 
-        contenedor.getChildren().add(contieneBotonesFunciones);
-        Scene escena = new Scene(contenedor,1300,500);
+        contenedor.getChildren().addAll(contieneBotonesFunciones, botonVolver);
+        Scene escena = new Scene(contenedor,1350,500);
         ventana.setTitle("GESTOR ADMINISTRADOR");
         ventana.setScene(escena);
         ventana.show();
@@ -523,7 +500,7 @@ public class GestorAdministrador {
 
     /*----------------------------------------------------------------------------------------------------------------------*/
 
-    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones){
+/*    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
         ventana.setTitle("Agregar nueva película");
 
@@ -630,10 +607,10 @@ public class GestorAdministrador {
         ventana.setScene(escena);
         ventana.show();
     }
+*/
 
 
-
-    private static void formularioEliminarPelicula(GestorFunciones gestorFunciones){
+    /*private static void formularioEliminarPelicula(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
         ventana.setTitle("Eliminar película");
 
@@ -690,7 +667,7 @@ public class GestorAdministrador {
         ventana.setScene(escena);
         ventana.show();
     }
-
+*/
 
     private static void formularioEditarFuncion(GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
