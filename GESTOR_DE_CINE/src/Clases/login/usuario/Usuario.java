@@ -20,7 +20,7 @@ public abstract class Usuario{
     protected EstadoUsuario estado;
     protected int intentosFallidos;
 
-    // Constructor protegido para las subclases
+
     // Constructor para clases anónimas (empleados)
     protected Usuario(String nombre, String apellido, String email, String password,
                       String telefono, TipoUsuario tipoUsuario) {

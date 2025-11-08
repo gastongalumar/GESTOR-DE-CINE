@@ -159,30 +159,5 @@ public class GestorUsuarios {
         System.out.println("✅ Nuevo usuario registrado: " + usuarioParaGuardar.getEmail() +
                 " - Tipo: " + usuarioParaGuardar.getTipoUsuario().getDescripcion());
     }
-    // Mantener usuarios de prueba SOLO si no hay usuarios reales
-    /*public void cargarUsuariosPrueba() {
-        if (usuarios.estaVacia()) {
-            System.out.println("🎬 Cargando usuarios de prueba...");
 
-            // USAR LAS SUBCLASES CORRECTAS
-            usuarios.agregar(new Administrador("Admin", "Sistema", "admin@cine.com",
-                    "admin123", "123456789"));
-
-            // Empleado como clase anónima
-            usuarios.agregar(new Usuario("Empleado", "Ventas", "empleado@cine.com",
-                    "empleado123", "987654321", TipoUsuario.EMPLEADO) {
-                @Override
-                public boolean puedeRealizarAccion(String accion) {
-                    return accion.equals("vender_entradas") ||
-                            accion.equals("ver_cartelera") ||
-                            accion.equals("atender_clientes");
-                }
-            });
-
-            guardarUsuarios();
-            System.out.println("✅ Usuarios de prueba (admin/empleado) creados");
-        } else {
-            System.out.println("📊 Usuarios existentes: " + usuarios.tamaño());
-        }
-    }*/
 }

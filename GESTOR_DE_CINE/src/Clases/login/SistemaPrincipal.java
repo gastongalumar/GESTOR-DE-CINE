@@ -202,12 +202,7 @@ public class SistemaPrincipal extends Application {
             case "Clientes":
             case "Reportes de Ventas":
             case "Configuración Horarios":
-                if (esEmpleado()) {
-                    mostrarFuncionalidadEmpleado(opcion);
-                }
-                break;
-
-            case "Cartelera":
+                case "Cartelera":
             case "Comprar Entradas":
                 if (esCliente()) {
                     Cliente cliente = obtenerClienteActual();
@@ -264,9 +259,6 @@ public class SistemaPrincipal extends Application {
         return tipoUsuario.equalsIgnoreCase("administrador");
     }
 
-    private boolean esEmpleado() {
-        return tipoUsuario.equalsIgnoreCase("empleado");
-    }
 
     private boolean esCliente() {
         return tipoUsuario.equalsIgnoreCase("cliente");
