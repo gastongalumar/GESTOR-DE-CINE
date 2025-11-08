@@ -8,6 +8,7 @@ import Enumeradores.login.EstadoUsuario;
 import Enumeradores.login.TipoUsuario;
 import Excepciones.AutenticacionException;
 import Excepciones.UsuarioException;
+import ManejoJSON.FuncionesJSON;
 import ManejoJSON.GestorJsonLogin;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,25 +21,40 @@ public class GestorUsuarios {
     private static final int MAX_INTENTOS = 5;
 
     private ListaGenerica<Usuario> usuarios;
-    private GestorJsonLogin<Usuario> gestorJson;
+
+
+    public ListaGenerica<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(ListaGenerica<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
 
     public GestorUsuarios() {
-        this.gestorJson = new GestorJsonLogin<>(
-                ARCHIVO_USUARIOS,
-                this::jsonToUsuario,
-                this::usuarioToJson
-        );
         cargarUsuarios();
     }
 
     private void cargarUsuarios() {
-        List<Usuario> usuariosCargados = gestorJson.cargar();
-        this.usuarios = new ListaGenerica<>(usuariosCargados);
+        try {
+            List<Usuario> lista = FuncionesJSON.deserializarUsuarios();
+            this.usuarios = new ListaGenerica<>(lista);
+            System.out.println("✅ Usuarios cargados: " + usuarios.tamaño());
+        } catch (Exception e) {
+            System.err.println("❌ Error al cargar usuarios: " + e.getMessage());
+            this.usuarios = new ListaGenerica<>();
+        }
     }
 
     private void guardarUsuarios() {
-        gestorJson.guardar(usuarios.obtenerTodos());
+        try {
+            FuncionesJSON.serializarUsuarios(usuarios.obtenerTodos());
+        } catch (Exception e) {
+
+        }
     }
+
 
     public Usuario autenticarUsuario(String email, String password)
             throws AutenticacionException, UsuarioException {
@@ -98,7 +114,7 @@ public class GestorUsuarios {
     }
 
     // ✅ MÉTODO jsonToUsuario
-    private Usuario jsonToUsuario(JSONObject jsonUser) {
+   /* private Usuario jsonToUsuario(JSONObject jsonUser) {
         try {
             TipoUsuario tipo = TipoUsuario.valueOf(jsonUser.getString("tipoUsuario"));
             Usuario usuario;
@@ -200,7 +216,7 @@ public class GestorUsuarios {
             throw new RuntimeException("Error convirtiendo Usuario a JSON", e);
         }
     }
-
+*/
     public boolean existeUsuario(String email) {
         return usuarios.existe(u -> u.getEmail().equalsIgnoreCase(email));
     }

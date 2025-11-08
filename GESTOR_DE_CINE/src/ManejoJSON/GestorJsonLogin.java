@@ -1,5 +1,10 @@
 package ManejoJSON;
 
+import Clases.login.usuario.Administrador;
+import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
+import Enumeradores.login.TipoUsuario;
+import Interfaces.ConversorJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -7,70 +12,111 @@ import org.json.JSONTokener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-public class GestorJsonLogin<T> {
-    private final String archivo;
-    private final Function<JSONObject, T> fromJsonConverter;
-    private final Function<T, JSONObject> toJsonConverter;
+public class GestorJsonLogin{
+  /*  private final String nombreArchivo;
 
-    public GestorJsonLogin(String archivo,
-                           Function<JSONObject, T> fromJsonConverter,
-                           Function<T, JSONObject> toJsonConverter) {
-        this.archivo = archivo;
-        this.fromJsonConverter = fromJsonConverter;
-        this.toJsonConverter = toJsonConverter;
+    public GestorJsonLogin(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
     }
 
-    // Cargar datos desde archivo
-    public List<T> cargar() {
-        List<T> elementos = new ArrayList<>();
+
+
+    @Override
+    public JSONObject aJson(Usuario usuario) {
+        JSONObject obj = new JSONObject();
 
         try {
-            JSONTokener tokener = JSONUtiles.leer(archivo);
-            if (tokener == null) {
-                System.out.println("📝 Creando archivo nuevo: " + archivo);
-                return elementos;
+            obj.put("nombre", usuario.getNombre());
+            obj.put("apellido", usuario.getApellido());
+            obj.put("email", usuario.getEmail());
+            obj.put("password", usuario.getPassword());
+            obj.put("telefono", usuario.getTelefono());
+            obj.put("tipoUsuario", usuario.getTipoUsuario().toString());
+            obj.put("activo", usuario.isActivo());
+
+            if (usuario instanceof Administrador) {
+                obj.put("nivelAcceso", ((Administrador) usuario).getNivelAcceso());
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ Error al convertir usuario a JSON: " + e.getMessage());
+        }
+
+        return obj;
+    }
+
+    @Override
+    public Usuario desdeJson(JSONObject obj) {
+        try {
+            String nombre = obj.getString("nombre");
+            String apellido = obj.getString("apellido");
+            String email = obj.getString("email");
+            String password = obj.getString("password");
+            String telefono = obj.getString("telefono");
+
+            boolean activo = true;
+            try {
+                activo = obj.getBoolean("activo");
+            } catch (Exception ignored) { }
+
+            TipoUsuario tipo = TipoUsuario.valueOf(obj.getString("tipoUsuario").toUpperCase());
+
+            Usuario usuario;
+            if (tipo == TipoUsuario.ADMINISTRADOR) {
+                String nivelAcceso = "avanzado";
+                try {
+                    nivelAcceso = obj.getString("nivelAcceso");
+                } catch (Exception ignored) { }
+
+                usuario = new Administrador(nombre, apellido, email, password, telefono, nivelAcceso);
+            } else {
+                usuario = new Cliente(nombre, apellido, email, password, telefono);
             }
 
-            JSONObject root = new JSONObject(tokener);
-            JSONArray jsonArray = root.getJSONArray("data");
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObj = jsonArray.getJSONObject(i);
-                T elemento = fromJsonConverter.apply(jsonObj);
-                elementos.add(elemento);
-            }
-
-            System.out.println("✅ " + elementos.size() + " elementos cargados de " + archivo);
-            return elementos;
+            return usuario;
 
         } catch (Exception e) {
-            System.err.println("❌ Error cargando de " + archivo + ": " + e.getMessage());
-            return elementos;
+            System.err.println("❌ Error al convertir JSON a Usuario: " + e.getMessage());
+            return null;
         }
     }
 
-    // Guardar datos a archivo
-    public void guardar(List<T> elementos) {
+    public List<Usuario> cargar() {
+        List<Usuario> lista = new ArrayList<>();
         try {
-            JSONArray jsonArray = new JSONArray();
+            JSONTokener tokener = JSONUtiles.leer(nombreArchivo);
+            if (tokener == null) return lista;
 
-            for (T elemento : elementos) {
-                JSONObject jsonObj = toJsonConverter.apply(elemento);
-                jsonArray.put(jsonObj);
+            JSONObject raiz = new JSONObject(tokener);
+            JSONArray datos = raiz.getJSONArray("data");
+
+            for (int i = 0; i < datos.length(); i++) {
+                JSONObject objetoJson = datos.getJSONObject(i);
+                Usuario usuario = desdeJson(objetoJson);
+                lista.add(usuario);
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar usuarios: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    public void guardar(List<Usuario> lista) {
+        try {
+            JSONArray datos = new JSONArray();
+            for (Usuario u : lista) {
+                datos.put(aJson(u));
             }
 
-            JSONObject root = new JSONObject();
-            root.put("data", jsonArray);
-            root.put("ultimaActualizacion", LocalDateTime.now().toString());
-            root.put("totalElementos", elementos.size());
+            JSONObject raiz = new JSONObject();
+            raiz.put("data", datos);
+            raiz.put("ultimaActualizacion", LocalDateTime.now().toString());
+            raiz.put("totalElementos", lista.size());
 
-            JSONUtiles.grabar(root, archivo);
-            System.out.println("✅ Datos guardados en " + archivo + ": " + elementos.size() + " elementos");
-
+            JSONUtiles.grabar(raiz, nombreArchivo);
         } catch (Exception e) {
-            System.err.println("❌ Error guardando en " + archivo + ": " + e.getMessage());
+            System.err.println("Error al guardar usuarios: " + e.getMessage());
         }
     }
 }
+*/}

@@ -3,11 +3,12 @@ package Clases.login.usuario;
 import Enumeradores.login.TipoUsuario;
 import Enumeradores.login.EstadoUsuario;
 import Excepciones.UsuarioException;
+import Interfaces.ConversorJson;
 
 import java.time.LocalDateTime;
 import java.util.regex.Pattern;
 
-public abstract class Usuario {
+public abstract class Usuario{
     protected String nombre;
     protected String apellido;
     protected String email;
@@ -36,6 +37,22 @@ public abstract class Usuario {
     }
 
     protected Usuario() {
+    }
+
+
+    public Usuario(String nombre, String apellido, String email, String password, String telefono,
+                   String estado, LocalDateTime fechaRegistro, LocalDateTime fechaUltimoAcceso,
+                   int intentosFallidos, TipoUsuario tipoUsuario) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+        this.telefono = telefono;
+        this.estado = EstadoUsuario.ACTIVO;
+        this.fechaRegistro = fechaRegistro;
+        this.fechaUltimoAcceso = fechaUltimoAcceso;
+        this.intentosFallidos = intentosFallidos;
+        this.tipoUsuario = tipoUsuario;
     }
 
     // Método abstracto que las subclases deben implementar
@@ -123,6 +140,44 @@ public abstract class Usuario {
     public void setIntentosFallidos(int intentosFallidos) {
         this.intentosFallidos = intentosFallidos;
     }
+
+
+
+   /* @Override
+    public Usuario fromJson(JSONObject json) {
+        try {
+            String nivel = json.has("nivelAcceso") ? json.getString("nivelAcceso") : null;
+            int puntos = json.has("puntosFidelidad") ? json.getInt("puntosFidelidad") : 0;
+
+            return new Usuario(
+                    json.getString("nombre"),
+                    json.getString("apellido"),
+                    json.getString("email"),
+                    json.getString("telefono"),
+                    json.getString("password"),
+                    json.getString("tipoUsuario"),
+                    json.getString("estado"),
+                    nivel,
+                    puntos,
+                    json.getInt("intentosFallidos"),
+                    LocalDateTime.parse(json.getString("fechaRegistro")),
+                    LocalDateTime.parse(json.getString("fechaUltimoAcceso"))
+            );
+
+        } catch (Exception e) {
+            throw new RuntimeException("❌ Error al convertir JSON a Usuario: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public JSONObject toJson(Usuario usuario) {
+        JSONObject obj = new JSONObject();
+        obj.put("nombre", usuario.getNombre());
+        obj.put("password", usuario.getPassword());
+        obj.put("rol", usuario.getRol());
+        return obj;
+    }
+    */
 
     @Override
     public String toString() {

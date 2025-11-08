@@ -2,6 +2,8 @@ package Clases.login.usuario;
 
 import Enumeradores.login.TipoUsuario;
 
+import java.time.LocalDateTime;
+
 public class Administrador extends Usuario {
     private String nivelAcceso; // "basico", "avanzado", "super"
 
@@ -19,11 +21,18 @@ public class Administrador extends Usuario {
         super();
     }
 
+    public Administrador(String nombre, String apellido, String email, String password, String telefono,
+                         String estado, LocalDateTime fechaRegistro, LocalDateTime fechaUltimoAcceso,
+                         int intentosFallidos, String nivelAcceso) {
+        super(nombre, apellido, email, password, telefono, estado, fechaRegistro,
+                fechaUltimoAcceso, intentosFallidos, TipoUsuario.ADMINISTRADOR);
+        this.nivelAcceso = nivelAcceso;
+    }
+
     @Override
     public boolean puedeRealizarAccion(String accion) {
         if (!isActivo()) return false;
 
-        // Administradores pueden hacer todo
         switch (accion) {
             case "gestion_usuarios":
             case "gestion_peliculas":
@@ -32,7 +41,7 @@ public class Administrador extends Usuario {
             case "configurar_sistema":
                 return true;
             default:
-                return true; // Por defecto, los admins pueden hacer todo
+                return true;
         }
     }
 

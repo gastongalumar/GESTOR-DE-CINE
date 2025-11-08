@@ -381,11 +381,11 @@ public class GestorCliente {
         ventana.show();
     }
 
-    public static void mostrarAlerta(String mensaje) {
+   /* public static void mostrarAlerta(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("Información");
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
-    }
+    }*/
 }

@@ -70,5 +70,17 @@
         "Fecha y hora": "2025-11-05 21:00",
         "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-10-26 10:30",
+        "Pelicula": "Jhon Wick 4",
+        "Precio": 5000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-10-27 10:30",
+        "Pelicula": "Jhon Wick 4",
+        "Precio": 5000
     }
 ]

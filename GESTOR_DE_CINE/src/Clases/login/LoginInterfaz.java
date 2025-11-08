@@ -37,6 +37,7 @@ public class LoginInterfaz extends Application {
         cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 200), new SalaCine("Sala 2", 200));
         crearInterfaz();
         configurarEventos(gestorFunciones);
+        GestorAdministrador.iniciarAdministrador(gestorFunciones);   //BORRAR ANTES DE ENTREGAR
         stage.show();
     }
 
@@ -318,7 +319,6 @@ public class LoginInterfaz extends Application {
     }
 
 
-    // En LoginInterfaz.java - Modificar el método abrirSistemaPrincipal
     private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones) {
         mostrarAlerta("Login Exitoso",
                 "¡Bienvenido " + usuario + "!\nTipo: " + tipoUsuario,

@@ -119,7 +119,6 @@ public class VistaCartelera {
                 horario.setOnMouseEntered(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: yellow;"));
                 horario.setOnMouseExited(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: white;"));
 
-                /// ACA ES DONDE LLAMA AL METODO DE SELECCION DE ASIENTOS
 
                 horario.setOnMouseClicked(ev -> {
                     SwingUtilities.invokeLater(() -> {

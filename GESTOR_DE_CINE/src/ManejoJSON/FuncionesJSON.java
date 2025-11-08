@@ -2,6 +2,10 @@ package ManejoJSON;
 
 import Clases.*;
 import Clases.GestionDePagos.Pago;
+import Clases.login.GestorUsuarios;
+import Clases.login.usuario.Administrador;
+import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -154,6 +158,106 @@ public class FuncionesJSON {
 
         return listaPeliculas;
     }
+
+
+
+    public static List<Usuario> deserializarUsuarios() {
+        List<Usuario> listaUsuarios = new ArrayList<>();
+
+        try {
+            JSONObject raiz = new JSONObject(JSONUtiles.leer("usuarios.json"));
+            JSONArray jsonUsuarios = raiz.getJSONArray("data");
+
+            for (int i = 0; i < jsonUsuarios.length(); i++) {
+                JSONObject obj = jsonUsuarios.getJSONObject(i);
+
+                String tipoUsuario = obj.getString("tipoUsuario");
+                String nombre = obj.getString("nombre");
+                String apellido = obj.getString("apellido");
+                String email = obj.getString("email");
+                String password = obj.getString("password");
+                String telefono = obj.getString("telefono");
+                String estado = obj.optString("estado", "ACTIVO");
+
+                LocalDateTime fechaRegistro = LocalDateTime.parse(
+                        obj.optString("fechaRegistro", LocalDateTime.now().toString())
+                );
+                LocalDateTime fechaUltimoAcceso = LocalDateTime.parse(
+                        obj.optString("fechaUltimoAcceso", LocalDateTime.now().toString())
+                );
+
+                int intentosFallidos = obj.optInt("intentosFallidos", 0);
+
+                Usuario usuario = null;
+
+                if (tipoUsuario.equalsIgnoreCase("ADMINISTRADOR")) {
+                    String nivelAcceso = obj.optString("nivelAcceso", "NORMAL");
+                    usuario = new Administrador(nombre, apellido, email, password, telefono,
+                            estado, fechaRegistro, fechaUltimoAcceso, intentosFallidos, nivelAcceso);
+                } else if (tipoUsuario.equalsIgnoreCase("CLIENTE")) {
+                    int puntosFidelidad = obj.optInt("puntosFidelidad", 0);
+                    usuario = new Cliente(nombre, apellido, email, password, telefono,
+                            estado, fechaRegistro, fechaUltimoAcceso, intentosFallidos, puntosFidelidad);
+                }
+
+                if (usuario != null) {
+                    listaUsuarios.add(usuario);
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("❌ Error al deserializar usuarios: " + e.getMessage());
+        }
+
+        return listaUsuarios;
+    }
+
+    public static void serializarUsuarios(List<Usuario> listaUsuarios) {
+        JSONArray dataArray = new JSONArray();
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+        try {
+            for (Usuario u : listaUsuarios) {
+                JSONObject obj = new JSONObject();
+
+                try {
+                    obj.put("nombre", u.getNombre());
+                    obj.put("apellido", u.getApellido());
+                    obj.put("email", u.getEmail());
+                    obj.put("password", u.getPassword());
+                    obj.put("telefono", u.getTelefono());
+                    obj.put("estado", u.getEstado());
+                    obj.put("fechaRegistro", u.getFechaRegistro().format(formatoFecha));
+                    obj.put("fechaUltimoAcceso", u.getFechaUltimoAcceso().format(formatoFecha));
+                    obj.put("intentosFallidos", u.getIntentosFallidos());
+                    obj.put("tipoUsuario", u.getTipoUsuario().toString());
+
+                    if (u instanceof Administrador admin) {
+                        obj.put("nivelAcceso", admin.getNivelAcceso());
+                    } else if (u instanceof Cliente cli) {
+                        obj.put("puntosFidelidad", cli.getPuntosFidelidad());
+                    }
+
+                    dataArray.put(obj);
+
+                } catch (Exception ex) {
+                    System.out.println("⚠️ Error al procesar usuario " + u.getEmail() + ": " + ex.getMessage());
+                }
+            }
+
+            JSONObject raiz = new JSONObject();
+            raiz.put("data", dataArray);
+            raiz.put("ultimaActualizacion", LocalDateTime.now().toString());
+            raiz.put("totalElementos", listaUsuarios.size());
+
+            JSONUtiles.grabar(raiz, "usuarios.json");
+            System.out.println("💾 Usuarios guardados correctamente en usuarios.json");
+
+        } catch (Exception e) {
+            System.out.println("❌ Error al serializar usuarios: " + e.getMessage());
+        }
+    }
+
 
     public static void serializarPagos(List<Pago> listaPagos) {
         JSONArray jsonPagos = new JSONArray();

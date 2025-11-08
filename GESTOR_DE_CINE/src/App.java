@@ -24,18 +24,19 @@ public class App extends Application {
         // Inicializar gestor principal
 
 
-   // GestorAdministrador.iniciarAdministrador(gestorFunciones);
+    //GestorAdministrador.iniciarAdministrador(gestorFunciones);
 
 
 //     System.out.println("prueba"+ gestorPeliculas.getListaPeliculas());
         System.out.println("🎬 Iniciando Sistema de Cine Integrado...");
-        GestorCine gestorCine = new GestorCine();
-        GestorFunciones gestorFunciones = new GestorFunciones();
-        SalaCine s1 = new SalaCine("Sala 1", 200);
-        SalaCine s2 = new SalaCine("Sala 2", 200);
+    //    GestorCine gestorCine = new GestorCine();
+        //GestorFunciones gestorFunciones = new GestorFunciones();
+       /* SalaCine s1 = new SalaCine("Sala 1", 200);
+        SalaCine s2 = new SalaCine("Sala 2", 200);*/
 
-        gestorCine.inicializarSistema();
+      //  gestorCine.inicializarSistema();
         LoginInterfaz.abrirLogin();
+        //GestorAdministrador.iniciarAdministrador(gestorFunciones);
 
 //
 //        System.out.println("✅ Sistema inicializado con:");
