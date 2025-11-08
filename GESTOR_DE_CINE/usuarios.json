@@ -1,0 +1,30 @@
+{
+    "ultimaActualizacion": "2025-11-03T20:54:47.273113700",
+    "data": [
+        {
+            "password": "admin123",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-03T20:54:47.270112",
+            "apellido": "Sistema",
+            "tipoUsuario": "ADMINISTRADOR",
+            "telefono": "123456789",
+            "nombre": "Admin",
+            "email": "admin@cine.com",
+            "fechaUltimoAcceso": "2025-11-03T20:54:47.270112",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "empleado123",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-03T20:54:47.273113700",
+            "apellido": "Ventas",
+            "tipoUsuario": "EMPLEADO",
+            "telefono": "987654321",
+            "nombre": "Empleado",
+            "email": "empleado@cine.com",
+            "fechaUltimoAcceso": "2025-11-03T20:54:47.273113700",
+            "intentosFallidos": 0
+        }
+    ],
+    "totalElementos": 2
+}
