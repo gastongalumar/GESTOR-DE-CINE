@@ -5,8 +5,11 @@ import Clases.GestionSelectorAsientos.AsientoButton;
 import Clases.Funcion;
 import Clases.GestionSelectorAsientos.SelectorAsientos;
 import Clases.ListaGenerica;
+import Clases.login.usuario.Cliente;
 import Enumeradores.EstadoAsiento;
 import javafx.scene.control.*;
+
+import java.io.File;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ public class GestorDePagos {
     private ListaGenerica<Pago> listaPagos = new ListaGenerica<>();
     private ListaGenerica<MetodoDePago> metodoDePagos = new ListaGenerica<>();
     private SelectorAsientos selectorAsientos;
+
 
     // CONSTRUCTOR
     public GestorDePagos(SelectorAsientos selectorAsientos) {
@@ -86,7 +90,7 @@ public class GestorDePagos {
     }
 
     // METODO PRINCIPAL DE PROCESAMIENTO DE PAGO
-    public void procesarPago() {
+    public void procesarPago(Cliente cliente) {
         double totalAPagar = calcularPrecioTotal();
         List<String> asientosSeleccionadosParaTicket = obtenerAsientosSeleccionados();
         int cantidadAsientos = asientosSeleccionadosParaTicket.size();
@@ -124,7 +128,7 @@ public class GestorDePagos {
 
         if (resultado.isPresent()) {
             MetodoDePago metodoSeleccionado = resultado.get();
-            procesarPagoConMetodo(String.valueOf(metodoSeleccionado), totalAPagar, cantidadAsientos, asientosSeleccionadosParaTicket);
+            procesarPagoConMetodo(String.valueOf(metodoSeleccionado), totalAPagar, cantidadAsientos, asientosSeleccionadosParaTicket,cliente);
         }
     }
 
@@ -147,7 +151,7 @@ public class GestorDePagos {
         );
     }
 
-    private void procesarPagoConMetodo(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados) {
+    private void procesarPagoConMetodo(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados,Cliente cliente) {
         MetodoDePago metodoPago = new MetodoDePago(generarIdMetodoPago(), metodoSeleccionado);
         String descripcion = String.format("Compra de %d asientos para %s",
                 cantidadAsientos,
@@ -159,11 +163,11 @@ public class GestorDePagos {
 
         if (pagoExitoso) {
             int asientosConfirmados = confirmarSelecciones();
-            mostrarConfirmacionPago(metodoSeleccionado, totalAPagar, cantidadAsientos, asientosSeleccionados);
+            mostrarConfirmacionPago(metodoSeleccionado, totalAPagar, cantidadAsientos, asientosSeleccionados,cliente);
         }
     }
 
-    private void mostrarConfirmacionPago(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados) {
+    private void mostrarConfirmacionPago(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados,Cliente cliente) {
         Alert exito = new Alert(Alert.AlertType.INFORMATION);
         exito.setTitle("Pago Exitoso");
         exito.setHeaderText("✅ PAGO PROCESADO EXITOSAMENTE");
@@ -182,9 +186,10 @@ public class GestorDePagos {
         Optional<ButtonType> resultado2 = exito.showAndWait();
 
         if (resultado2.isPresent() && resultado2.get() == btnImprimirTicket) {
-            imprimirTicketCompra(metodoSeleccionado, totalAPagar, asientosSeleccionados);
+            // ✅ SOLUCIÓN: Usar datos básicos pero REALES
+            Cliente clienteTemp = new Cliente("Usuario", "Cine", "usuario@cine.com", "", "000-0000");
+            imprimirTicketCompra(metodoSeleccionado, totalAPagar, cantidadAsientos, asientosSeleccionados, cliente);
         }
-
     }
 
     private int confirmarSelecciones() {
@@ -221,30 +226,92 @@ public class GestorDePagos {
         return seleccionados;
     }
 
-    // MÉTODOS PARA TICKET
-    private void imprimirTicketCompra(String metodoPago, double monto, List<String> asientosSeleccionados) {
+    private void imprimirTicketCompra(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados, Cliente cliente) {
         try {
             Funcion funcion = selectorAsientos.getFuncion();
-            String nombrePelicula = funcion.getPelicula().getNombrePelicula();
-            String horario = funcion.getHorarioFuncion().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-            String salaNombre = funcion.getSala() != null ? funcion.getSala().getNombreSala() : "Sala Principal";
-            String timestamp = java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
-            String asientosStr = asientosSeleccionados.isEmpty() ? "Por asignar" : String.join(", ", asientosSeleccionados);
+            // ✅ VERIFICAR QUE EL CLIENTE TENGA DATOS
+            if (cliente == null || cliente.getNombre() == null || cliente.getApellido() == null) {
+                System.out.println("⚠️ Cliente incompleto, usando datos por defecto");
+                // Crear un cliente temporal con datos básicos si es necesario
+                if (cliente == null) {
+                    cliente = new Cliente("Cliente", "Cinemax", "cliente@cinemax.com", "", "000-0000");
+                }
+            }
 
-            System.out.println("🔍 Asientos seleccionados para ticket: " + asientosSeleccionados);
-            System.out.println("🔍 Total de asientos: " + asientosSeleccionados.size());
+            // ✅ CREAR RESERVA CON CLIENTE REAL
+            Reserva reserva = new Reserva(cliente, funcion, metodoSeleccionado, totalAPagar, asientosSeleccionados);
 
-            String numeroTicket = generarNumeroTicket();
-            String codigoOR = "OR-CMX-" + numeroTicket.replace("TK", "");
+            // ✅ GUARDAR EN JSON Y EN HISTORIAL
+            HistorialCompras.agregarCompraConReserva(cliente, reserva);
 
-            String fileName = "ticket_cine_" + System.currentTimeMillis() + ".html";
+            // Imprimir ticket
+            imprimirTicketDesdeReserva(reserva);
+
+            System.out.println("✅ Reserva COMPLETA guardada para: " + cliente.getEmail());
+            System.out.println("✅ Nombre del cliente: " + cliente.getNombre() + " " + cliente.getApellido());
+
+        } catch (Exception e) {
+            mostrarAlertaError(e);
+        }
+    }
+
+
+    private void imprimirTicketDesdeReserva(Reserva reserva) {
+        try {
+            System.out.println("🔍 Asientos seleccionados para ticket: " + reserva.getAsientosSeleccionados());
+            System.out.println("🔍 Total de asientos: " + reserva.getAsientosSeleccionados().size());
+
+
+            // 1. Obtener ruta base
+            String userDir = System.getProperty("user.dir");
+            System.out.println("📂 Directorio actual: " + userDir);
+
+            // 2. Si estamos en out/, retroceder
+            File proyectoRoot;
+            if (userDir.contains("out")) {
+                proyectoRoot = new File(userDir).getParentFile();
+                System.out.println("🔄 Retrocediendo desde out/ a: " + proyectoRoot.getAbsolutePath());
+            } else {
+                proyectoRoot = new File(userDir);
+            }
+
+            // 3. Crear directorio src/Tickets
+            File ticketsDir = new File(proyectoRoot, "Tickets");
+            System.out.println("📁 Intentando crear: " + ticketsDir.getAbsolutePath());
+
+            if (!ticketsDir.exists()) {
+                if (ticketsDir.mkdirs()) {
+                    System.out.println("✅ Directorio creado exitosamente");
+                } else {
+                    System.err.println("❌ NO SE PUDO CREAR EL DIRECTORIO");
+                    // Intentar crear en ubicación alternativa
+                    ticketsDir = new File(proyectoRoot, "Tickets");
+                    ticketsDir.mkdirs();
+                    System.out.println("🔄 Intentando en: " + ticketsDir.getAbsolutePath());
+                }
+            }
+
+            // 4. Crear archivo
+            String fileName = ticketsDir.getAbsolutePath() + File.separator + "ticket_cine_" + reserva.getNumeroTicket() + ".html";
+            System.out.println("📄 Creando archivo: " + fileName);
+
+            // Verificar permisos
+            File testFile = new File(fileName);
+            if (testFile.getParentFile().canWrite()) {
+                System.out.println("✅ Permisos de escritura OK");
+            } else {
+                System.err.println("❌ Sin permisos de escritura");
+            }
+
+
+            fileName = ticketsDir + "/ticket_cine_" + reserva.getNumeroTicket() + ".html";
             java.io.FileWriter writer = new java.io.FileWriter(fileName);
 
             String qrImagePath = obtenerRutaAbsolutaImagen("qr.jpg");
             String barcodeImagePath = obtenerRutaAbsolutaImagen("bar.jpg");
 
-            // Escribir HTML completo del ticket
+                      // Escribir HTML completo del ticket
             writer.write("<!DOCTYPE html>\n");
             writer.write("<html>\n");
             writer.write("<head>\n");
@@ -410,45 +477,45 @@ public class GestorDePagos {
             writer.write("            <div class=\"info-section\">\n");
             writer.write("                <div class=\"info-row\">\n");
             writer.write("                    <span class=\"info-label\">Ticket #:</span>\n");
-            writer.write("                    <span class=\"info-value\">" + numeroTicket + "</span>\n");
+            writer.write("                    <span class=\"info-value\">" + reserva.getNumeroTicket() + "</span>\n");
             writer.write("                </div>\n");
             writer.write("                <div class=\"info-row\">\n");
             writer.write("                    <span class=\"info-label\">Emisión:</span>\n");
-            writer.write("                    <span class=\"info-value\">" + timestamp + "</span>\n");
+            writer.write("                    <span class=\"info-value\">" + reserva.getFechaEmision() + "</span>\n");
             writer.write("                </div>\n");
             writer.write("            </div>\n");
             writer.write("            \n");
             writer.write("            <div class=\"info-section\">\n");
             writer.write("                <div class=\"info-row\">\n");
             writer.write("                    <span class=\"info-label\">Película:</span>\n");
-            writer.write("                    <span class=\"info-value\">" + nombrePelicula + "</span>\n");
+            writer.write("                    <span class=\"info-value\">" + reserva.getNombrePelicula() + "</span>\n");
             writer.write("                </div>\n");
             writer.write("                <div class=\"info-row\">\n");
             writer.write("                    <span class=\"info-label\">Función:</span>\n");
-            writer.write("                    <span class=\"info-value\">" + horario + "</span>\n");
+            writer.write("                    <span class=\"info-value\">" + reserva.getHorarioFuncion() + "</span>\n");
             writer.write("                </div>\n");
             writer.write("                <div class=\"info-row\">\n");
             writer.write("                    <span class=\"info-label\">Sala:</span>\n");
-            writer.write("                    <span class=\"info-value\">" + salaNombre + "</span>\n");
+            writer.write("                    <span class=\"info-value\">" + reserva.getSalaNombre() + "</span>\n");
             writer.write("                </div>\n");
             writer.write("                <div class=\"info-row\">\n");
             writer.write("                    <span class=\"info-label\">Asientos:</span>\n");
-            writer.write("                    <span class=\"info-value\">" + asientosStr + "</span>\n");
+            writer.write("                    <span class=\"info-value\">" + reserva.getAsientosComoString() + "</span>\n");
             writer.write("                </div>\n");
             writer.write("                <div class=\"info-row\">\n");
             writer.write("                    <span class=\"info-label\">Método Pago:</span>\n");
-            writer.write("                    <span class=\"info-value\">" + metodoPago + "</span>\n");
+            writer.write("                    <span class=\"info-value\">" + reserva.getMetodoPago() + "</span>\n");
             writer.write("                </div>\n");
             writer.write("            </div>\n");
             writer.write("            \n");
             writer.write("            <div class=\"total-section\">\n");
-            writer.write("                <div class=\"total-amount\">TOTAL: $" + String.format("%,.2f", monto) + "</div>\n");
+            writer.write("                <div class=\"total-amount\">TOTAL: $" + String.format("%,.2f", reserva.getMonto()) + "</div>\n");
             writer.write("            </div>\n");
             writer.write("            \n");
             writer.write("            <div class=\"codes-section\">\n");
             writer.write("                <div class=\"code-block\">\n");
             writer.write("                    <strong style=\"font-size: 11px;\">📋 CÓDIGO OR</strong>\n");
-            writer.write("                    <div class=\"numeric-code\" style=\"font-size: 10px; padding: 4px;\">" + codigoOR + "</div>\n");
+            writer.write("                    <div class=\"numeric-code\" style=\"font-size: 10px; padding: 4px;\">" + reserva.getCodigoOR() + "</div>\n");
             writer.write("                    <small style=\"font-size: 8px; color: #666;\">Orden de compra</small>\n");
             writer.write("                </div>\n");
             writer.write("                \n");
@@ -457,7 +524,7 @@ public class GestorDePagos {
             writer.write("                    <div class=\"img-container\" style=\"width: 150px; height: 100px;\">\n");
             writer.write("                        <img src=\"" + barcodeImagePath + "\" alt=\"Código de Barras\" onerror=\"this.style.display='none'; this.parentNode.innerHTML='<div style=&quot;padding:10px;text-align:center;color:#660;&quot;>Imagen no disponible</div>';\">\n");
             writer.write("                    </div>\n");
-            writer.write("                    <div class=\"numeric-code\" style=\"font-size: 9px; margin-top: 3px;\">" + numeroTicket.replace("TK", "") + "</div>\n");
+            writer.write("                    <div class=\"numeric-code\" style=\"font-size: 9px; margin-top: 3px;\">" + reserva.getNumeroTicket().replace("TK", "") + "</div>\n");
             writer.write("                    <small style=\"font-size: 8px; color: #666;\">Escaneo rápido</small>\n");
             writer.write("                </div>\n");
             writer.write("                \n");
@@ -466,7 +533,7 @@ public class GestorDePagos {
             writer.write("                    <div class=\"img-container\" style=\"width: 100px; height: 100px;\">\n");
             writer.write("                        <img src=\"" + qrImagePath + "\" alt=\"Código QR\" onerror=\"this.style.display='none'; this.parentNode.innerHTML='<div style=&quot;padding:10px;text-align:center;color:#666;&quot;>Imagen no disponible</div>';\">\n");
             writer.write("                    </div>\n");
-            writer.write("                    <div class=\"numeric-code\" style=\"font-size: 9px; margin-top: 3px;\">" + numeroTicket.replace("TK", "").substring(0, 6) + "</div>\n");
+            writer.write("                    <div class=\"numeric-code\" style=\"font-size: 9px; margin-top: 3px;\">" + reserva.getNumeroTicket().replace("TK", "").substring(0, 6) + "</div>\n");
             writer.write("                    <small style=\"font-size: 8px; color: #666;\">Escaneo móvil</small>\n");
             writer.write("                </div>\n");
             writer.write("            </div>\n");
@@ -491,6 +558,7 @@ public class GestorDePagos {
             writer.write("    </div>\n");
             writer.write("</body>\n");
             writer.write("</html>\n");
+
 
             writer.close();
             abrirEnNavegador(fileName);
@@ -536,45 +604,36 @@ public class GestorDePagos {
     }
 
     // MÉTODOS AUXILIARES
-    private String generarNumeroTicket() {
-        Random random = new Random();
-        int numero = random.nextInt(900000) + 100000;
-        return "TK" + numero;
-    }
 
     private int generarIdMetodoPago() {
         return (int) (System.currentTimeMillis() % 1000000);
     }
 
-    private String obtenerRutaAbsolutaImagen(String rutaRelativa) {
-        try {
-            java.io.File archivoImagen = new java.io.File(rutaRelativa);
-            if (archivoImagen.exists()) {
-                return archivoImagen.toURI().toString();
-            } else {
-                System.err.println("⚠️ No se encontró la imagen: " + rutaRelativa);
-                String[] rutasAlternativas = {
-                        "src/" + rutaRelativa,
-                        "resources/" + rutaRelativa,
-                        "./" + rutaRelativa,
-                        "../" + rutaRelativa
-                };
+    public String obtenerRutaAbsolutaImagen(String nombreArchivo) {
+        System.out.println("🔍 BUSCANDO IMAGEN: " + nombreArchivo);
 
-                for (String rutaAlt : rutasAlternativas) {
-                    archivoImagen = new java.io.File(rutaAlt);
-                    if (archivoImagen.exists()) {
-                        System.out.println("✅ Imagen encontrada en: " + rutaAlt);
-                        return archivoImagen.toURI().toString();
-                    }
-                }
+        // Lista TODAS las ubicaciones posibles
+        String[] rutasPosibles = {
+                "src/img/" + nombreArchivo,
+                "img/" + nombreArchivo,
+                "src/main/resources/img/" + nombreArchivo,
+                "resources/img/" + nombreArchivo,
+                nombreArchivo,
+                "GESTOR_DE_CINE/src/img/" + nombreArchivo,
+                "C:/Users/user/Desktop/TECNICATURA EN PROGRAMACION/TP FINAL/PROGRA 2/GESTOR_DE_CINE/src/img/" + nombreArchivo
+        };
 
-                System.err.println("❌ No se pudo encontrar la imagen en ninguna ubicación alternativa");
-                return "";
+        for (String ruta : rutasPosibles) {
+            File archivo = new File(ruta);
+            System.out.println("   Probando: " + ruta + " → " + (archivo.exists() ? "✅ EXISTE" : "❌ NO EXISTE"));
+            if (archivo.exists()) {
+                System.out.println("   ✅ ENCONTRADA: " + archivo.getAbsolutePath());
+                return archivo.getAbsolutePath();
             }
-        } catch (Exception e) {
-            System.err.println("❌ Error al obtener ruta de imagen: " + e.getMessage());
-            return "";
         }
+
+        System.out.println("❌ No se pudo encontrar la imagen en ninguna ubicación: " + nombreArchivo);
+        return null;
     }
 
     private void abrirEnNavegador(String fileName) {
@@ -605,4 +664,51 @@ public class GestorDePagos {
         alert.setContentText("Ocurrió un error al generar el ticket:\n" + e.getMessage());
         alert.showAndWait();
     }
+
+
+    private Cliente obtenerClienteActual() {
+        // Aquí necesitas obtener el cliente que está actualmente logueado
+        // Depende de cómo tengas implementada la sesión
+
+        // Opción 1: Si tienes una sesión global
+        // return SesionManager.getClienteActual();
+
+        // Opción 2: Si el selectorAsientos tiene referencia al cliente
+        if (selectorAsientos != null && selectorAsientos.getCliente() != null) {
+            return selectorAsientos.getCliente();
+        }
+
+        // Opción 3: Temporal - crear con datos del login
+        // Necesitas pasar el email del login de alguna manera
+        String emailCliente = obtenerEmailClienteLogueado(); // Implementar esto
+
+        if (emailCliente != null && !emailCliente.isEmpty()) {
+            return new Cliente("Cliente", "Cinemax", emailCliente, "", "000-0000");
+        }
+
+        // Último recurso: cliente temporal
+        System.out.println("⚠️ No se pudo obtener cliente real, usando temporal");
+        return new Cliente("Cliente", "Cinemax", "cliente@cinemax.com", "", "000-0000");
+    }
+
+
+    private String obtenerEmailClienteLogueado() {
+        // Implementa cómo obtienes el email del cliente logueado
+        // Por ahora retorna null, luego lo implementas
+        return null;
+    }
+
+    public Cliente getCliente() {
+        return obtenerClienteActual();
+    }
+
+    public static void eliminarTicketTemporal(String numeroTicket) {
+        try {
+            // Siempre usar el nombre completo con prefijo
+            new File("Tickets/ticket_cine_" + numeroTicket + ".html").delete();
+        } catch (Exception e) {
+            // Silencio
+        }
+    }
 }
+

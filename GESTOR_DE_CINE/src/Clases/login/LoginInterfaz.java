@@ -1,6 +1,7 @@
 package Clases.login;
 
 import Clases.*;
+//import Clases.GestionDePagos.HistorialCompras;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Excepciones.AutenticacionException;
@@ -32,14 +33,12 @@ public class LoginInterfaz extends Application {
     private GestorUsuarios gestorUsuarios;
 
 
-    @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage,Cliente cliente) {
         this.stage = primaryStage;
         GestorFunciones gestorFunciones = new GestorFunciones();
-        cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 200), new SalaCine("Sala 2", 200));
-        crearInterfaz();
-        configurarEventos(gestorFunciones);
-        GestorAdministrador.iniciarAdministrador(gestorFunciones);   //BORRAR ANTES DE ENTREGAR
+        cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 9,14), new SalaCine("Sala 2", 9,14));
+        crearInterfaz(cliente);
+        configurarEventos(gestorFunciones,cliente);
         stage.show();
     }
 
@@ -48,8 +47,15 @@ public class LoginInterfaz extends Application {
         //this.gestorUsuarios.cargarUsuariosPrueba(); // Solo carga admin/empleado si no existen
     }
 
+    @Override
+    public void start(Stage stage) throws Exception {
 
-    private void crearInterfaz() {
+        start(stage,new Cliente());
+
+    }
+
+
+    private void crearInterfaz(Cliente cliente) {
         stage.setTitle("CINE LOS CULIA - Inicio de Sesión");
         stage.setOnCloseRequest(e -> stage.close());
         stage.setWidth(400);
@@ -71,11 +77,8 @@ public class LoginInterfaz extends Application {
         mainPanel.getChildren().add(headerPanel);
 
         // Formulario
-
-
-            GridPane formPanel = crearFormPanel();
-            mainPanel.getChildren().add(formPanel);
-
+        GridPane formPanel = crearFormPanel();
+        mainPanel.getChildren().add(formPanel);
 
         // Footer
         HBox footerPanel = crearFooterPanel();
@@ -86,7 +89,7 @@ public class LoginInterfaz extends Application {
         Scene scene = new Scene(mainPanel);
         stage.setScene(scene);
         stage.centerOnScreen();
-        configurarEventos(new GestorFunciones());
+        configurarEventos(new GestorFunciones(),cliente);
     }
 
     private VBox crearHeaderPanel() {
@@ -223,13 +226,13 @@ public class LoginInterfaz extends Application {
         return footerPanel;
     }
 
-    private void configurarEventos(GestorFunciones gestorFunciones) {
-        loginButton.setOnAction(e -> realizarLogin(gestorFunciones));
+    private void configurarEventos(GestorFunciones gestorFunciones,Cliente cliente) {
+        loginButton.setOnAction(e -> realizarLogin(gestorFunciones,cliente));
         registerButton.setOnAction(e -> registrarUsuario());
 
         // Enter para login
-        emailField.setOnAction(e -> realizarLogin(gestorFunciones));
-        passwordField.setOnAction(e -> realizarLogin(gestorFunciones));
+        emailField.setOnAction(e -> realizarLogin(gestorFunciones,cliente));
+        passwordField.setOnAction(e -> realizarLogin(gestorFunciones,cliente));
     }
 
     private void registrarUsuario() {
@@ -255,7 +258,7 @@ public class LoginInterfaz extends Application {
             }
         });
     }
-    private void realizarLogin(GestorFunciones gestorFunciones) {
+    private void realizarLogin(GestorFunciones gestorFunciones,Cliente cliente) {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
 
@@ -278,7 +281,7 @@ public class LoginInterfaz extends Application {
             stage.close();
 
 
-            abrirSistemaPrincipal(email, tipoUsuario, gestorFunciones);
+            abrirSistemaPrincipal(email, tipoUsuario, gestorFunciones,cliente);
 
         } else {
             intentosLogin++;
@@ -326,7 +329,8 @@ public class LoginInterfaz extends Application {
     }
 
 
-    private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones) {
+    // En LoginInterfaz.java - Modificar el método abrirSistemaPrincipal
+    private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones,Cliente cliente) {
         mostrarAlerta("Login Exitoso",
                 "¡Bienvenido " + usuario + "!\nTipo: " + tipoUsuario,
                 Alert.AlertType.INFORMATION);
@@ -335,13 +339,13 @@ public class LoginInterfaz extends Application {
 
         // Redirigir según el tipo de usuario
         if (tipoUsuario.equals("Administrador")) {
-            abrirPanelAdministrador(gestorFunciones);
+            abrirPanelAdministrador(gestorFunciones,cliente);
         } else {
             abrirPanelCliente(usuario, gestorFunciones);
         }
     }
 
-    private void abrirPanelAdministrador(GestorFunciones gestorFunciones) {
+    private void abrirPanelAdministrador(GestorFunciones gestorFunciones,Cliente cliente) {
         System.out.println("🎯 INTENTANDO ABRIR PANEL ADMIN...");
 
         Platform.runLater(() -> {
@@ -351,7 +355,8 @@ public class LoginInterfaz extends Application {
 
                 DashboardAdmin dashboard = new DashboardAdmin(
                         gestorUsuarios,
-                        gestorFunciones  // ✅ AGREGAR ESTO
+                        gestorFunciones ,
+                        cliente// ✅ AGREGAR ESTO
                 );
                 dashboard.mostrarDashboard();
 
@@ -401,6 +406,7 @@ public class LoginInterfaz extends Application {
 
             Button btnCerrar = new Button("Cerrar Sesión");
             btnCerrar.setStyle("-fx-background-color: #ff4444; -fx-text-fill: white; -fx-font-weight: bold;");
+            Cliente finalCliente = cliente;
             btnCerrar.setOnAction(e -> {
                 clienteStage.close();
                 abrirLogin();
@@ -429,7 +435,7 @@ public class LoginInterfaz extends Application {
 
         // Mostrar películas
         for(Pelicula p: listaPeliculas) {
-            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(), cliente);
             contenedor.getChildren().add(vista);
         }
 
@@ -459,20 +465,20 @@ public class LoginInterfaz extends Application {
         botonHistorial.setStyle("-fx-background-color: #4169E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
         botonHistorial.setOnAction(e -> HistorialCompras.mostrarHistorial(cliente));
 
-        // Puntos de Fidelidad
-        Button botonPuntos = new Button("Mis Puntos: " + cliente.getPuntosFidelidad());
-        botonPuntos.setStyle("-fx-background-color: #FFAA4A; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
-        botonPuntos.setOnAction(e -> mostrarInfoPuntos(cliente));
+//        // Puntos de Fidelidad
+//        Button botonPuntos = new Button("Mis Puntos: " + cliente.getPuntosFidelidad());
+//        botonPuntos.setStyle("-fx-background-color: #FFAA4A; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
+//        botonPuntos.setOnAction(e -> mostrarInfoPuntos(cliente));
 
         // Promociones
         Button botonPromociones = new Button("Promociones Activas");
         botonPromociones.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
         botonPromociones.setOnAction(e -> mostrarPromociones(cliente));
 
-        // Cancelar Reserva
-        Button botonCancelarReserva = new Button("Cancelar Reserva");
-        botonCancelarReserva.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
-        botonCancelarReserva.setOnAction(e -> mostrarCancelarReserva(cliente, gestorFunciones));
+//        // Cancelar Reserva
+//        Button botonCancelarReserva = new Button("Cancelar Reserva");
+//        botonCancelarReserva.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
+//        botonCancelarReserva.setOnAction(e -> mostrarCancelarReserva(cliente, gestorFunciones));
 
         // Mi Perfil
         Button botonPerfil = new Button("Mi Perfil");
@@ -482,9 +488,9 @@ public class LoginInterfaz extends Application {
         VBox panelBotones = new VBox(10,
                 tituloFunciones,
                 botonHistorial,
-                botonPuntos,
+              //  botonPuntos,
                 botonPromociones,
-                botonCancelarReserva,
+             //   botonCancelarReserva,
                 separacion,
                 tituloPeliculas,
                 botonPerfil
@@ -585,7 +591,11 @@ public class LoginInterfaz extends Application {
     public static void abrirLogin() {
         Platform.runLater(() -> {
             LoginInterfaz login = new LoginInterfaz();
-            login.start(new Stage());
+            try {
+                login.start(new Stage());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 

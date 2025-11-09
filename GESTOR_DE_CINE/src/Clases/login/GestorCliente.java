@@ -4,6 +4,7 @@ import Clases.GestorFunciones;
 import Clases.GestorPeliculas;
 import Clases.Pelicula;
 import Clases.VistaCartelera;
+import Clases.login.usuario.Cliente;
 import ManejoJSON.FuncionesJSON;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.util.List;
+
+
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -18,12 +22,12 @@ import javafx.scene.control.Separator;
 
 public class GestorCliente {
 
-    public static void iniciarCliente(GestorFunciones gestorFunciones) {
+    public static void iniciarCliente(GestorFunciones gestorFunciones, Cliente cliente) {
         Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
-        vistaCliente(GestorPeliculas.getListaPeliculas(), gestorFunciones);
+        vistaCliente(GestorPeliculas.getListaPeliculas(), gestorFunciones,cliente);
     }
 
-    public static void vistaCliente(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones) {
+    public static void vistaCliente(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones,Cliente cliente) {
         Stage ventana = new Stage();
         HBox contenedor = new HBox(20);
         contenedor.setStyle("""
@@ -32,7 +36,7 @@ public class GestorCliente {
 
         // Mostrar las películas disponibles
         for(Pelicula p: listaPeliculas) {
-            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos());
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(),cliente);
             contenedor.getChildren().add(vista);
         }
 

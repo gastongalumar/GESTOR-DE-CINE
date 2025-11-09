@@ -1,6 +1,7 @@
 package Clases.login;
 import Clases.GestorAdministrador;
 import Clases.GestorFunciones;
+import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Enumeradores.login.TipoUsuario;
 import javafx.application.Platform;
@@ -28,13 +29,13 @@ public class DashboardAdmin {
     private Stage stage;
 
     // ✅ Constructor modificado para recibir GestorFunciones
-    public DashboardAdmin(GestorUsuarios gestorUsuarios, GestorFunciones gestorFunciones) {
+    public DashboardAdmin(GestorUsuarios gestorUsuarios, GestorFunciones gestorFunciones,Cliente cliente) {
         this.gestorUsuarios = gestorUsuarios;
         this.gestorFunciones = gestorFunciones;
     }
     public DashboardAdmin (){}
 
-    public void mostrarDashboard() {
+    public void mostrarDashboard(Cliente cliente) {
         Platform.runLater(() -> {
             stage = new Stage();
             stage.setTitle("Dashboard Administrador - CINE LOS CULIA");
@@ -56,7 +57,7 @@ public class DashboardAdmin {
             tabEstadisticas.setClosable(false);
 
             // ✅ NUEVA PESTAÑA: Gestión de Cine
-            Tab tabCine = new Tab("Gestión de Cine", crearPanelCine());
+            Tab tabCine = new Tab("Gestión de Cine", crearPanelCine(cliente));
             tabCine.setClosable(false);
 
             // ✅ Agregar todas las pestañas
@@ -69,7 +70,7 @@ public class DashboardAdmin {
     }
 
     // ✅ Método corregido - sin parámetros
-    private BorderPane crearPanelCine() {
+    private BorderPane crearPanelCine(Cliente cliente) {
         BorderPane panel = new BorderPane();
         panel.setPadding(new Insets(20));
 
@@ -99,7 +100,7 @@ public class DashboardAdmin {
         btnAbrirGestorCine.setOnAction(e -> {
             // Cerrar el dashboard y abrir el gestor de cine
             stage.close();
-            GestorAdministrador.iniciarAdministrador(gestorFunciones);
+            GestorAdministrador.iniciarAdministrador(gestorFunciones,cliente);
         });
 
         centerBox.getChildren().addAll(descripcion, btnAbrirGestorCine);
@@ -258,5 +259,9 @@ public class DashboardAdmin {
 
         panel.getChildren().addAll(titulo, pieChart);
         return panel;
+    }
+
+    public void mostrarDashboard() {
+        mostrarDashboard(null);
     }
 }

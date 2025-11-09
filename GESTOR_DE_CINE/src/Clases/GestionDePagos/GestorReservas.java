@@ -1,4 +1,4 @@
-package Clases.login;
+package Clases.GestionDePagos;
 
 import Clases.Funcion;
 import Clases.login.usuario.Cliente;
@@ -12,12 +12,12 @@ import javafx.stage.Stage;
 
 import java.time.format.DateTimeFormatter;
 
-public class GestorCompras {
+public class GestorReservas {
     private Cliente cliente;
     private Funcion funcionSeleccionada;
     private int asientosSeleccionados;
 
-    public GestorCompras(Cliente cliente) {
+    public GestorReservas(Cliente cliente) {
         this.cliente = cliente;
     }
 
@@ -29,7 +29,7 @@ public class GestorCompras {
 
     private void mostrarResumenCompra() {
         Stage stage = new Stage();
-        stage.setTitle("Confirmar Compra - CINE LOS CULIA");
+        stage.setTitle("Confirmar Compra - CINEMAX");
 
         BorderPane panel = new BorderPane();
         panel.setPadding(new Insets(20));

@@ -86,4 +86,9 @@ public class ListaGenerica<T>  {
     public void setElementos(List<T> elementos) {
         this.elementos = elementos;
     }
+
+    public T obtener(int i) {
+        return elementos.get(i);
+
+    }
 }

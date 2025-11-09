@@ -1,6 +1,7 @@
 package Clases;
 
 import Clases.login.GestorEstadisticasLogin;
+import Clases.login.usuario.Cliente;
 import ManejoJSON.FuncionesJSON;
 import ManejoJSON.GestorJsonAsientos;
 import javafx.geometry.Insets;
@@ -43,9 +44,10 @@ public class GestorAdministrador {
 
 */
 
-    public static void iniciarAdministrador(GestorFunciones gestorFunciones) {
+    public static void iniciarAdministrador(GestorFunciones gestorFunciones,Cliente cliente) {
         Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
-        vistaAdministrador(GestorPeliculas.getListaPeliculas(), gestorFunciones);
+
+        vistaAdministrador(GestorPeliculas.getListaPeliculas(), gestorFunciones,cliente);
     }
 
     public static List<Funcion> filtrarYBorrarFuncionesPasadas(List<Funcion> funciones, GestorFunciones gestorFunciones) {
@@ -85,9 +87,12 @@ public class GestorAdministrador {
         gestorFunciones.setListaFunciones(new ListaGenerica<>(vigentes));
         return vigentes;
     }
+    public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones,Cliente cliente){
 
 
-    public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones){
+
+
+   // public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
         int i = 0;
         HBox contenedor = new HBox(20);
@@ -96,7 +101,8 @@ public class GestorAdministrador {
     """);
 
         for(Pelicula p: listaPeliculas){
-            VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos(), gestorFunciones));
+            //VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(),cliente);
+            VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos(), gestorFunciones,cliente));
             contenedor.getChildren().add(vista);
         }
 
@@ -132,7 +138,7 @@ public class GestorAdministrador {
         -fx-background-radius: 10;
     """);
         botonAgregar.setOnAction(e -> {
-            formularioAgregar(listaPeliculas, gestorFunciones);
+            formularioAgregar(listaPeliculas, gestorFunciones,cliente);
         });
 
         Button botonEliminar = new Button("Eliminar función");
@@ -144,7 +150,7 @@ public class GestorAdministrador {
         -fx-background-radius: 10;
     """);
         botonEliminar.setOnAction(e -> {
-            formularioEliminarFuncion(gestorFunciones);
+            formularioEliminarFuncion(gestorFunciones,cliente);
         });
 
         Button botonModificarFuncion = new Button("Modificar función");
@@ -156,7 +162,7 @@ public class GestorAdministrador {
         -fx-background-radius: 10;
     """);
         botonModificarFuncion.setOnAction(e -> {
-            formularioEditarFuncion(gestorFunciones);
+            formularioEditarFuncion(gestorFunciones,cliente);
         });
 
         Separator separacion = new Separator();
@@ -182,7 +188,7 @@ public class GestorAdministrador {
         -fx-background-radius: 10;
     """);
         botonAgregarPelicula.setOnAction(e -> {
-            Formularios.formularioAgregarPelicula(gestorFunciones);
+            Formularios.formularioAgregarPelicula(gestorFunciones,cliente);
         });
 
         Button botonEliminarPelicula = new Button("Eliminar pelicula");
@@ -194,7 +200,7 @@ public class GestorAdministrador {
         -fx-background-radius: 10;
     """);
         botonEliminarPelicula.setOnAction(e -> {
-            Formularios.formularioEliminarPelicula(gestorFunciones);
+            Formularios.formularioEliminarPelicula(gestorFunciones,cliente);
         });
 
         Button botonModificarPelicula = new Button("Modificar pelicula");
@@ -206,21 +212,10 @@ public class GestorAdministrador {
         -fx-background-radius: 10;
     """);
         botonModificarPelicula.setOnAction(e -> {
-            Formularios.formularioEditarPelicula(gestorFunciones);
+            Formularios.formularioEditarPelicula(gestorFunciones,cliente);
         });
 
-        Button botonVolver = new Button("Volver atras");
-        botonVolver.setStyle("""
-        -fx-background-color: grey;
-        -fx-text-fill: white;
-        -fx-font-weight: bold;
-        -fx-padding: 10 20 10 20;
-        -fx-background-radius: 10;
-    """);
-        botonVolver.setOnAction(e -> {
-            ventana.close();
-        });
-
+        // === MODIFICAR ESTA LÍNEA para incluir el nuevo botón ===
         VBox contieneBotonesFunciones = new VBox(10,
                 tituloFunciones, botonAgregar, botonEliminar, botonModificarFuncion,
                 separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula, botonModificarPelicula
@@ -233,7 +228,7 @@ public class GestorAdministrador {
         ventana.show();
     }
 
-    public static void formularioAgregar(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones){
+    public static void formularioAgregar(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones,Cliente cliente){
         Stage ventana = new Stage();
         ventana.setTitle("Agregar nueva función");
 
@@ -359,7 +354,7 @@ public class GestorAdministrador {
             }
 
             ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
+            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
         });
 
 
@@ -376,7 +371,7 @@ public class GestorAdministrador {
     }
 
 
-    private static void formularioEliminarFuncion(GestorFunciones gestorFunciones){
+    private static void formularioEliminarFuncion(GestorFunciones gestorFunciones,Cliente cliente){
         Stage ventana = new Stage();
         ventana.setTitle("Eliminar funcion");
 
@@ -456,7 +451,7 @@ public class GestorAdministrador {
                     mostrarAlerta("Funcion eliminada correctamente");
 
                     ventana.close();
-                    ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
+                    ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
                 }catch (DateTimeParseException ex){
 
                     mostrarAlerta("Formato de fecha y hora incorrecto");
@@ -479,7 +474,7 @@ public class GestorAdministrador {
 
     /*----------------------------------------------------------------------------------------------------------------------*/
 
-    private static void formularioEditarFuncion(GestorFunciones gestorFunciones){
+    private static void formularioEditarFuncion(GestorFunciones gestorFunciones, Cliente cliente){
         Stage ventana = new Stage();
 
         ventana.setTitle("Formulario para modificar funcion");
@@ -505,7 +500,7 @@ public class GestorAdministrador {
                     layout.getChildren().add(funcion);
 
                     funcion.setOnMouseClicked(p->{
-                        editarFuncion(f, gestorFunciones);
+                        editarFuncion(f, gestorFunciones,cliente);
 
 
                     });
@@ -541,7 +536,7 @@ public class GestorAdministrador {
 
     }
 
-    private static void editarFuncion (Funcion f, GestorFunciones gestorFunciones){
+    private static void editarFuncion (Funcion f, GestorFunciones gestorFunciones,Cliente cliente){
         Stage ventana = new Stage();
 
         ventana.setTitle("Modificar funcion");
@@ -587,7 +582,7 @@ public class GestorAdministrador {
             FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
 
             ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones);
+            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
         });
 
         VBox layout = new VBox(20, titulo, campoNombrePelicula, campoSala, campoFecha, campoHorario, botonGuardar);
@@ -780,3 +775,4 @@ public class GestorAdministrador {
 
 
 }
+
