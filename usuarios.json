@@ -1,0 +1,44 @@
+{
+    "ultimaActualizacion": "2025-11-08T22:07:51.113326600",
+    "data": [
+        {
+            "nivelAcceso": "avanzado",
+            "password": "admin123",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-08T22:07:42.460042400",
+            "apellido": "Sistema",
+            "tipoUsuario": "ADMINISTRADOR",
+            "telefono": "123456789",
+            "nombre": "Admin",
+            "email": "admin@cine.com",
+            "fechaUltimoAcceso": "2025-11-08T11:13:39.826892500",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "empleado123",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-08T22:07:42.467066800",
+            "apellido": "Ventas",
+            "tipoUsuario": "EMPLEADO",
+            "telefono": "987654321",
+            "nombre": "Empleado",
+            "email": "empleado@cine.com",
+            "fechaUltimoAcceso": "2025-11-03T00:58:53.691665400",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "123123",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-08T22:07:42.467066800",
+            "apellido": "gatto",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
+            "telefono": "23232323",
+            "nombre": "gaston",
+            "email": "gaston@g.com",
+            "fechaUltimoAcceso": "2025-11-08T22:07:51.113326600",
+            "intentosFallidos": 0
+        }
+    ],
+    "totalElementos": 3
+}

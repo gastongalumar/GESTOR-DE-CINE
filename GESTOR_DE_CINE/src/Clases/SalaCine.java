@@ -132,7 +132,8 @@ public class SalaCine {
         if (letraFila.equals("A") && (numeroColumna == 1 || numeroColumna == 2)) return true; // A0, A1
         if (letraFila.equals("B") && (numeroColumna == 2 || numeroColumna == 3)) return true; // B2, B3
         if (letraFila.equals("C") && (numeroColumna == 2 || numeroColumna == 3)) return true; // C2, C3
-        if (letraFila.equals("D") && (numeroColumna == 2 || numeroColumna == 3 || numeroColumna == 4)) return true; // D2, D3, D4
+        if (letraFila.equals("D") && (numeroColumna == 2 || numeroColumna == 3 || numeroColumna == 4))
+            return true; // D2, D3, D4
         if (letraFila.equals("E") && (numeroColumna == 2 || numeroColumna == 3)) return true; // E2, E3
         if (letraFila.equals("F") && (numeroColumna >= 1 && numeroColumna <= 3)) return true; // F1, F2, F3
         if (letraFila.equals("G") && (numeroColumna >= 1 && numeroColumna <= 3)) return true; // G1, G2, G3
@@ -224,30 +225,6 @@ public class SalaCine {
             }
         }
         return count;
-    }
-
-    /**
-     * Libera un asiento ocupado (cambia estado de OCUPADO a LIBRE)
-     */
-    public boolean liberarAsiento(int fila, int columna) {
-        try {
-            // Asumiendo que tienes una matriz de estados de asientos llamada 'asientos'
-            // y un enum EstadoAsiento con valores LIBRE, SELECCIONADO, OCUPADO
-
-            EstadoAsiento estadoActual = asientos[fila][columna];
-
-            if (estadoActual == EstadoAsiento.OCUPADO) {
-                asientos[fila][columna] = EstadoAsiento.LIBRE;
-                System.out.println("✅ Asiento [" + fila + "," + columna + "] liberado de OCUPADO a LIBRE");
-                return true;
-            } else {
-                System.out.println("⚠️ Asiento [" + fila + "," + columna + "] no estaba ocupado (estado: " + estadoActual + ")");
-                return false;
-            }
-        } catch (Exception e) {
-            System.err.println("❌ Error al liberar asiento [" + fila + "," + columna + "]: " + e.getMessage());
-            return false;
-        }
     }
 
 }

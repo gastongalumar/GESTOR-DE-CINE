@@ -1,0 +1,16 @@
+[{
+    "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
+    "clienteNombre": "gaston gatto",
+    "monto": 4000,
+    "asientosSeleccionados": [
+        "A4",
+        "A5"
+    ],
+    "nombrePelicula": "F1 La pelicula",
+    "clienteEmail": "gaston@g.com",
+    "codigoOR": "OR-CMX-1762650485053420",
+    "fechaEmision": "2025-11-08T22:08:05.0533172",
+    "salaNombre": "Sala 1",
+    "numeroTicket": "TK1762650485053420",
+    "horarioFuncion": "26/10/2025 19:07"
+}]

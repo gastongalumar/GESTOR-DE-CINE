@@ -1,0 +1,988 @@
+{
+    "asientosOcupados": 3,
+    "totalColumnas": 16,
+    "totalFilas": 10,
+    "fechaActualizacion": "2025-11-08T21:45:25.937567900",
+    "matrizAsientos": [
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O1",
+                "estado": "LIBRE",
+                "fila": 0
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P1",
+                "estado": "LIBRE",
+                "fila": 0
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O2",
+                "estado": "LIBRE",
+                "fila": 1
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P2",
+                "estado": "LIBRE",
+                "fila": 1
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O3",
+                "estado": "LIBRE",
+                "fila": 2
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P3",
+                "estado": "LIBRE",
+                "fila": 2
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O4",
+                "estado": "LIBRE",
+                "fila": 3
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P4",
+                "estado": "LIBRE",
+                "fila": 3
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O5",
+                "estado": "LIBRE",
+                "fila": 4
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P5",
+                "estado": "LIBRE",
+                "fila": 4
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O6",
+                "estado": "LIBRE",
+                "fila": 5
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P6",
+                "estado": "LIBRE",
+                "fila": 5
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O7",
+                "estado": "LIBRE",
+                "fila": 6
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P7",
+                "estado": "LIBRE",
+                "fila": 6
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O8",
+                "estado": "LIBRE",
+                "fila": 7
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P8",
+                "estado": "LIBRE",
+                "fila": 7
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O9",
+                "estado": "LIBRE",
+                "fila": 8
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P9",
+                "estado": "LIBRE",
+                "fila": 8
+            }
+        ],
+        [
+            {
+                "columna": 0,
+                "etiqueta": "A10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 1,
+                "etiqueta": "B10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 2,
+                "etiqueta": "C10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 3,
+                "etiqueta": "D10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 4,
+                "etiqueta": "E10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 5,
+                "etiqueta": "F10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 6,
+                "etiqueta": "G10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 7,
+                "etiqueta": "H10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 8,
+                "etiqueta": "I10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 9,
+                "etiqueta": "J10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 10,
+                "etiqueta": "K10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 11,
+                "etiqueta": "L10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 12,
+                "etiqueta": "M10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 13,
+                "etiqueta": "N10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 14,
+                "etiqueta": "O10",
+                "estado": "LIBRE",
+                "fila": 9
+            },
+            {
+                "columna": 15,
+                "etiqueta": "P10",
+                "estado": "LIBRE",
+                "fila": 9
+            }
+        ]
+    ]
+}
