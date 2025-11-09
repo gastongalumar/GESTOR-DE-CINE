@@ -37,6 +37,13 @@ public class Funcion {
                 encontrado = true;
             }
         }
+        /*for (SalaCine s : listaSalas) {
+            if (s.getNombreSala().equalsIgnoreCase(nombreSala)) {
+                salaEncontrada = s;
+                break;
+            }
+        }*/
+
         for(Pelicula p: listaPeliculas){
             if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){
                 encontrado = true;
@@ -47,6 +54,7 @@ public class Funcion {
         this.sala = salaEncontrada;
         this.pelicula = peliculaEncontrada;
         this.horarioFuncion = horarioFuncion;
+        this.precio = precio;
     }
 
     public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, double precio, GestorFunciones gestorFunciones) {
@@ -97,6 +105,8 @@ public class Funcion {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+
+
 
     //TO STRING
     @Override

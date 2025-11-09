@@ -1,7 +1,7 @@
 package Clases.login;
 
 import Clases.*;
-//import Clases.GestionDePagos.HistorialCompras;
+import Clases.GestionDePagos.HistorialCompras;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Excepciones.AutenticacionException;

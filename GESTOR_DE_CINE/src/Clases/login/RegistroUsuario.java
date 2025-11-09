@@ -305,7 +305,7 @@ public class RegistroUsuario {
 
             mostrarExito(mensajeExito);
             limpiarFormulario();
-            reiniciarAplicacion();
+            //reiniciarAplicacion();
             stage.close();
 
         } catch (UsuarioException e) {
@@ -424,7 +424,7 @@ public class RegistroUsuario {
         System.out.println("🎯 STAGE CREADO: " + this.stage);
         inicializarInterfaz();
     }
-    private void reiniciarAplicacion() {
+    private void reiniciarAplicacion(Cliente cliente) {
         System.out.println("🔄 REINICIANDO APLICACIÓN...");
 
         Platform.runLater(() -> {
@@ -452,7 +452,7 @@ public class RegistroUsuario {
                     // Reabrir dashboard fresco (con los nuevos usuarios cargados)
                     // Necesitamos recrear el dashboard con el gestor actualizado
                     GestorUsuarios gestorActualizado = new GestorUsuarios();
-                    DashboardAdmin nuevoDashboard = new DashboardAdmin(gestorActualizado, gestorFunciones);
+                    DashboardAdmin nuevoDashboard = new DashboardAdmin(gestorActualizado, gestorFunciones, cliente);
                     nuevoDashboard.mostrarDashboard();
 
                 } else {

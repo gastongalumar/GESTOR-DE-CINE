@@ -87,10 +87,16 @@ public class GestorAdministrador {
         gestorFunciones.setListaFunciones(new ListaGenerica<>(vigentes));
         return vigentes;
     }
+
     public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones,Cliente cliente){
 
 
-
+        gestorFunciones.setListaFunciones(
+                new ListaGenerica<>(filtrarYBorrarFuncionesPasadas(
+                        gestorFunciones.getListaFunciones().getElementos(),
+                        gestorFunciones
+                ))
+        );
 
    // public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones){
         Stage ventana = new Stage();
@@ -102,7 +108,8 @@ public class GestorAdministrador {
 
         for(Pelicula p: listaPeliculas){
             //VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(),cliente);
-            VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos(), gestorFunciones,cliente));
+           //VBox vista = VistaCartelera.crearVista(p,filtrarYBorrarFuncionesPasadas(gestorFunciones.getListaFunciones().getElementos(), gestorFunciones),cliente);
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(), cliente);
             contenedor.getChildren().add(vista);
         }
 
@@ -221,7 +228,7 @@ public class GestorAdministrador {
                 separacion, tituloPeliculas, botonAgregarPelicula, botonEliminarPelicula, botonModificarPelicula
         );
 
-        contenedor.getChildren().addAll(contieneBotonesFunciones, botonVolver);
+        contenedor.getChildren().addAll(contieneBotonesFunciones);
         Scene escena = new Scene(contenedor,1350,500);
         ventana.setTitle("GESTOR ADMINISTRADOR");
         ventana.setScene(escena);
@@ -340,6 +347,7 @@ public class GestorAdministrador {
                     for (long i = 0; i <= diasDiferencia; i++) {
                         Funcion funcion = new Funcion(sala, nombrePelicula, fechaAgregar, listaPeliculas, precio, gestorFunciones);
                         gestorFunciones.agregarFuncion(funcion);
+                        System.out.println(funcion);
                         fechaAgregar = fechaAgregar.plusDays(1);
                     }
 
