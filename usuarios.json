@@ -1,23 +1,23 @@
 {
-    "ultimaActualizacion": "2025-11-08T22:07:51.113326600",
+    "ultimaActualizacion": "2025-11-09T17:00:35.407061400",
     "data": [
         {
             "nivelAcceso": "avanzado",
             "password": "admin123",
             "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T22:07:42.460042400",
+            "fechaRegistro": "2025-11-09T17:00:20.321584500",
             "apellido": "Sistema",
             "tipoUsuario": "ADMINISTRADOR",
             "telefono": "123456789",
             "nombre": "Admin",
             "email": "admin@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T11:13:39.826892500",
+            "fechaUltimoAcceso": "2025-11-09T17:00:35.407061400",
             "intentosFallidos": 0
         },
         {
             "password": "empleado123",
             "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T22:07:42.467066800",
+            "fechaRegistro": "2025-11-09T17:00:20.322576400",
             "apellido": "Ventas",
             "tipoUsuario": "EMPLEADO",
             "telefono": "987654321",
@@ -29,14 +29,14 @@
         {
             "password": "123123",
             "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T22:07:42.467066800",
+            "fechaRegistro": "2025-11-09T17:00:20.322576400",
             "apellido": "gatto",
             "tipoUsuario": "CLIENTE",
             "puntosFidelidad": 0,
             "telefono": "23232323",
             "nombre": "gaston",
             "email": "gaston@g.com",
-            "fechaUltimoAcceso": "2025-11-08T22:07:51.113326600",
+            "fechaUltimoAcceso": "2025-11-09T16:59:41.333136700",
             "intentosFallidos": 0
         }
     ],

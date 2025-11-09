@@ -1,6 +1,6 @@
 package Clases;
 
-import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import Excepciones.CamposIncompletosException;
 import Excepciones.FechaInvalidaException;
 import Excepciones.PeliculaInvalidaException;
@@ -26,7 +26,7 @@ import static Clases.GestorAdministrador.mostrarAlerta;
 
 public class Formularios {
 
-    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones, Cliente cliente) {
+    public static void formularioAgregarPelicula(GestorFunciones gestorFunciones, Usuario cliente) {
         Stage ventana = crearVentana("Agregar nueva película");
         Label titulo = crearTitulo("Agregar nueva película");
 
@@ -213,7 +213,7 @@ public class Formularios {
 
 
 
-    public static void formularioEliminarPelicula(GestorFunciones gestorFunciones,Cliente cliente) throws CamposIncompletosException, PeliculaInvalidaException {
+    public static void formularioEliminarPelicula(GestorFunciones gestorFunciones, Usuario cliente) throws CamposIncompletosException, PeliculaInvalidaException {
         Stage ventana = crearVentana("Eliminar película");
         Label titulo = crearTitulo("Eliminar película");
 
@@ -255,7 +255,7 @@ public class Formularios {
 
 
 
-    public static void formularioEditarPelicula(GestorFunciones gestorFunciones,Cliente cliente) {
+    public static void formularioEditarPelicula(GestorFunciones gestorFunciones, Usuario cliente) {
         Stage ventana = crearVentana("Modificar película");
         Label titulo = crearTitulo("Buscar película para modificar");
 
@@ -284,7 +284,7 @@ public class Formularios {
         ventana.show();
     }
 
-    private static void editarPelicula(Pelicula p, GestorFunciones gestorFunciones,Cliente cliente) throws CamposIncompletosException, FechaInvalidaException {
+    private static void editarPelicula(Pelicula p, GestorFunciones gestorFunciones, Usuario cliente) throws CamposIncompletosException, FechaInvalidaException {
         Stage ventana = crearVentana("Modificar película");
         Label titulo = crearTitulo("Modificar película");
 

@@ -37,7 +37,7 @@ public class SistemaPrincipal extends Application {
 
         // Si es cliente, abrir directamente la vista de cliente
         if (tipoUsuario.equalsIgnoreCase("cliente")) {
-            Cliente cliente = obtenerClienteActual();
+            Usuario cliente = obtenerClienteActual();
             if (cliente != null) {
                 GestorCliente.iniciarCliente(gestorFunciones,cliente);
                 stage.close();
@@ -48,7 +48,7 @@ public class SistemaPrincipal extends Application {
         inicializarInterfaz(obtenerClienteActual());
     }
 
-    private void inicializarInterfaz(Cliente cliente) {
+    private void inicializarInterfaz(Usuario cliente) {
         stage.setTitle("CINEMAX - Sistema de Gestión");
         stage.setOnCloseRequest(e -> Platform.exit());
         stage.setWidth(1200);
@@ -75,7 +75,7 @@ public class SistemaPrincipal extends Application {
         stage.centerOnScreen();
     }
 
-    private HBox crearHeaderPanel(Cliente cliente) {
+    private HBox crearHeaderPanel(Usuario cliente) {
         HBox headerPanel = new HBox();
         headerPanel.setStyle("-fx-background-color: #191923;");
         headerPanel.setPadding(new Insets(10, 20, 10, 20));
@@ -104,7 +104,7 @@ public class SistemaPrincipal extends Application {
         return headerPanel;
     }
 
-    private VBox crearMenuPanel(Cliente cliente) {
+    private VBox crearMenuPanel(Usuario cliente) {
         VBox menuPanel = new VBox();
         menuPanel.setStyle("-fx-background-color: #28283c;");
         menuPanel.setPrefWidth(250);
@@ -145,7 +145,7 @@ public class SistemaPrincipal extends Application {
         }
     }
 
-    private Button crearBotonMenu(String texto,Cliente cliente) {
+    private Button crearBotonMenu(String texto,Usuario cliente) {
         Button button = new Button(texto);
         button.setMaxWidth(Double.MAX_VALUE);
         button.setPrefHeight(45);
@@ -178,7 +178,7 @@ public class SistemaPrincipal extends Application {
         return contentPanel;
     }
 
-    private void manejarOpcionMenu(String opcion,Cliente cliente) {
+    private void manejarOpcionMenu(String opcion, Usuario cliente) {
         switch (opcion) {
             case "Dashboard":
                 if (esAdministrador()) {
@@ -283,7 +283,7 @@ public class SistemaPrincipal extends Application {
         return null;
     }
 
-    private void abrirCarteleraGeneral(Cliente cliente) {
+    private void abrirCarteleraGeneral(Usuario cliente) {
         Stage carteleraStage = new Stage();
         carteleraStage.setTitle("Cartelera - CINE LOS CULIA");
 
@@ -313,19 +313,19 @@ public class SistemaPrincipal extends Application {
         alert.showAndWait();
     }
 
-    private void mostrarPromocionesCliente(Cliente cliente) {
+    private void mostrarPromocionesCliente(Usuario cliente) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Promociones Activas");
         alert.setHeaderText("¡Aprovecha nuestras promociones!");
         alert.setContentText("🎁 PROMOCIONES PARA TI:\n\n" +
                 "• Martes de Descuento: 20% OFF\n" +
                 "• Combo Familiar: 25% OFF\n" +
-                "• Canje de Puntos: " + cliente.getPuntosFidelidad() + " puntos disponibles\n\n" +
+      //        "• Canje de Puntos: " + cliente.getPuntosFidelidad() + " puntos disponibles\n\n" +
                 "¡Disfruta del cine con los mejores precios!");
         alert.showAndWait();
     }
 
-    private void mostrarPerfilCliente(Cliente cliente) {
+    private void mostrarPerfilCliente(Usuario cliente) {
         Stage perfilStage = new Stage();
         perfilStage.setTitle("Mi Perfil - " + cliente.getNombre());
 
@@ -345,7 +345,7 @@ public class SistemaPrincipal extends Application {
                 crearFilaPerfil("Nombre:", cliente.getNombre() + " " + cliente.getApellido()),
                 crearFilaPerfil("Email:", cliente.getEmail()),
                 crearFilaPerfil("Teléfono:", cliente.getTelefono()),
-                crearFilaPerfil("Puntos de fidelidad:", String.valueOf(cliente.getPuntosFidelidad())),
+           //   crearFilaPerfil("Puntos de fidelidad:", String.valueOf(cliente.getPuntosFidelidad())),
                 crearFilaPerfil("Tipo de cuenta:", "Cliente")
         );
 
@@ -402,7 +402,7 @@ public class SistemaPrincipal extends Application {
         alert.showAndWait();
     }
 
-    private void cerrarSesion(Cliente cliente) {
+    private void cerrarSesion(Usuario cliente) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Cierre de Sesión");
         alert.setHeaderText(null);

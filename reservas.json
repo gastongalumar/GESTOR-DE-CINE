@@ -1,16 +1,70 @@
-[{
-    "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
-    "clienteNombre": "gaston gatto",
-    "monto": 4000,
-    "asientosSeleccionados": [
-        "A4",
-        "A5"
-    ],
-    "nombrePelicula": "F1 La pelicula",
-    "clienteEmail": "gaston@g.com",
-    "codigoOR": "OR-CMX-1762650485053420",
-    "fechaEmision": "2025-11-08T22:08:05.0533172",
-    "salaNombre": "Sala 1",
-    "numeroTicket": "TK1762650485053420",
-    "horarioFuncion": "26/10/2025 19:07"
-}]
+[
+    {
+        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
+        "clienteNombre": "Cliente Cinemax",
+        "monto": 20000,
+        "asientosSeleccionados": [
+            "E6",
+            "F7",
+            "F8",
+            "F9"
+        ],
+        "nombrePelicula": "Havoc",
+        "clienteEmail": "cliente@cinemax.com",
+        "codigoOR": "OR-CMX-1762653034433075",
+        "fechaEmision": "2025-11-08T22:50:34.4338031",
+        "salaNombre": "Sala 1",
+        "numeroTicket": "TK1762653034433075",
+        "horarioFuncion": "15/11/2025 20:30"
+    },
+    {
+        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
+        "clienteNombre": "Cliente Cinemax",
+        "monto": 10000,
+        "asientosSeleccionados": [
+            "D6",
+            "D7"
+        ],
+        "nombrePelicula": "Havoc",
+        "clienteEmail": "cliente@cinemax.com",
+        "codigoOR": "OR-CMX-1762659393122543",
+        "fechaEmision": "2025-11-09T00:36:33.1212506",
+        "salaNombre": "Sala 1",
+        "numeroTicket": "TK1762659393122543",
+        "horarioFuncion": "12/11/2025 20:30"
+    },
+    {
+        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
+        "clienteNombre": "gaston gatto",
+        "monto": 6000,
+        "asientosSeleccionados": [
+            "H8",
+            "H9",
+            "H10"
+        ],
+        "nombrePelicula": "F1 La pelicula",
+        "clienteEmail": "gaston@g.com",
+        "codigoOR": "OR-CMX-1762718245884229",
+        "fechaEmision": "2025-11-09T16:57:25.8846674",
+        "salaNombre": "Sala 1",
+        "numeroTicket": "TK1762718245884229",
+        "horarioFuncion": "16/10/2025 18:30"
+    },
+    {
+        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
+        "clienteNombre": "gaston gatto",
+        "monto": 6000,
+        "asientosSeleccionados": [
+            "E9",
+            "F9",
+            "G9"
+        ],
+        "nombrePelicula": "F1 La pelicula",
+        "clienteEmail": "gaston@g.com",
+        "codigoOR": "OR-CMX-1762718407795574",
+        "fechaEmision": "2025-11-09T17:00:07.7951368",
+        "salaNombre": "Sala 1",
+        "numeroTicket": "TK1762718407795574",
+        "horarioFuncion": "15/10/2025 18:30"
+    }
+]

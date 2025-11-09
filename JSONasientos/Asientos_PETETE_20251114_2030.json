@@ -1,8 +1,8 @@
 {
-    "asientosOcupados": 3,
+    "asientosOcupados": 8,
     "totalColumnas": 16,
     "totalFilas": 10,
-    "fechaActualizacion": "2025-11-09T17:00:04.677425300",
+    "fechaActualizacion": "2025-11-09T00:22:14.841879500",
     "matrizAsientos": [
         [
             {
@@ -454,7 +454,7 @@
             {
                 "columna": 9,
                 "etiqueta": "J5",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 4
             },
             {
@@ -552,7 +552,7 @@
             {
                 "columna": 9,
                 "etiqueta": "J6",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 5
             },
             {
@@ -650,7 +650,7 @@
             {
                 "columna": 9,
                 "etiqueta": "J7",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 6
             },
             {

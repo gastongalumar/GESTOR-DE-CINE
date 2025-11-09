@@ -29,7 +29,7 @@ public class DashboardAdmin {
     private Stage stage;
 
     // ✅ Constructor modificado para recibir GestorFunciones
-    public DashboardAdmin(GestorUsuarios gestorUsuarios, GestorFunciones gestorFunciones,Cliente cliente) {
+    public DashboardAdmin(GestorUsuarios gestorUsuarios, GestorFunciones gestorFunciones, Usuario cliente) {
         this.gestorUsuarios = gestorUsuarios;
         this.gestorFunciones = gestorFunciones;
     }

@@ -1,8 +1,8 @@
 package Clases.GestionDePagos;
 
 import Clases.Funcion;
-import Clases.ListaGenerica;
 import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import ManejoJSON.JSONReservas;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,7 +24,7 @@ public class HistorialCompras {
         System.out.println("✅ Reserva registrada para: " + cliente.getEmail());
     }
 
-    public static void mostrarHistorialReservas(Cliente cliente) {
+    public static void mostrarHistorialReservas(Usuario cliente) {
         Stage stage = new Stage();
         stage.setTitle("Mi Historial de Reservas - CINE LOS CULIA");
 
@@ -164,7 +164,7 @@ public class HistorialCompras {
     }
 
     // ✅ MÉTODO MEJORADO PARA CANCELAR RESERVA
-    private static void cancelarReserva(String numeroTicket, Cliente cliente, Stage stageActual) {
+    private static void cancelarReserva(String numeroTicket, Usuario cliente, Stage stageActual) {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar Cancelación");
         confirmacion.setHeaderText("¿Estás seguro de que quieres cancelar esta reserva?");
@@ -259,7 +259,7 @@ public class HistorialCompras {
         stage.show();
     }
 
-    public static void mostrarHistorial(Cliente cliente) {
+    public static void mostrarHistorial(Usuario cliente) {
         mostrarHistorialReservas(cliente);
     }
 

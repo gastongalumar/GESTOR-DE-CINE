@@ -1,6 +1,6 @@
 package Clases;
 
-import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
@@ -48,7 +48,7 @@ public class ManejoVentanas {
     /**
      * Cierra ventanas específicas del administrador y reinicia el gestor
      */
-    public static void reiniciarGestorAdministrador(GestorFunciones gestorFunciones, Cliente cliente) {
+    public static void reiniciarGestorAdministrador(GestorFunciones gestorFunciones, Usuario cliente) {
         // Cerrar todas las ventanas del administrador
         cerrarVentanasPorTitulo("GESTOR ADMINISTRADOR");
         cerrarVentanasPorTitulo("Formulario para modificar");

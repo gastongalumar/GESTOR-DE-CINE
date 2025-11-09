@@ -31,7 +31,7 @@ public class LoginInterfaz extends Application {
     private GestorUsuarios gestorUsuarios;
 
 
-    public void start(Stage primaryStage,Cliente cliente) {
+    public void start(Stage primaryStage, Usuario cliente) {
         this.stage = primaryStage;
         GestorFunciones gestorFunciones = new GestorFunciones();
         cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 9,14), new SalaCine("Sala 2", 9,14));
@@ -53,7 +53,7 @@ public class LoginInterfaz extends Application {
     }
 
 
-    private void crearInterfaz(Cliente cliente) {
+    private void crearInterfaz(Usuario cliente) {
         stage.setTitle("CINE LOS CULIA - Inicio de Sesión");
         stage.setOnCloseRequest(e -> stage.close());
         stage.setWidth(400);
@@ -224,7 +224,7 @@ public class LoginInterfaz extends Application {
         return footerPanel;
     }
 
-    private void configurarEventos(GestorFunciones gestorFunciones,Cliente cliente) {
+    private void configurarEventos(GestorFunciones gestorFunciones, Usuario cliente) {
         loginButton.setOnAction(e -> realizarLogin(gestorFunciones,cliente));
         registerButton.setOnAction(e -> registrarUsuario());
 
@@ -256,7 +256,7 @@ public class LoginInterfaz extends Application {
             }
         });
     }
-    private void realizarLogin(GestorFunciones gestorFunciones,Cliente cliente) {
+    private void realizarLogin(GestorFunciones gestorFunciones, Usuario cliente) {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
 
@@ -326,7 +326,7 @@ public class LoginInterfaz extends Application {
 
 
     // En LoginInterfaz.java - Modificar el método abrirSistemaPrincipal
-    private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones,Cliente cliente) {
+    private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones, Usuario cliente) {
         mostrarAlerta("Login Exitoso",
                 "¡Bienvenido " + usuario + "!\nTipo: " + tipoUsuario,
                 Alert.AlertType.INFORMATION);
@@ -341,7 +341,7 @@ public class LoginInterfaz extends Application {
         }
     }
 
-    private void abrirPanelAdministrador(GestorFunciones gestorFunciones,Cliente cliente) {
+    private void abrirPanelAdministrador(GestorFunciones gestorFunciones, Usuario cliente) {
         System.out.println("🎯 INTENTANDO ABRIR PANEL ADMIN...");
 
         Platform.runLater(() -> {
@@ -421,7 +421,7 @@ public class LoginInterfaz extends Application {
         });
     }
 
-    private HBox crearContenidoGestorCliente(GestorFunciones gestorFunciones, Cliente cliente, Stage ventana) {
+    private HBox crearContenidoGestorCliente(GestorFunciones gestorFunciones, Usuario usuario, Stage ventana) {
         HBox contenedor = new HBox(20);
         contenedor.setPadding(new Insets(20));
         contenedor.setStyle("-fx-background-color: #6E0A17;");
@@ -431,18 +431,18 @@ public class LoginInterfaz extends Application {
 
         // Mostrar películas
         for(Pelicula p: listaPeliculas) {
-            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(), cliente);
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(), usuario);
             contenedor.getChildren().add(vista);
         }
 
         // === PANEL LATERAL CON BOTONES ===
-        VBox panelLateral = crearPanelLateralCliente(cliente, gestorFunciones, ventana);
+        VBox panelLateral = crearPanelLateralCliente(usuario, gestorFunciones, ventana);
         contenedor.getChildren().add(panelLateral);
 
         return contenedor;
     }
 
-    private VBox crearPanelLateralCliente(Cliente cliente, GestorFunciones gestorFunciones, Stage ventana) {
+    private VBox crearPanelLateralCliente(Usuario cliente, GestorFunciones gestorFunciones, Stage ventana) {
         // Títulos
         Label tituloFunciones = new Label("CARTELERA");
         tituloFunciones.setStyle("-fx-font-size: 20px; -fx-text-fill: #0A6E61; -fx-font-weight: bold; -fx-padding: 5 10 5 10;");
@@ -504,7 +504,7 @@ public class LoginInterfaz extends Application {
         alert.showAndWait();
     }
 
-    private void mostrarPromociones(Cliente cliente) {
+    private void mostrarPromociones(Usuario cliente) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Promociones Activas");
         alert.setHeaderText("🎁 PROMOCIONES ESPECIALES");
@@ -512,11 +512,11 @@ public class LoginInterfaz extends Application {
         alert.showAndWait();
     }
 
-    private void mostrarPerfil(Cliente cliente) {
+    private void mostrarPerfil(Usuario cliente) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Mi Perfil");
         alert.setHeaderText("👤 " + cliente.getNombre() + " " + cliente.getApellido());
-        alert.setContentText("Email: " + cliente.getEmail() + "\nTeléfono: " + cliente.getTelefono() + "\nPuntos: " + cliente.getPuntosFidelidad());
+        alert.setContentText("Email: " + cliente.getEmail() + "\nTeléfono: " + cliente.getTelefono() + "\nPuntos: " );
         alert.showAndWait();
     }
 

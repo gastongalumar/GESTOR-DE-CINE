@@ -224,41 +224,172 @@ public class GestorJsonAsientos {
         guardarEstadoCompleto();
     }
 
+//    public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
+//        try {
+//            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+//
+//            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
+//                if (funcion.getPelicula().getNombrePelicula().equals(nombreAnterior)) {
+//                    String horarioStr = funcion.getHorarioFuncion().format(fmt);
+//
+//                    // Archivos dentro de la carpeta JSONasientos
+//                    String archivoViejo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
+//                            nombreAnterior.replaceAll("\\s+", "_"), horarioStr);
+//                    String archivoNuevo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
+//                            nuevoNombre.replaceAll("\\s+", "_"), horarioStr);
+//
+//                    File fileViejo = new File(archivoViejo);
+//                    File fileNuevo = new File(archivoNuevo);
+//
+//                    System.out.println("🔄 Procesando: " + archivoViejo + " → " + archivoNuevo);
+//
+//                    if (fileViejo.exists()) {
+//                        // 🔴 FORZAR SOBREESCRITURA incluso si el archivo nuevo ya existe
+//                        String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
+//                        Files.write(fileNuevo.toPath(), contenido.getBytes(),
+//                                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+//                        System.out.println("✅ Datos SOBREESCRITOS: " + archivoViejo + " → " + archivoNuevo);
+//
+//                    } else {
+//                        System.out.println("⚠️ Archivo origen no encontrado: " + archivoViejo);
+//                    }
+//
+//                    fileViejo.delete();
+//                }
+//            }
+//        } catch (Exception e) {
+//            System.err.println("⚠️ Error al copiar archivos de asientos: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
+
     public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
         try {
+            System.out.println("🔄 ===== INICIANDO COPIA DE ARCHIVOS DE ASIENTOS =====");
+            System.out.println("📝 Nombre anterior: '" + nombreAnterior + "'");
+            System.out.println("📝 Nombre nuevo: '" + nuevoNombre + "'");
+
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
 
-            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
-                if (funcion.getPelicula().getNombrePelicula().equals(nombreAnterior)) {
-                    String horarioStr = funcion.getHorarioFuncion().format(fmt);
+            // Verificar que la carpeta existe
+            File carpeta = new File(CARPETA_JSON);
+            if (!carpeta.exists()) {
+                System.err.println("❌ Carpeta no existe: " + CARPETA_JSON);
+                return;
+            }
+            System.out.println("✅ Carpeta verificada: " + CARPETA_JSON);
 
-                    // Archivos dentro de la carpeta JSONasientos
+            // Listar todas las funciones para debug
+            System.out.println("🎬 Lista completa de funciones:");
+            boolean funcionesEncontradas = false;
+
+            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
+                String nombreFuncion = funcion.getPelicula().getNombrePelicula();
+                String horarioFuncion = funcion.getHorarioFuncion().format(fmt);
+
+                System.out.println("   - '" + nombreFuncion + "' | Horario: " + horarioFuncion);
+
+                // Verificar si coincide con el nombre anterior (con diferentes criterios)
+                boolean coincideExacto = nombreFuncion.equals(nombreAnterior);
+                boolean contieneNombre = nombreFuncion.contains(nombreAnterior);
+                boolean nombresSimilares = nombreFuncion.replaceAll("\\s+", "_")
+                        .equals(nombreAnterior.replaceAll("\\s+", "_"));
+
+                System.out.println("     → Coincide exacto: " + coincideExacto);
+                System.out.println("     → Contiene nombre: " + contieneNombre);
+                System.out.println("     → Nombres similares: " + nombresSimilares);
+
+                if (coincideExacto) {
+                    funcionesEncontradas = true;
+                    System.out.println("🎯 FUNCIÓN COINCIDENTE ENCONTRADA!");
+
+                    String nombreAnteriorSinEspacios = nombreAnterior.replaceAll("\\s+", "_");
+                    String nuevoNombreSinEspacios = nuevoNombre.replaceAll("\\s+", "_");
+
+                    // Archivo VIEJO (con nombre anterior)
                     String archivoViejo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
-                            nombreAnterior.replaceAll("\\s+", "_"), horarioStr);
+                            nombreAnteriorSinEspacios, horarioFuncion);
+
+                    // Archivo NUEVO (con nuevo nombre)
                     String archivoNuevo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
-                            nuevoNombre.replaceAll("\\s+", "_"), horarioStr);
+                            nuevoNombreSinEspacios, horarioFuncion);
 
                     File fileViejo = new File(archivoViejo);
                     File fileNuevo = new File(archivoNuevo);
 
-                    System.out.println("🔄 Procesando: " + archivoViejo + " → " + archivoNuevo);
+                    System.out.println("📁 Archivo viejo esperado: " + archivoViejo);
+                    System.out.println("📁 Archivo nuevo destino: " + archivoNuevo);
+                    System.out.println("📁 Archivo viejo existe: " + fileViejo.exists());
+                    System.out.println("📁 Archivo nuevo existe: " + fileNuevo.exists());
 
                     if (fileViejo.exists()) {
-                        // 🔴 FORZAR SOBREESCRITURA incluso si el archivo nuevo ya existe
-                        String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
-                        Files.write(fileNuevo.toPath(), contenido.getBytes(),
-                                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                        System.out.println("✅ Datos SOBREESCRITOS: " + archivoViejo + " → " + archivoNuevo);
+                        try {
+                            // Leer contenido del archivo viejo
+                            String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
+                            System.out.println("✅ Contenido leído, tamaño: " + contenido.length() + " caracteres");
 
+                            // Escribir en archivo nuevo
+                            Files.write(fileNuevo.toPath(), contenido.getBytes(),
+                                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                            System.out.println("✅ ARCHIVO COPIADO EXITOSAMENTE: " + archivoViejo + " → " + archivoNuevo);
+
+                            // Verificar que se copió correctamente
+                            if (fileNuevo.exists()) {
+                                String contenidoVerificado = new String(Files.readAllBytes(fileNuevo.toPath()));
+                                System.out.println("✅ Verificación: nuevo archivo tiene " + contenidoVerificado.length() + " caracteres");
+                            } else {
+                                System.err.println("❌ Error: nuevo archivo no se creó");
+                            }
+
+                        } catch (Exception e) {
+                            System.err.println("❌ Error durante la copia: " + e.getMessage());
+                            e.printStackTrace();
+                        }
                     } else {
-                        System.out.println("⚠️ Archivo origen no encontrado: " + archivoViejo);
-                    }
+                        System.err.println("❌ Archivo origen no encontrado: " + archivoViejo);
 
-                    fileViejo.delete();
+                        // Listar archivos disponibles que podrían coincidir
+                        System.out.println("🔍 Buscando archivos similares...");
+                        String[] archivosDisponibles = carpeta.list((dir, name) ->
+                                name.startsWith("Asientos_") &&
+                                        name.contains(nombreAnteriorSinEspacios) &&
+                                        name.endsWith(".json"));
+
+                        if (archivosDisponibles != null && archivosDisponibles.length > 0) {
+                            System.out.println("📂 Archivos similares encontrados:");
+                            for (String archivo : archivosDisponibles) {
+                                System.out.println("   - " + archivo);
+                            }
+                        } else {
+                            System.out.println("📂 No se encontraron archivos similares");
+
+                            // Listar todos los archivos de asientos
+                            String[] todosArchivos = carpeta.list((dir, name) ->
+                                    name.startsWith("Asientos_") && name.endsWith(".json"));
+                            if (todosArchivos != null && todosArchivos.length > 0) {
+                                System.out.println("📂 Todos los archivos de asientos:");
+                                for (String archivo : todosArchivos) {
+                                    System.out.println("   - " + archivo);
+                                }
+                            }
+                        }
+                    }
+                    System.out.println("---");
                 }
             }
+
+            if (!funcionesEncontradas) {
+                System.err.println("❌ NO SE ENCONTRARON FUNCIONES con el nombre anterior: '" + nombreAnterior + "'");
+                System.out.println("🔍 Posibles causas:");
+                System.out.println("   - El nombre ya fue actualizado en las funciones");
+                System.out.println("   - No hay funciones para esta película");
+                System.out.println("   - Diferencia en mayúsculas/minúsculas o espacios");
+            }
+
+            System.out.println("======= FIN DE COPIA DE ARCHIVOS =======");
+
         } catch (Exception e) {
-            System.err.println("⚠️ Error al copiar archivos de asientos: " + e.getMessage());
+            System.err.println("❌ ERROR CRÍTICO al copiar archivos de asientos: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -6,7 +6,7 @@ import Clases.GestorFunciones;
 import Clases.GestorPeliculas;
 import Clases.Pelicula;
 import Clases.VistaCartelera;
-import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
 import ManejoJSON.FuncionesJSON;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,12 +24,12 @@ import javafx.scene.control.Separator;
 
 public class GestorCliente {
 
-    public static void iniciarCliente(GestorFunciones gestorFunciones, Cliente cliente) {
+    public static void iniciarCliente(GestorFunciones gestorFunciones, Usuario cliente) {
         Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
         vistaCliente(GestorPeliculas.getListaPeliculas(), gestorFunciones,cliente);
     }
 
-    public static void vistaCliente(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones,Cliente cliente) {
+    public static void vistaCliente(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Usuario cliente) {
         Stage ventana = new Stage();
         HBox contenedor = new HBox(20);
         contenedor.setStyle("""
