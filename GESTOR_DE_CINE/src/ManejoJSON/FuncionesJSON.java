@@ -25,8 +25,10 @@ public class FuncionesJSON {
             try {
                 if(!listaFunciones.isEmpty()) {
                     for (int i = 0; i < listaFunciones.size(); i++) {
+                       // System.out.println(listaFunciones.get(i));
                         JSONObject jsonFuncion = new JSONObject();
                         Funcion funcion = listaFunciones.get(i);
+                      //  System.out.println(funcion.getSala().getNombreSala()); descartamos aca NO NULL EL GETTER
                         jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
                         jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
                         jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
@@ -66,18 +68,20 @@ public class FuncionesJSON {
                 double precioFuncion = obj.getDouble("Precio");
 
                 SalaCine salaEncontrada = buscarSalaPorNombre(listaSalas, nombreSala);
+                //System.out.println(salaEncontrada); DESCARTAMOS ACA TAMBIEN, LA SALA LA ENCUENTRA
                 Pelicula peliculaEncontrada = buscarPeliculaPorNombre(listaPeliculas, nombrePelicula);
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 if (salaEncontrada != null && peliculaEncontrada != null) {
                     LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraStr, formato);
                     Funcion f = new Funcion(salaEncontrada, peliculaEncontrada, fechaHora, precioFuncion, gestorFunciones);
                     listaFunciones.add(f);
+                   // gestorFunciones.agregarFuncion(f);
                 } else {
                     System.out.println("⚠️ No se encontró coincidencia para: " + nombrePelicula + " / " + nombreSala);
                 }
             }
 
-            //GestorFunciones.setListaFunciones(listaFunciones);
+            //GestorFunciones.setListaFunciones(new ListaGenerica<>(listaFunciones));
 
         } catch (Exception e) {
             System.out.println("❌ Error al deserializar funciones: " + e.getMessage());

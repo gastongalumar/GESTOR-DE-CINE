@@ -1,372 +1,3 @@
-//package ManejoJSON;
-//
-//import Clases.Funcion;
-//import Clases.GestorFunciones;
-//import Clases.SalaCine;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
-//import org.json.JSONException;
-//import ManejoJSON.JSONUtiles;
-//import java.io.*;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-//import java.nio.file.StandardOpenOption;
-//import java.time.LocalDateTime;
-//import java.time.format.DateTimeFormatter;
-//import java.util.List;
-//
-//public class GestorJsonAsientos {
-//    // Archivo por defecto si no se especifica uno
-//    private static final String ARCHIVO_POR_DEFECTO = "asientos_sala.json";
-//    private final SalaCine sala;
-//    private final String archivoAsientos;
-//
-//    public GestorJsonAsientos(SalaCine sala) {
-//        this(sala, ARCHIVO_POR_DEFECTO);
-//    }
-//
-//    // Constructor nuevo que permite especificar el archivo JSON (por función, por ejemplo)
-//    public GestorJsonAsientos(SalaCine sala, String archivoAsientos) {
-//        this.sala = sala;
-//        this.archivoAsientos = archivoAsientos != null && !archivoAsientos.isEmpty() ? archivoAsientos : ARCHIVO_POR_DEFECTO;
-//        inicializarArchivo();
-//    }
-//
-//    private void inicializarArchivo() {
-//        File archivo = new File(archivoAsientos);
-//        if (!archivo.exists()) {
-//            System.out.println("📝 Creando nuevo archivo JSON... -> " + archivoAsientos);
-//            guardarEstadoCompleto();
-//        } else {
-//            System.out.println("📁 Archivo JSON encontrado: " + archivoAsientos);
-//        }
-//    }
-//
-//    public boolean cargarEstadoGuardado() {
-//        try {
-//            JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
-//            if (estadoSala == null) {
-//                System.err.println("❌ No se pudo leer el archivo JSON o está vacío");
-//                return false;
-//            }
-//
-//            JSONArray matrizAsientos = estadoSala.getJSONArray("matrizAsientos");
-//
-//            System.out.println("📊 ===== CARGANDO ESTADO DESDE JSON =====");
-//            System.out.println("📅 Última actualización: " + estadoSala.getString("fechaActualizacion"));
-//
-//            int libresJson = 0, ocupadosJson = 0;
-//            for (int i = 0; i < matrizAsientos.length(); i++) {
-//                JSONArray filaArray = matrizAsientos.getJSONArray(i);
-//                for (int j = 0; j < filaArray.length(); j++) {
-//                    JSONObject asientoJson = filaArray.getJSONObject(j);
-//                    String estado = asientoJson.getString("estado");
-//                    switch (estado) {
-//                        case "LIBRE":
-//                            libresJson++;
-//                            break;
-//                        case "OCUPADO":
-//                            ocupadosJson++;
-//                            break;
-//                    }
-//                }
-//            }
-//
-//            System.out.println("📦 ESTADOS EN ARCHIVO JSON:");
-//            System.out.println("   ⚪ Libres: " + libresJson);
-//            System.out.println("   🔴 Ocupados: " + ocupadosJson);
-//
-//            // Cargar los estados en la sala
-//            sala.cargarEstadosDesdeJSON(matrizAsientos);
-//
-//            // Mostrar información después de cargar
-//            System.out.println("📈 ESTADOS DESPUÉS DE CARGAR:");
-//            System.out.println("   ⚪ Libres: " + sala.contarAsientosLibres());
-//            System.out.println("   🔴 Ocupados: " + sala.contarAsientosOcupados());
-//            System.out.println("   🔵 Seleccionados: " + sala.contarAsientosSeleccionados() + " (temporal)");
-//            System.out.println("✅ ===== ESTADO CARGADO CORRECTAMENTE =====");
-//
-//            return true;
-//
-//        } catch (JSONException e) {
-//            System.err.println("❌ Error de JSON al cargar estado: " + e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        } catch (Exception e) {
-//            System.err.println("❌ Error inesperado al cargar estado: " + e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-//
-//    /**
-//     * Guarda el estado completo en JSON
-//     */
-//    public void guardarEstadoCompleto() {
-//        try {
-//            JSONObject estadoSala = new JSONObject();
-//            estadoSala.put("fechaActualizacion", java.time.LocalDateTime.now().toString());
-//            estadoSala.put("totalFilas", sala.getFilas());
-//            estadoSala.put("totalColumnas", sala.getColumnas());
-//            estadoSala.put("asientosOcupados", sala.contarAsientosOcupados());
-//
-//            // Matriz de asientos
-//            JSONArray matrizAsientos = new JSONArray();
-//            for (int i = 0; i < sala.getFilas(); i++) {
-//                JSONArray filaArray = new JSONArray();
-//                for (int j = 0; j < sala.getColumnas(); j++) {
-//                    JSONObject asiento = new JSONObject();
-//                    asiento.put("fila", i);
-//                    asiento.put("columna", j);
-//                    asiento.put("estado", sala.getEstadoAsiento(i, j).toString());
-//                    asiento.put("etiqueta", generarEtiquetaAsiento(i, j));
-//                    filaArray.put(asiento);
-//                }
-//                matrizAsientos.put(filaArray);
-//            }
-//            estadoSala.put("matrizAsientos", matrizAsientos);
-//
-//            JSONUtiles.grabar(estadoSala, archivoAsientos);
-//
-//            System.out.println("💾 Estado guardado en JSON: -> " + archivoAsientos);
-//            System.out.println("   🔴 Ocupados: " + sala.contarAsientosOcupados());
-//            System.out.println("   ⚪ Libres: " + sala.contarAsientosLibres());
-//
-//        } catch (Exception e) {
-//            System.err.println("❌ Error al guardar el estado de asientos: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    /**
-//     * Confirma las selecciones y guarda en JSON
-//     */
-//    public int confirmarSelecciones() {
-//        int confirmados = sala.confirmarSelecciones();
-//        guardarEstadoCompleto();
-//        return confirmados;
-//    }
-//
-//    public JSONObject generarReporte() {
-//        try {
-//            JSONObject reporte = new JSONObject();
-//            reporte.put("fechaReporte", java.time.LocalDateTime.now().toString());
-//            reporte.put("totalAsientos", sala.getFilas() * sala.getColumnas());
-//            reporte.put("asientosSeleccionados", sala.contarAsientosSeleccionados());
-//            reporte.put("asientosOcupados", sala.contarAsientosOcupados());
-//            reporte.put("asientosLibres", sala.contarAsientosLibres());
-//
-//            try {
-//                JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
-//                if (estadoSala != null) {
-//                    reporte.put("ultimaActualizacion", estadoSala.getString("fechaActualizacion"));
-//                }
-//            } catch (Exception e) {
-//                reporte.put("ultimaActualizacion", "No disponible");
-//            }
-//
-//            return reporte;
-//
-//        } catch (Exception e) {
-//            System.err.println("❌ Error al generar reporte: " + e.getMessage());
-//            try {
-//                return new JSONObject().put("error", "No se pudo generar el reporte");
-//            } catch (JSONException ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        }
-//    }
-//
-//    public boolean archivoExiste() {
-//        File archivo = new File(archivoAsientos);
-//        return archivo.exists();
-//    }
-//
-//    private String generarEtiquetaAsiento(int fila, int columna) {
-//        return String.valueOf((char) ('A' + columna)) + (fila + 1);
-//    }
-//
-//    /**
-//     * Limpia selecciones y guarda
-//     */
-//    public void limpiarSelecciones() {
-//        sala.limpiarSelecciones();
-//        guardarEstadoCompleto();
-//    }
-//
-//    public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
-//        try {
-//            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
-//
-//            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
-//                if (funcion.getPelicula().getNombrePelicula().equals(nombreAnterior)) {
-//                    String horarioStr = funcion.getHorarioFuncion().format(fmt);
-//
-//                    String archivoViejo = String.format("Asientos_%s_%s.json",
-//                            nombreAnterior.replaceAll("\\s+", "_"), horarioStr);
-//                    String archivoNuevo = String.format("Asientos_%s_%s.json",
-//                            nuevoNombre.replaceAll("\\s+", "_"), horarioStr);
-//
-//                    File fileViejo = new File(archivoViejo);
-//                    File fileNuevo = new File(archivoNuevo);
-//
-//                    System.out.println("🔄 Procesando: " + archivoViejo + " → " + archivoNuevo);
-//
-//                    if (fileViejo.exists()) {
-//                        // 🔴 FORZAR SOBREESCRITURA incluso si el archivo nuevo ya existe
-//                        String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
-//                        Files.write(fileNuevo.toPath(), contenido.getBytes(),
-//                                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-//                        System.out.println("✅ Datos SOBREESCRITOS: " + archivoViejo + " → " + archivoNuevo);
-//
-//                    } else {
-//                        System.out.println("⚠️ Archivo origen no encontrado: " + archivoViejo);
-//                    }
-//
-//                    fileViejo.delete();
-//                }
-//            }
-//        } catch (Exception e) {
-//            System.err.println("⚠️ Error al copiar archivos de asientos: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private int[] etiquetaACoordenadas(String etiqueta) {
-//        if (etiqueta == null || etiqueta.length() < 2) {
-//            return new int[]{-1, -1};
-//        }
-//
-//        try {
-//            // Letra = Fila, Número = Columna VISIBLE
-//            char letraFila = etiqueta.charAt(0);
-//            String numeroStr = etiqueta.substring(1);
-//            int columnaVisible = Integer.parseInt(numeroStr);
-//
-//            // Convertir letra a índice de fila
-//            int fila = letraFila - 'A';
-//
-//            // ✅ MAPEO DE COLUMNAS VISIBLES A COLUMNAS REALES
-//            // Columnas visibles: 1-14
-//            // Columnas reales en JSON: 0-2, 4-11, 13-15 (16 columnas total con pasillos)
-//            int columnaReal = -1;
-//
-//            if (columnaVisible >= 1 && columnaVisible <= 3) {
-//                // Bloque izquierdo: 1->0, 2->1, 3->2
-//                columnaReal = columnaVisible - 1;
-//            } else if (columnaVisible >= 4 && columnaVisible <= 11) {
-//                // Bloque central: 4->4, 5->5, ..., 11->11
-//                columnaReal = columnaVisible;
-//            } else if (columnaVisible >= 12 && columnaVisible <= 14) {
-//                // Bloque derecho: 12->13, 13->14, 14->15
-//                columnaReal = columnaVisible + 1;
-//            }
-//
-//            System.out.println("🔍 Etiqueta '" + etiqueta + "' -> Fila:" + fila +
-//                    ", ColVisible:" + columnaVisible + ", ColReal:" + columnaReal);
-//
-//            if (columnaReal == -1) {
-//                System.err.println("❌ Columna visible inválida: " + columnaVisible);
-//                return new int[]{-1, -1};
-//            }
-//
-//            return new int[]{fila, columnaReal};
-//
-//        } catch (NumberFormatException e) {
-//            System.err.println("❌ Error parseando etiqueta: " + etiqueta);
-//            return new int[]{-1, -1};
-//        }
-//    }
-//
-//    public boolean liberarAsientos(List<String> asientosALiberar) {
-//        try {
-//            System.out.println("🔄 Liberando " + asientosALiberar.size() + " asientos: " + asientosALiberar);
-//            System.out.println("📁 Archivo: " + archivoAsientos);
-//
-//            File archivo = new File(archivoAsientos);
-//            if (!archivo.exists()) {
-//                System.err.println("❌ Archivo no existe: " + archivoAsientos);
-//                return false;
-//            }
-//
-//            // Leer archivo JSON
-//            JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
-//            if (estadoSala == null) {
-//                System.err.println("❌ No se pudo leer el archivo JSON");
-//                return false;
-//            }
-//
-//            JSONArray matrizAsientos = estadoSala.getJSONArray("matrizAsientos");
-//            int liberados = 0;
-//
-//            // Para cada etiqueta a liberar
-//            for (String etiqueta : asientosALiberar) {
-//                String etiquetaNormalizada = etiqueta.trim().toUpperCase();
-//                System.out.println("🎯 Procesando: '" + etiquetaNormalizada + "'");
-//
-//                // Convertir etiqueta a coordenadas
-//                int[] coordenadas = etiquetaACoordenadas(etiquetaNormalizada);
-//                if (coordenadas[0] == -1 || coordenadas[1] == -1) {
-//                    System.err.println("❌ No se pudo convertir etiqueta: " + etiquetaNormalizada);
-//                    continue;
-//                }
-//
-//                int fila = coordenadas[0];
-//                int columna = coordenadas[1];
-//
-//                System.out.println("📍 Coordenadas: Fila " + fila + ", Columna " + columna);
-//
-//                // Verificar que las coordenadas estén dentro de los límites
-//                if (fila >= 0 && fila < matrizAsientos.length()) {
-//                    JSONArray filaArray = matrizAsientos.getJSONArray(fila);
-//                    if (columna >= 0 && columna < filaArray.length()) {
-//                        JSONObject asientoJson = filaArray.getJSONObject(columna);
-//                        String estadoActual = asientoJson.getString("estado");
-//                        String etiquetaEnJson = asientoJson.getString("etiqueta");
-//
-//                        System.out.println("📋 En JSON: " + etiquetaEnJson + " -> Estado: " + estadoActual);
-//
-//                        if ("OCUPADO".equals(estadoActual)) {
-//                            asientoJson.put("estado", "LIBRE");
-//                            liberados++;
-//                            System.out.println("✅ Asiento liberado: " + etiquetaNormalizada);
-//                        } else {
-//                            System.out.println("⚠️ Asiento " + etiquetaNormalizada + " no está ocupado (estado: " + estadoActual + ")");
-//                        }
-//                    } else {
-//                        System.err.println("❌ Columna fuera de rango: " + columna + " para etiqueta: " + etiquetaNormalizada);
-//                    }
-//                } else {
-//                    System.err.println("❌ Fila fuera de rango: " + fila + " para etiqueta: " + etiquetaNormalizada);
-//                }
-//                System.out.println("---");
-//            }
-//
-//            if (liberados > 0) {
-//                // Guardar cambios
-//                estadoSala.put("fechaActualizacion", LocalDateTime.now().toString());
-//                JSONUtiles.grabar(estadoSala, archivoAsientos);
-//                System.out.println("💾 " + liberados + " asientos liberados exitosamente");
-//                return true;
-//            } else {
-//                System.out.println("⚠️ No se liberó ningún asiento");
-//                return false;
-//            }
-//
-//        } catch (Exception e) {
-//            System.err.println("❌ Error liberando asientos: " + e.getMessage());
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-//}
-//
-//
-//
-//
-//
-
-
 package ManejoJSON;
 
 import Clases.Funcion;
@@ -592,7 +223,93 @@ public class GestorJsonAsientos {
         guardarEstadoCompleto();
     }
 
+
+
+
     public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
+        try {
+            System.out.println("🔄 ===== INICIANDO COPIA Y RENOMBRE DE ARCHIVOS DE ASIENTOS =====");
+            System.out.println("📝 Nombre anterior: '" + nombreAnterior + "'");
+            System.out.println("📝 Nuevo nombre: '" + nuevoNombre + "'");
+
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+            File carpeta = new File(CARPETA_JSON);
+
+            if (!carpeta.exists()) {
+                System.err.println("❌ Carpeta no existe: " + CARPETA_JSON);
+                return;
+            }
+
+            System.out.println("✅ Carpeta verificada: " + CARPETA_JSON);
+            boolean algunaCopia = false;
+
+            // 🔸 PRIMERA PASADA: copiar y eliminar archivos
+            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
+                String nombreFuncion = funcion.getPelicula().getNombrePelicula();
+                String horarioFuncion = funcion.getHorarioFuncion().format(fmt);
+
+                if (nombreFuncion.equalsIgnoreCase(nombreAnterior)) {
+                    algunaCopia = true;
+                    System.out.println("🎯 Función coincidente encontrada para horario " + horarioFuncion);
+
+                    String nombreAnt = nombreAnterior.replaceAll("\\s+", "_");
+                    String nombreNuev = nuevoNombre.replaceAll("\\s+", "_");
+
+                    File fileViejo = new File(CARPETA_JSON, String.format("Asientos_%s_%s.json", nombreAnt, horarioFuncion));
+                    File fileNuevo = new File(CARPETA_JSON, String.format("Asientos_%s_%s.json", nombreNuev, horarioFuncion));
+
+                    if (fileViejo.exists()) {
+                        try {
+                            String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
+                            Files.write(fileNuevo.toPath(), contenido.getBytes(),
+                                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                            System.out.println("✅ Copiado: " + fileViejo.getName() + " → " + fileNuevo.getName());
+
+                            boolean eliminado = fileViejo.delete();
+                            if (!eliminado) {
+                                System.gc();
+                                Thread.sleep(100);
+                                eliminado = fileViejo.delete();
+                            }
+
+                            System.out.println(eliminado
+                                    ? "🗑️ Archivo viejo eliminado: " + fileViejo.getName()
+                                    : "⚠️ No se pudo eliminar: " + fileViejo.getName());
+
+                        } catch (Exception e) {
+                            System.err.println("❌ Error copiando archivo " + fileViejo.getName() + ": " + e.getMessage());
+                        }
+                    } else {
+                        System.err.println("❌ Archivo no encontrado: " + fileViejo.getName());
+                    }
+                }
+            }
+
+            // 🔸 SEGUNDA PASADA: actualizar nombres en funciones
+            if (algunaCopia) {
+                for (Funcion f : gestorFunciones.getListaFunciones().getElementos()) {
+                    if (f.getPelicula().getNombrePelicula().equalsIgnoreCase(nombreAnterior)) {
+                        f.getPelicula().setNombrePelicula(nuevoNombre);
+                    }
+                }
+
+                // Guardar funciones actualizadas
+                FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
+                System.out.println("💾 Funciones actualizadas y serializadas correctamente.");
+            } else {
+                System.err.println("⚠️ No se encontraron funciones con el nombre anterior: " + nombreAnterior);
+            }
+
+            System.out.println("✅ ===== FIN DE PROCESO =====");
+
+        } catch (Exception e) {
+            System.err.println("❌ ERROR CRÍTICO al copiar archivos de asientos: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+    /*public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
         try {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
 
@@ -629,7 +346,171 @@ public class GestorJsonAsientos {
             System.err.println("⚠️ Error al copiar archivos de asientos: " + e.getMessage());
             e.printStackTrace();
         }
-    }
+    }*/
+
+
+    /*public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
+        try {
+            System.out.println("🔄 ===== INICIANDO COPIA DE ARCHIVOS DE ASIENTOS =====");
+            System.out.println("📝 Nombre anterior: '" + nombreAnterior + "'");
+            System.out.println("📝 Nombre nuevo: '" + nuevoNombre + "'");
+
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+            // Verificar que la carpeta existe
+            File carpeta = new File(CARPETA_JSON);
+            if (!carpeta.exists()) {
+                System.err.println("❌ Carpeta no existe: " + CARPETA_JSON);
+                return;
+            }
+            System.out.println("✅ Carpeta verificada: " + CARPETA_JSON);
+
+            // Listar todas las funciones para debug
+            System.out.println("🎬 Lista completa de funciones:");
+            boolean funcionesEncontradas = false;
+
+            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
+                String nombreFuncion = funcion.getPelicula().getNombrePelicula();
+                String horarioFuncion = funcion.getHorarioFuncion().format(fmt);
+
+                System.out.println("   - '" + nombreFuncion + "' | Horario: " + horarioFuncion);
+
+                // Verificar si coincide con el nombre anterior (con diferentes criterios)
+                boolean coincideExacto = nombreFuncion.equals(nombreAnterior);
+                boolean contieneNombre = nombreFuncion.contains(nombreAnterior);
+                boolean nombresSimilares = nombreFuncion.replaceAll("\\s+", "_")
+                        .equals(nombreAnterior.replaceAll("\\s+", "_"));
+
+                System.out.println("     → Coincide exacto: " + coincideExacto);
+                System.out.println("     → Contiene nombre: " + contieneNombre);
+                System.out.println("     → Nombres similares: " + nombresSimilares);
+
+                if (coincideExacto) {
+                    funcionesEncontradas = true;
+                    System.out.println("🎯 FUNCIÓN COINCIDENTE ENCONTRADA!");
+
+                    String nombreAnteriorSinEspacios = nombreAnterior.replaceAll("\\s+", "_");
+                    String nuevoNombreSinEspacios = nuevoNombre.replaceAll("\\s+", "_");
+
+                    // Archivo VIEJO (con nombre anterior)
+                    String archivoViejo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
+                            nombreAnteriorSinEspacios, horarioFuncion);
+
+                    // Archivo NUEVO (con nuevo nombre)
+                    String archivoNuevo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
+                            nuevoNombreSinEspacios, horarioFuncion);
+
+                    File fileViejo = new File(archivoViejo);
+                    File fileNuevo = new File(archivoNuevo);
+
+                    System.out.println("📁 Archivo viejo esperado: " + archivoViejo);
+                    System.out.println("📁 Archivo nuevo destino: " + archivoNuevo);
+                    System.out.println("📁 Archivo viejo existe: " + fileViejo.exists());
+                    System.out.println("📁 Archivo nuevo existe: " + fileNuevo.exists());
+
+                    if (fileViejo.exists()) {
+                        try {
+                            // Leer contenido del archivo viejo
+                            String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
+                            System.out.println("✅ Contenido leído, tamaño: " + contenido.length() + " caracteres");
+
+                            // Escribir en archivo nuevo
+                            Files.write(fileNuevo.toPath(), contenido.getBytes(),
+                                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                            System.out.println("✅ ARCHIVO COPIADO EXITOSAMENTE: " + archivoViejo + " → " + archivoNuevo);
+
+                            // Verificar que se copió correctamente
+                            if (fileNuevo.exists()) {
+                                String contenidoVerificado = new String(Files.readAllBytes(fileNuevo.toPath()));
+                                System.out.println("✅ Verificación: nuevo archivo tiene " + contenidoVerificado.length() + " caracteres");
+                            } else {
+                                System.err.println("❌ Error: nuevo archivo no se creó");
+                            }
+
+                        } catch (Exception e) {
+                            System.err.println("❌ Error durante la copia: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    } else {
+                        System.err.println("❌ Archivo origen no encontrado: " + archivoViejo);
+
+                        // Listar archivos disponibles que podrían coincidir
+                        System.out.println("🔍 Buscando archivos similares...");
+                        String[] archivosDisponibles = carpeta.list((dir, name) ->
+                                name.startsWith("Asientos_") &&
+                                        name.contains(nombreAnteriorSinEspacios) &&
+                                        name.endsWith(".json"));
+
+                        if (archivosDisponibles != null && archivosDisponibles.length > 0) {
+                            System.out.println("📂 Archivos similares encontrados:");
+                            for (String archivo : archivosDisponibles) {
+                                System.out.println("   - " + archivo);
+                            }
+                        } else {
+                            System.out.println("📂 No se encontraron archivos similares");
+
+                            // Listar todos los archivos de asientos
+                            String[] todosArchivos = carpeta.list((dir, name) ->
+                                    name.startsWith("Asientos_") && name.endsWith(".json"));
+                            if (todosArchivos != null && todosArchivos.length > 0) {
+                                System.out.println("📂 Todos los archivos de asientos:");
+                                for (String archivo : todosArchivos) {
+                                    System.out.println("   - " + archivo);
+                                }
+                            }
+                        }
+                    }
+                    System.out.println("---");
+                }
+            }
+
+            if (!funcionesEncontradas) {
+                System.err.println("❌ NO SE ENCONTRARON FUNCIONES con el nombre anterior: '" + nombreAnterior + "'");
+                System.out.println("🔍 Posibles causas:");
+                System.out.println("   - El nombre ya fue actualizado en las funciones");
+                System.out.println("   - No hay funciones para esta película");
+                System.out.println("   - Diferencia en mayúsculas/minúsculas o espacios");
+            }
+
+            System.out.println("======= FIN DE COPIA DE ARCHIVOS =======");
+
+        } catch (Exception e) {
+            System.err.println("❌ ERROR CRÍTICO al copiar archivos de asientos: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }*/
+    /*public static void copiarArchivosAsientos(String nombreViejo, String nombreNuevo, GestorFunciones gestorFunciones) {
+        File carpeta = new File("Asientos");
+        if (!carpeta.exists() || !carpeta.isDirectory()) return;
+
+        File[] archivos = carpeta.listFiles();
+        if (archivos == null) return;
+
+        for (File archivoViejo : archivos) {
+            // Si el archivo pertenece a la película vieja
+            if (archivoViejo.getName().startsWith("Asientos_" + nombreViejo + "_")) {
+                try {
+                    // Crear nuevo nombre reemplazando solo el nombre de la película
+                    String nombreNuevoArchivo = archivoViejo.getName().replace(nombreViejo, nombreNuevo);
+                    File archivoNuevo = new File(carpeta, nombreNuevoArchivo);
+
+                    // Copiar contenido (reservas incluidas)
+                    java.nio.file.Files.copy(
+                            archivoViejo.toPath(),
+                            archivoNuevo.toPath(),
+                            java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                    );
+
+                    // Eliminar el viejo
+                    archivoViejo.delete();
+
+                } catch (Exception e) {
+                    System.out.println("Error copiando asientos: " + e.getMessage());
+                }
+            }
+        }
+    }*/
+
 
     private int[] etiquetaACoordenadas(String etiqueta) {
         if (etiqueta == null || etiqueta.length() < 2) {
@@ -756,26 +637,6 @@ public class GestorJsonAsientos {
             System.err.println("❌ Error liberando asientos: " + e.getMessage());
             e.printStackTrace();
             return false;
-        }
-    }
-
-    /**
-     * Método adicional: Listar todos los archivos JSON en la carpeta
-     */
-    public static void listarArchivosJSON() {
-        File carpeta = new File(CARPETA_JSON);
-        if (carpeta.exists() && carpeta.isDirectory()) {
-            File[] archivos = carpeta.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
-            if (archivos != null && archivos.length > 0) {
-                System.out.println("📂 Archivos en " + CARPETA_JSON + ":");
-                for (File archivo : archivos) {
-                    System.out.println("   📄 " + archivo.getName());
-                }
-            } else {
-                System.out.println("📂 La carpeta " + CARPETA_JSON + " está vacía");
-            }
-        } else {
-            System.out.println("📂 La carpeta " + CARPETA_JSON + " no existe");
         }
     }
 }

@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -140,27 +141,31 @@ public class JSONReservas {
         }
     }
 
-    // ✅ MÉTODO SIMPLIFICADO: Liberar asientos de reserva cancelada
+
     private static void liberarAsientosReserva(JSONObject reserva) {
         try {
-
             String nombrePelicula = reserva.getString("nombrePelicula");
             String horarioFuncion = reserva.getString("horarioFuncion");
             String salaNombre = reserva.getString("salaNombre");
             String numeroTicket = reserva.getString("numeroTicket");
             JSONArray asientosSeleccionados = reserva.getJSONArray("asientosSeleccionados");
 
-
             GestorDePagos.eliminarTicketTemporal(numeroTicket);
 
             System.out.println("🔄 Liberando asientos para: " + nombrePelicula);
             System.out.println("🎫 Asientos: " + asientosSeleccionados.toString());
 
-
-
-
             // Buscar archivo de asientos
-            String archivoAsientos = buscarArchivoAsientos(nombrePelicula, horarioFuncion);
+            String nombreArchivo = buscarArchivoAsientos(nombrePelicula, horarioFuncion);
+
+            if (nombreArchivo == null) {
+                System.err.println("❌ No se puede liberar asientos - archivo no encontrado");
+                return;
+            }
+
+            String archivoAsientos = "JSONasientos/" + nombreArchivo;
+
+            System.out.println("📁 Ruta completa: " + archivoAsientos);
 
             if (!new File(archivoAsientos).exists()) {
                 System.err.println("❌ Archivo no encontrado: " + archivoAsientos);
@@ -174,7 +179,7 @@ public class JSONReservas {
             }
 
             // Liberar asientos
-            SalaCine sala = new SalaCine(salaNombre, 9, 14); // Ajusta filas/columnas según tu sala
+            SalaCine sala = new SalaCine(salaNombre, 9, 14);
             GestorJsonAsientos gestorAsientos = new GestorJsonAsientos(sala, archivoAsientos);
 
             boolean exito = gestorAsientos.liberarAsientos(asientosList);
@@ -190,63 +195,65 @@ public class JSONReservas {
         }
     }
 
-    // ✅ MÉTODO CORREGIDO: Buscar archivo de asientos en la carpeta correcta
     private static String buscarArchivoAsientos(String nombrePelicula, String horarioFuncion) {
         try {
             // Buscar en la carpeta JSONasientos
             File directorio = new File("JSONasientos");
 
-            // Si la carpeta no existe, buscar en raíz como fallback
+            // Si la carpeta no existe, mostrar error
             if (!directorio.exists()) {
-                directorio = new File(".");
-                System.out.println("⚠️ Carpeta JSONasientos no encontrada, buscando en raíz");
+                System.err.println("❌ Carpeta JSONasientos no encontrada");
+                return null;
             }
 
             String nombreBusqueda = nombrePelicula.replaceAll("\\s+", "_");
 
-            System.out.println("🔍 Buscando archivos en: " + directorio.getAbsolutePath());
-            System.out.println("🔍 Búsqueda: " + nombreBusqueda);
+            System.out.println("🔍 Buscando archivo EXACTO:");
+            System.out.println("   Película: " + nombreBusqueda);
+            System.out.println("   Horario reserva: " + horarioFuncion);
 
-            String[] archivos = directorio.list((dir, name) ->
-                    name.startsWith("Asientos_") &&
-                            name.contains(nombreBusqueda) &&
-                            name.endsWith(".json")
-            );
+            // SOLO buscar el archivo EXACTO usando el horario
+            try {
+                // Convertir el horario de la reserva al formato del archivo
+                DateTimeFormatter formatterEntrada = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                LocalDateTime horario = LocalDateTime.parse(horarioFuncion, formatterEntrada);
+                DateTimeFormatter fmtGuardado = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+                String horarioFormateado = horario.format(fmtGuardado);
 
-            if (archivos != null && archivos.length > 0) {
-                String archivoEncontrado = archivos[0];
-                // Si estamos en la carpeta JSONasientos, incluir la ruta
-                if (directorio.getName().equals("JSONasientos")) {
-                    archivoEncontrado = "JSONasientos/" + archivoEncontrado;
+                String nombreArchivoExacto = String.format("Asientos_%s_%s.json",
+                        nombreBusqueda, horarioFormateado);
+
+                System.out.println("🔍 Archivo exacto esperado: " + nombreArchivoExacto);
+
+                File archivoExacto = new File(directorio, nombreArchivoExacto);
+                if (archivoExacto.exists()) {
+                    System.out.println("✅ Archivo exacto encontrado: " + nombreArchivoExacto);
+                    return nombreArchivoExacto;
+                } else {
+                    System.err.println("❌ Archivo exacto NO encontrado: " + nombreArchivoExacto);
+
+                    // Listar archivos disponibles para debug
+                    String[] archivos = directorio.list((dir, name) ->
+                            name.startsWith("Asientos_") && name.endsWith(".json"));
+                    if (archivos != null && archivos.length > 0) {
+                        System.out.println("📂 Archivos disponibles en JSONasientos:");
+                        for (String f : archivos) {
+                            System.out.println("   - " + f);
+                        }
+                    }
+                    return null;
                 }
-                System.out.println("✅ Archivo encontrado: " + archivoEncontrado);
-                return archivoEncontrado;
+            } catch (Exception e) {
+                System.err.println("❌ Error buscando archivo exacto: " + e.getMessage());
+                return null;
             }
-
-            // Si no encuentra, buscar cualquier archivo que contenga el nombre
-            archivos = directorio.list((dir, name) ->
-                    name.startsWith("Asientos_") && name.endsWith(".json")
-            );
-
-            if (archivos != null && archivos.length > 0) {
-                String archivoEncontrado = archivos[0];
-                if (directorio.getName().equals("JSONasientos")) {
-                    archivoEncontrado = "JSONasientos/" + archivoEncontrado;
-                }
-                System.out.println("✅ Archivo genérico encontrado: " + archivoEncontrado);
-                return archivoEncontrado;
-            }
-
-            // Si no encuentra ningún archivo específico, usar el por defecto en JSONasientos
-            String archivoPorDefecto = "JSONasientos/Asientos.json";
-            System.out.println("⚠️ Usando archivo por defecto: " + archivoPorDefecto);
-            return archivoPorDefecto;
 
         } catch (Exception e) {
             System.err.println("❌ Error buscando archivo: " + e.getMessage());
-            return "JSONasientos/Asientos.json"; // Fallback a la nueva ubicación
+            return null;
         }
     }
+
     public void eliminarTicketTemporal(String fileName) {
         try {
             java.io.File file = new java.io.File(fileName);

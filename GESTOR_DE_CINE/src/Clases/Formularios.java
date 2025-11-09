@@ -364,7 +364,7 @@ public class Formularios {
                 p.setFechaEstreno(nuevaFechaEstreno);
                 p.setFechaSalida(nuevaFechaSalida);
                 p.setRutaImagen(nuevaRutaImagen[0]);
-                FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
+                //FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
                 FuncionesJSON.serializarPeliculas(GestorPeliculas.getListaPeliculas());
 
             }catch (CamposIncompletosException | FechaInvalidaException ex){
