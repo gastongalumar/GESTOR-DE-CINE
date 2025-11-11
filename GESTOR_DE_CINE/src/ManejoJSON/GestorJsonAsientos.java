@@ -214,6 +214,79 @@ public class GestorJsonAsientos implements ConversorJson {
 
 
 
+    public static void borrarArchivoAsientosDeFuncion(Funcion funcion) {
+        if (funcion == null || funcion.getPelicula() == null) return;
+
+        try {
+            DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+            String nombrePelicula = funcion.getPelicula().getNombrePelicula()
+                    .replace(" ", "_")
+                    .replaceAll("[^a-zA-Z0-9_]", ""); // limpiar caracteres raros
+
+            String nombreArchivo = String.format(
+                    "Asientos_%s_%s.json",
+                    nombrePelicula,
+                    funcion.getHorarioFuncion().format(formatoFecha)
+            );
+
+            File archivo = new File(CARPETA_JSON, nombreArchivo);
+
+            if (archivo.exists()) {
+                if (archivo.delete()) {
+                    System.out.println("Archivo eliminado: " + archivo.getPath());
+                } else {
+                    System.err.println("No se pudo eliminar el archivo: " + archivo.getPath());
+                }
+            } else {
+                System.out.println("No existe el archivo: " + archivo.getPath());
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error al borrar archivo de función: " + e.getMessage());
+        }
+    }
+
+
+
+    public static void borrarArchivoAsientosSiFuncionPaso(Funcion funcion) {
+        try {
+            if (funcion == null || funcion.getPelicula() == null || funcion.getHorarioFuncion() == null)
+                return;
+
+            // Verificar si la función ya pasó
+            if (!funcion.getHorarioFuncion().isBefore(LocalDateTime.now()))
+                return;
+
+            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+            // Construir nombre esperado del archivo
+            String nombrePelicula = funcion.getPelicula().getNombrePelicula().replaceAll("\\s+", "_");
+            String horarioFuncion = funcion.getHorarioFuncion().format(fmt);
+
+            File carpeta = new File(CARPETA_JSON);
+            if (!carpeta.exists()) return;
+
+            File archivoAsientos = new File(
+                    carpeta,
+                    String.format("Asientos_%s_%s.json", nombrePelicula, horarioFuncion)
+            );
+
+            if (archivoAsientos.exists()) {
+                boolean eliminado = archivoAsientos.delete();
+                if (!eliminado) {
+                    System.gc();
+                    Thread.sleep(100);
+                    archivoAsientos.delete();
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
         try {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");

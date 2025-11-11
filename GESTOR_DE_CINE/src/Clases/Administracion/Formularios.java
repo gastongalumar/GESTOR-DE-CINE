@@ -83,8 +83,7 @@ public class Formularios {
 
 
             if (nombre.isEmpty() || fechaEstrenoStr.isEmpty() || fechaSalidaStr.isEmpty() || archivoSeleccionado[0] == null || duracionSelecciona.isZero()) {
-                mostrarAlerta("Por favor, completa todos los campos y selecciona una imagen.");
-                return;
+               throw new CamposIncompletosException("Por favor, completa todos los campos y selecciona una imagen.");
             }
 
             try {
@@ -106,7 +105,10 @@ public class Formularios {
 
             }catch (FechaInvalidaException ex){
                 mostrarAlerta("Por favor, revise las fechas nuevamente");
-            } catch (Exception ex) {
+            }catch (CamposIncompletosException ex){
+                mostrarAlerta("Por favor, completa todos los campos y selecciona una imagen.");
+            }
+            catch (Exception ex) {
                 ex.printStackTrace();
                 mostrarAlerta("Error al procesar las fechas o la imagen.");
             }
@@ -452,7 +454,7 @@ public class Formularios {
                                 return;
                             }
 
-                            if(fechaInicialTime.toLocalDate().isAfter(peliculaSeleccionada.getFechaEstreno())&& fechaFinalTime.toLocalDate().isBefore(peliculaSeleccionada.getFechaSalida())) {
+                            if(!fechaInicialTime.toLocalDate().isBefore(peliculaSeleccionada.getFechaEstreno())&& !fechaFinalTime.toLocalDate().isAfter(peliculaSeleccionada.getFechaSalida())) {
                                 Duration duracion = peliculaSeleccionada.getDuracion();
 
                                 for (long i = 0; i <= diasDiferencia; i++) {
@@ -606,6 +608,7 @@ public class Formularios {
             } else {
                 try {
                     gestorFunciones.eliminarFuncion(funcionEliminar);
+                    GestorJsonAsientos.borrarArchivoAsientosDeFuncion(funcionEliminar);
                     mostrarAlerta("Funcion eliminada correctamente");
 
                     ventana.close();

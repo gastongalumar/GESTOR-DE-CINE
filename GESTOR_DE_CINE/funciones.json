@@ -1,21 +1,9 @@
 [
     {
         "Sala": "Sala 1",
-        "Fecha y hora": "2025-12-15 21:00",
-        "Pelicula": "Ace Ventura",
-        "Precio": 4000
-    },
-    {
-        "Sala": "Sala 1",
         "Fecha y hora": "2025-12-16 21:00",
         "Pelicula": "Ace Ventura",
         "Precio": 4000
-    },
-    {
-        "Sala": "Sala 1",
-        "Fecha y hora": "2025-11-11 23:38",
-        "Pelicula": "Jhon Wick 4",
-        "Precio": 400
     },
     {
         "Sala": "Sala 2",
@@ -79,14 +67,26 @@
     },
     {
         "Sala": "Sala 1",
-        "Fecha y hora": "2025-11-15 14:00",
+        "Fecha y hora": "2025-11-16 14:00",
         "Pelicula": "Jhon Wick 4",
         "Precio": 4500
     },
     {
         "Sala": "Sala 1",
-        "Fecha y hora": "2025-11-16 14:00",
+        "Fecha y hora": "2025-11-13 12:44",
         "Pelicula": "Jhon Wick 4",
-        "Precio": 4500
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-12 17:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 2000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-13 17:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 2000
     }
 ]

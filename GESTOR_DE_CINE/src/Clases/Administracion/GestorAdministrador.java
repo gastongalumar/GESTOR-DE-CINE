@@ -7,6 +7,7 @@ import Clases.Utilidades.ListaGenerica;
 import Clases.login.GestorEstadisticasLogin;
 import Clases.login.usuario.Cliente;
 import ManejoJSON.FuncionesJSON;
+import ManejoJSON.GestorJsonAsientos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -43,7 +44,8 @@ public class GestorAdministrador {
                 vigentes.add(f);
             } else {
                 try {
-                    String nombrePelicula = f.getPelicula().getNombrePelicula()
+                    GestorJsonAsientos.borrarArchivoAsientosSiFuncionPaso(f);
+                   /* String nombrePelicula = f.getPelicula().getNombrePelicula()
                             .replace(" ", "_")
                             .replaceAll("[^a-zA-Z0-9_]", ""); // limpiar caracteres raros
 
@@ -54,7 +56,7 @@ public class GestorAdministrador {
                     );
 
                     File archivo = new File(nombreArchivo);
-                    archivo.delete();
+                    archivo.delete();*/
                 } catch (Exception e) {
                 }
             }
