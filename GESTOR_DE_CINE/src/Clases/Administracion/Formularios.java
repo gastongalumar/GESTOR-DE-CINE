@@ -51,14 +51,16 @@ public class Formularios {
         // --- Sección Fechas ---
         Label labelEstreno = crearLabelSeccion("Fecha de estreno:");
         Label labelSalida = crearLabelSeccion("Fecha de finalización:");
+        Label labelDuracion = crearLabelSeccion("Duracion de la pelicula (minutos):");
 
         GridPane gridFechas = new GridPane();
         gridFechas.setHgap(10);
         gridFechas.setVgap(10);
         gridFechas.addRow(0, labelEstreno, campoEstreno);
         gridFechas.addRow(1, labelSalida, campoSalida);
+        gridFechas.addRow(2, labelDuracion, comboDuracion);
 
-        VBox seccionFechas = new VBox(5, gridFechas, comboDuracion);
+        VBox seccionFechas = new VBox(5, gridFechas);
         seccionFechas.setAlignment(Pos.CENTER_LEFT);
 
         // --- Selección de imagen ---
@@ -230,15 +232,20 @@ public class Formularios {
         // --- Campos con datos actuales ---
         TextField campoNombre = crearCampoTexto(p.getNombrePelicula());
         campoNombre.setText(p.getNombrePelicula());
+        campoNombre.setAlignment(Pos.CENTER_LEFT);
         TextField campoEstreno = crearCampoTexto(p.getFechaEstreno().toString());
         campoEstreno.setText(p.getFechaEstreno().toString());
         campoEstreno.setEditable(false);
+        campoEstreno.setAlignment(Pos.CENTER_LEFT);
         TextField campoSalida = crearCampoTexto(p.getFechaSalida().toString());
         campoSalida.setText(p.getFechaSalida().toString());
         campoSalida.setEditable(false);
-        TextField campoDuracion = crearCampoTexto(String.valueOf(p.getDuracion().toMinutes()));
-        campoDuracion.setText(String.valueOf(p.getDuracion().toMinutes()));
+        campoSalida.setAlignment(Pos.CENTER_LEFT);
+        TextField campoDuracion =new TextField(String.valueOf(p.getDuracion().toMinutes()));
+       // campoDuracion.setText(String.valueOf(p.getDuracion().toMinutes()));
+        campoDuracion.setMaxWidth(150);
         campoDuracion.setEditable(false);
+
 
         // --- Imagen actual ---
         Label labelImagen = new Label("Imagen actual:");
