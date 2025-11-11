@@ -4,6 +4,7 @@ import Clases.GestionFunciones.GestorFunciones;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Enumeradores.login.TipoUsuario;
+import ManejoJSON.FuncionesJSON;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -201,7 +202,6 @@ public class DashboardAdmin {
     private void actualizarTablaUsuarios(BorderPane panel) {
         TableView<Usuario> tabla = new TableView<>();
 
-
         TableColumn<Usuario, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 
@@ -224,7 +224,52 @@ public class DashboardAdmin {
             return new javafx.beans.property.SimpleStringProperty(fecha);
         });
 
-        tabla.getColumns().addAll(colNombre, colApellido, colEmail, colTipo, colEstado, colUltimoAcceso);
+        // Columna de botón "Eliminar"
+        TableColumn<Usuario, Void> colEliminar = new TableColumn<>("Acciones");
+        colEliminar.setCellFactory(param -> new TableCell<>() {
+            private final Button btnEliminar = new Button("Eliminar");
+
+            {
+                btnEliminar.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
+                btnEliminar.setOnAction(event -> {
+                    Usuario usuario = getTableView().getItems().get(getIndex());
+
+                    Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                    alerta.setTitle("Confirmar eliminación");
+                    alerta.setHeaderText(null);
+                    alerta.setContentText("¿Seguro que deseas eliminar al usuario " + usuario.getNombre() + "?");
+
+                    alerta.showAndWait().ifPresent(respuesta -> {
+                        if (respuesta == ButtonType.OK) {
+                            // Eliminar de la tabla
+                            getTableView().getItems().remove(usuario);
+
+                            // (Opcional) eliminar del gestor también:
+                            gestorUsuarios.getUsuarios().eliminar(usuario);
+                            FuncionesJSON.serializarUsuarios(gestorUsuarios.obtenerTodosUsuarios());
+
+                            Alert info = new Alert(Alert.AlertType.INFORMATION);
+                            info.setTitle("Usuario eliminado");
+                            info.setHeaderText(null);
+                            info.setContentText("El usuario fue eliminado correctamente.");
+                            info.showAndWait();
+                        }
+                    });
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btnEliminar);
+                }
+            }
+        });
+
+        tabla.getColumns().addAll(colNombre, colApellido, colEmail, colTipo, colEstado, colUltimoAcceso, colEliminar);
 
         // Datos
         ObservableList<Usuario> usuarios = FXCollections.observableArrayList(
@@ -234,6 +279,7 @@ public class DashboardAdmin {
 
         panel.setCenter(tabla);
     }
+
 
     private VBox crearPanelEstadisticas() {
         VBox panel = new VBox(20);
