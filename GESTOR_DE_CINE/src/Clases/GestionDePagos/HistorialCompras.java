@@ -15,10 +15,12 @@ import org.json.JSONObject;
 
 public class HistorialCompras {
 
+    // Agrega una reserva al historial del cliente
     public static void agregarReservaAlHistorial(Cliente cliente, Reserva reserva) {
         JSONReservas.guardarReserva(reserva);
     }
 
+    // Muestra la ventana del historial de reservas del cliente
     public static void mostrarHistorialReservas(Cliente cliente) {
         Stage stage = new Stage();
         stage.setTitle("Mi Historial de Reservas - CINE MARCENTER");
@@ -88,7 +90,7 @@ public class HistorialCompras {
             );
         });
 
-        // ✅ NUEVA COLUMNA: Acciones (Cancelar)
+        // NUEVA COLUMNA: Acciones (Cancelar)
         TableColumn<JSONObject, Void> colAcciones = new TableColumn<>("Acciones");
         colAcciones.setCellFactory(param -> new TableCell<JSONObject, Void>() {
             private final Button btnCancelar = new Button("Cancelar");
@@ -155,7 +157,7 @@ public class HistorialCompras {
         stage.show();
     }
 
-
+    // Cancela una reserva específica después de confirmación
     private static void cancelarReserva(String numeroTicket, Cliente cliente, Stage stageActual) {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar Cancelación");
@@ -187,12 +189,12 @@ public class HistorialCompras {
         });
     }
 
-
+    // Metodo público para mostrar el historial (alias de mostrarHistorialReservas)
     public static void mostrarHistorial(Cliente cliente) {
         mostrarHistorialReservas(cliente);
     }
 
-
+    // Metodo público para agregar compra con reserva (alias de agregarReservaAlHistorial)
     public static void agregarCompraConReserva(Cliente cliente, Reserva reserva) {
         agregarReservaAlHistorial(cliente, reserva);
     }

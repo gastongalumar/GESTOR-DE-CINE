@@ -45,18 +45,6 @@ public class GestorAdministrador {
             } else {
                 try {
                     GestorJsonAsientos.borrarArchivoAsientosSiFuncionPaso(f);
-                   /* String nombrePelicula = f.getPelicula().getNombrePelicula()
-                            .replace(" ", "_")
-                            .replaceAll("[^a-zA-Z0-9_]", ""); // limpiar caracteres raros
-
-                    String nombreArchivo = String.format(
-                            "Asientos_%s_%s.json",
-                            nombrePelicula,
-                            f.getHorarioFuncion().format(formatoFecha)
-                    );
-
-                    File archivo = new File(nombreArchivo);
-                    archivo.delete();*/
                 } catch (Exception e) {
                 }
             }

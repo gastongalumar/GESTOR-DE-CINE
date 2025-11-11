@@ -531,7 +531,7 @@ public class Formularios {
     }
 
 
-    public static void formularioEliminarFuncion(GestorFunciones gestorFunciones,Cliente cliente){
+    public static void formularioEliminarFuncion(GestorFunciones gestorFunciones,Cliente cliente) throws CamposIncompletosException{
         Stage ventana = new Stage();
         ventana.setTitle("Eliminar funcion");
 
@@ -590,8 +590,12 @@ public class Formularios {
             String horario = campoHorario.getText();
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             String fechaTotal = campoFecha.getText().trim().concat(" ").concat(campoHorario.getText().trim());
-            LocalDateTime fechaHora = LocalDateTime.parse(fechaTotal, formato);
-
+            LocalDateTime fechaHora = null;
+            try {
+                fechaHora = LocalDateTime.parse(fechaTotal, formato);
+            }catch (DateTimeParseException ex){
+                mostrarAlerta("Formato de fecha y hora incorrecto");
+            }
 
             boolean encontrado = false;
             Funcion funcionEliminar = null;
@@ -603,8 +607,9 @@ public class Formularios {
                 }
             }
 
-            if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty()|| !encontrado) {
-                mostrarAlerta("Por favor, completa todos los campos.");
+            if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty() || !encontrado) {
+
+               mostrarAlerta("Por favor, completa todos los campos");
             } else {
                 try {
                     gestorFunciones.eliminarFuncion(funcionEliminar);
@@ -613,9 +618,9 @@ public class Formularios {
 
                     ventana.close();
                     ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
-                }catch (DateTimeParseException ex){
-
-                    mostrarAlerta("Formato de fecha y hora incorrecto");
+                }
+                catch (CamposIncompletosException ex){
+                    mostrarAlerta("Por favor, complete todos los campos");
                 }
 
             }
