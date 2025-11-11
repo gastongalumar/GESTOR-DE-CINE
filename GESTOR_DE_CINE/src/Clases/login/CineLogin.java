@@ -1,280 +1,232 @@
 package Clases.login;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
+import javafx.stage.Stage;
 
-public class CineLogin extends JFrame {
-    private JTextField emailField;
-    private JPasswordField passwordField;
-    private JButton loginButton, registerButton, recoverButton;
+public class CineLogin extends Application {
+    private TextField emailField;
+    private PasswordField passwordField;
+    private Button loginButton, registerButton, recoverButton;
+    private Stage stage;
 
-    public CineLogin() {
+    @Override
+    public void start(Stage primaryStage) {
+        this.stage = primaryStage;
         inicializarInterfaz();
         configurarComponentes();
     }
 
     private void inicializarInterfaz() {
-        setTitle("CINE LOS CULIA - Inicio de Sesión");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 500);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        stage.setTitle("CINE MARCENTER - Inicio de Sesión");
+        stage.setOnCloseRequest(e -> Platform.exit());
+        stage.setWidth(400);
+        stage.setHeight(500);
+        stage.setResizable(false);
 
         // Panel principal con gradiente
-        JPanel mainPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                Color color1 = new Color(25, 25, 35);
-                Color color2 = new Color(75, 0, 130);
-                GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
-                g2d.setPaint(gp);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-            }
-        };
-        mainPanel.setLayout(new BorderLayout());
+        VBox mainPanel = new VBox();
+        mainPanel.setBackground(new Background(new BackgroundFill(
+                new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.rgb(25, 25, 35)),
+                        new Stop(1, Color.rgb(75, 0, 130))),
+                CornerRadii.EMPTY, Insets.EMPTY)));
 
         // Header
-        JPanel headerPanel = createHeaderPanel();
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        VBox headerPanel = createHeaderPanel();
+        mainPanel.getChildren().add(headerPanel);
 
         // Formulario
-        JPanel formPanel = createFormPanel();
-        mainPanel.add(formPanel, BorderLayout.CENTER);
+        GridPane formPanel = createFormPanel();
+        mainPanel.getChildren().add(formPanel);
 
         // Footer
-        JPanel footerPanel = createFooterPanel();
-        mainPanel.add(footerPanel, BorderLayout.SOUTH);
+        HBox footerPanel = createFooterPanel();
+        mainPanel.getChildren().add(footerPanel);
 
-        add(mainPanel);
+        VBox.setVgrow(formPanel, Priority.ALWAYS);
+
+        Scene scene = new Scene(mainPanel);
+        stage.setScene(scene);
+        stage.centerOnScreen();
     }
 
-    private void configurarComponentes() {
-        // Configurar acciones de los botones
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                realizarLogin();
-            }
-        });
+private void configurarComponentes() {
 
-        recoverButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                recuperarContrasena();
-            }
-        });
+    loginButton.setOnAction(e -> {
+        realizarLogin();
+    });
 
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                registrarUsuario();
-            }
-        });
+    registerButton.setOnAction(e -> {
+        registrarUsuario();
+    });
 
-        // Enter key listener
-        emailField.addActionListener(e -> realizarLogin());
-        passwordField.addActionListener(e -> realizarLogin());
-    }
+}
 
-    private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel();
-        headerPanel.setOpaque(false);
-        headerPanel.setLayout(new BorderLayout());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+    private VBox createHeaderPanel() {
+        VBox headerPanel = new VBox();
+        headerPanel.setAlignment(Pos.CENTER);
+        headerPanel.setPadding(new Insets(20, 0, 10, 0));
+        headerPanel.setSpacing(5);
 
-        JLabel titleLabel = new JLabel("CINE LOS CULIA", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        titleLabel.setForeground(Color.WHITE);
+        Label titleLabel = new Label("CINE MARCENTER");
+        titleLabel.setStyle("-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;");
 
-        JLabel subtitleLabel = new JLabel("Sistema de Gestión Cinematográfica", SwingConstants.CENTER);
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        subtitleLabel.setForeground(new Color(200, 200, 200));
+        Label subtitleLabel = new Label("Sistema de Gestión Cinematográfica");
+        subtitleLabel.setStyle("-fx-font-size: 14; -fx-text-fill: #c8c8c8;");
 
-        headerPanel.add(titleLabel, BorderLayout.NORTH);
-        headerPanel.add(subtitleLabel, BorderLayout.CENTER);
-
+        headerPanel.getChildren().addAll(titleLabel, subtitleLabel);
         return headerPanel;
     }
 
-    private JPanel createFormPanel() {
-        JPanel formPanel = new JPanel();
-        formPanel.setOpaque(false);
-        formPanel.setLayout(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);
+    private GridPane createFormPanel() {
+        GridPane formPanel = new GridPane();
+        formPanel.setAlignment(Pos.CENTER);
+        formPanel.setHgap(10);
+        formPanel.setVgap(10);
+        formPanel.setPadding(new Insets(30, 40, 30, 40));
 
         // Email
-        gbc.gridx = 0; gbc.gridy = 0;
-        JLabel emailLabel = new JLabel("E-MAIL:");
-        emailLabel.setForeground(Color.WHITE);
-        emailLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        formPanel.add(emailLabel, gbc);
+        Label emailLabel = new Label("E-MAIL:");
+        emailLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
-        gbc.gridx = 0; gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        emailField = new JTextField();
-        emailField.setPreferredSize(new Dimension(200, 35));
-        emailField.setFont(new Font("Arial", Font.PLAIN, 14));
-        formPanel.add(emailField, gbc);
+        emailField = new TextField();
+        emailField.setPrefSize(200, 35);
+        emailField.setStyle("-fx-font-size: 14;");
 
         // Contraseña
-        gbc.gridx = 0; gbc.gridy = 2;
-        gbc.gridwidth = 1;
-        JLabel passLabel = new JLabel("CONTRASEÑA:");
-        passLabel.setForeground(Color.WHITE);
-        passLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        formPanel.add(passLabel, gbc);
+        Label passLabel = new Label("CONTRASEÑA:");
+        passLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
-        gbc.gridx = 0; gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        passwordField = new JPasswordField();
-        passwordField.setPreferredSize(new Dimension(200, 35));
-        formPanel.add(passwordField, gbc);
+        passwordField = new PasswordField();
+        passwordField.setPrefSize(200, 35);
 
         // Botones
-        gbc.gridx = 0; gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(20, 5, 5, 5);
+        HBox buttonPanel = new HBox();
+        buttonPanel.setAlignment(Pos.CENTER);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setOpaque(false);
+        loginButton = new Button("INGRESAR");
+        loginButton.setStyle("-fx-background-color: #0096ff; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 20 10 20;");
+        loginButton.setPrefSize(120, 40);
 
-        loginButton = new JButton("INGRESAR");
-        loginButton.setBackground(new Color(0, 150, 255));
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setFont(new Font("Arial", Font.BOLD, 14));
-        loginButton.setFocusPainted(false);
-        loginButton.setPreferredSize(new Dimension(120, 40));
-        loginButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
-        buttonPanel.add(loginButton);
-        formPanel.add(buttonPanel, gbc);
+        buttonPanel.getChildren().add(loginButton);
 
         // Enlaces
-        gbc.gridx = 0; gbc.gridy = 5;
-        gbc.insets = new Insets(10, 5, 5, 5);
-
-        JPanel linkPanel = new JPanel(new FlowLayout());
-        linkPanel.setOpaque(false);
+        HBox linkPanel = new HBox(10);
+        linkPanel.setAlignment(Pos.CENTER);
 
         recoverButton = createLinkButton("¿Olvidaste tu contraseña?");
         registerButton = createLinkButton("Registrarme");
 
-        linkPanel.add(recoverButton);
-        linkPanel.add(new JLabel("|"));
-        linkPanel.add(registerButton);
+        Label separator = new Label("|");
+        separator.setStyle("-fx-text-fill: #c8c8c8;");
 
-        formPanel.add(linkPanel, gbc);
+        linkPanel.getChildren().addAll(recoverButton, separator, registerButton);
+
+        // Agregar al grid
+        formPanel.add(emailLabel, 0, 0, 2, 1);
+        formPanel.add(emailField, 0, 1, 2, 1);
+        formPanel.add(passLabel, 0, 2, 2, 1);
+        formPanel.add(passwordField, 0, 3, 2, 1);
+        formPanel.add(buttonPanel, 0, 4, 2, 1);
+        formPanel.add(linkPanel, 0, 5, 2, 1);
+
+        GridPane.setMargin(buttonPanel, new Insets(20, 0, 0, 0));
+        GridPane.setMargin(linkPanel, new Insets(10, 0, 0, 0));
 
         return formPanel;
     }
 
-    private JButton createLinkButton(String text) {
-        JButton button = new JButton(text);
-        button.setBorderPainted(false);
-        button.setContentAreaFilled(false);
-        button.setForeground(new Color(100, 180, 255));
-        button.setFont(new Font("Arial", Font.PLAIN, 12));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
+    private Button createLinkButton(String text) {
+        Button button = new Button(text);
+        button.setStyle("-fx-text-fill: #64b4ff; -fx-font-size: 12; -fx-background-color: transparent; -fx-underline: true;");
         return button;
     }
 
-    private JPanel createFooterPanel() {
-        JPanel footerPanel = new JPanel();
-        footerPanel.setOpaque(false);
-        footerPanel.setLayout(new BorderLayout());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+    private HBox createFooterPanel() {
+        HBox footerPanel = new HBox();
+        footerPanel.setAlignment(Pos.CENTER);
+        footerPanel.setPadding(new Insets(10, 0, 10, 0));
 
-        JLabel copyrightLabel = new JLabel("© 2025 Cine Los Culia - Todos los derechos reservados", SwingConstants.CENTER);
-        copyrightLabel.setFont(new Font("Arial", Font.PLAIN, 10));
-        copyrightLabel.setForeground(new Color(150, 150, 150));
+        Label copyrightLabel = new Label("© 2025 Cine Marcenter - Todos los derechos reservados");
+        copyrightLabel.setStyle("-fx-font-size: 10; -fx-text-fill: #969696;");
 
-        footerPanel.add(copyrightLabel, BorderLayout.CENTER);
-
+        footerPanel.getChildren().add(copyrightLabel);
         return footerPanel;
     }
 
     private void realizarLogin() {
         String email = emailField.getText().trim();
-        String password = new String(passwordField.getPassword());
+        String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Por favor, complete todos los campos",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            mostrarAlerta("Error", "Por favor, complete todos los campos", Alert.AlertType.ERROR);
             return;
         }
 
         // Autenticación simulada
         if (autenticarUsuario(email, password)) {
             String tipoUsuario = determinarTipoUsuario(email);
-            JOptionPane.showMessageDialog(this,
-                    "¡Bienvenido a CINE LOS CULIA!",
-                    "Login Exitoso",
-                    JOptionPane.INFORMATION_MESSAGE);
+            mostrarAlerta("Login Exitoso", "¡Bienvenido a CINE MARCENTER!", Alert.AlertType.INFORMATION);
 
             // Abrir sistema principal
             abrirSistemaPrincipal(email, tipoUsuario);
         } else {
-            JOptionPane.showMessageDialog(this,
-                    "Credenciales incorrectas",
-                    "Error de Login",
-                    JOptionPane.ERROR_MESSAGE);
+            mostrarAlerta("Error de Login", "Credenciales incorrectas", Alert.AlertType.ERROR);
         }
     }
 
+    //ADMIN DEFAULT
     private boolean autenticarUsuario(String email, String password) {
-        // Simulación de autenticación
-        // Usuarios de prueba
         return (email.equals("admin@cine.com") && password.equals("admin123")) ||
                 (email.equals("cliente@cine.com") && password.equals("cliente123")) ||
                 (email.equals("empleado@cine.com") && password.equals("empleado123"));
     }
 
     private String determinarTipoUsuario(String email) {
-        // Simulación de determinación de tipo de usuario
         if (email.equals("admin@cine.com")) return "Administrador";
         if (email.equals("empleado@cine.com")) return "Empleado";
         return "Cliente";
     }
 
     private void abrirSistemaPrincipal(String usuario, String tipoUsuario) {
-        this.dispose();
-        SwingUtilities.invokeLater(() -> {
-            new SistemaPrincipal(usuario, tipoUsuario).setVisible(true);
+        stage.close();
+        Platform.runLater(() -> {
+            SistemaPrincipal sistema = new SistemaPrincipal(usuario, tipoUsuario);
+            sistema.start(new Stage());
         });
     }
 
-    private void recuperarContrasena() {
-        String email = JOptionPane.showInputDialog(this,
-                "Ingrese su email para recuperar contraseña:",
-                "Recuperar Contraseña",
-                JOptionPane.QUESTION_MESSAGE);
 
-        if (email != null && !email.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Se ha enviado un enlace de recuperación a: " + email,
-                    "Recuperación Enviada",
-                    JOptionPane.INFORMATION_MESSAGE);
+private void registrarUsuario() {
+
+    Platform.runLater(() -> {
+
+        try {
+            RegistroUsuario.abrirRegistroCliente();
+        } catch (Exception e) {
+            System.out.println(" ERROR: " + e.getMessage());
+            e.printStackTrace();
         }
+    });
+}
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
-    private void registrarUsuario() {
-        // Abrir ventana de registro
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new RegistroUsuario().setVisible(true);
-            }
-        });
-    }
+
 }

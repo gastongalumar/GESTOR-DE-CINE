@@ -1,26 +1,30 @@
 [
     {
-        "Nombre": "pelicula1",
+        "Nombre": "F1 La pelicula",
         "RutaImagen": "/img/pelicula1.jpg",
+        "Duracion": 120,
         "FechaEstreno": "2025-07-02",
         "FechaSalida": "2025-11-05"
     },
     {
-        "Nombre": "pelicula2",
-        "RutaImagen": "/img/pelicula2.jpg",
-        "FechaEstreno": "2025-10-05",
-        "FechaSalida": "2025-12-06"
-    },
-    {
-        "Nombre": "pelicula3",
+        "Nombre": "Jhon Wick 4",
         "RutaImagen": "/img/pelicula3.jpg",
+        "Duracion": 120,
         "FechaEstreno": "2025-10-15",
         "FechaSalida": "2026-01-12"
     },
     {
-        "Nombre": "pelicula4",
+        "Nombre": "Los 4 Fantasticos",
         "RutaImagen": "/img/pelicula4.jpg",
-        "FechaEstreno": "2025-08-04",
-        "FechaSalida": "2025-11-06"
+        "Duracion": 120,
+        "FechaEstreno": "2025-11-11",
+        "FechaSalida": "2025-11-15"
+    },
+    {
+        "Nombre": "Ace Ventura",
+        "RutaImagen": "/img/ACE_VENTURA.jpg",
+        "Duracion": 150,
+        "FechaEstreno": "2025-12-11",
+        "FechaSalida": "2025-12-26"
     }
 ]

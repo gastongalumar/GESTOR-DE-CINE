@@ -1,0 +1,84 @@
+{
+    "ultimaActualizacion": "2025-11-11T09:22:58.065056600",
+    "data": [
+        {
+            "nivelAcceso": "avanzado",
+            "password": "655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-07T22:01:35",
+            "apellido": "Sistema",
+            "tipoUsuario": "ADMINISTRADOR",
+            "telefono": "123456789",
+            "nombre": "Admin",
+            "email": "santideluxe@mail.com",
+            "fechaUltimoAcceso": "2025-11-11T09:19:50",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-08T22:19:40",
+            "apellido": "Stellatelli",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
+            "telefono": "4454545",
+            "nombre": "Santiago",
+            "email": "santistella@gmail.com",
+            "fechaUltimoAcceso": "2025-11-10T22:59:01",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "7349346a889e87eaf1e7708387a87832b68268c00f994c1e3fd3a2116c4ae40a",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-10T20:07:23",
+            "apellido": "Merentiel",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
+            "telefono": "21656416",
+            "nombre": "Miguel",
+            "email": "merentiel16@gmail.com",
+            "fechaUltimoAcceso": "2025-11-10T20:07:23",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "7349346a889e87eaf1e7708387a87832b68268c00f994c1e3fd3a2116c4ae40a",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-10T20:15:01",
+            "apellido": "Zeballos",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
+            "telefono": "51655165615",
+            "nombre": "Chango",
+            "email": "chango@gmail.com",
+            "fechaUltimoAcceso": "2025-11-10T20:29:35",
+            "intentosFallidos": 0
+        },
+        {
+            "nivelAcceso": "avanzado",
+            "password": "655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-10T20:33:27",
+            "apellido": "Paredes",
+            "tipoUsuario": "ADMINISTRADOR",
+            "telefono": "5464545465",
+            "nombre": "Leandro",
+            "email": "paredes@gmail.com",
+            "fechaUltimoAcceso": "2025-11-10T20:33:27",
+            "intentosFallidos": 0
+        },
+        {
+            "nivelAcceso": "avanzado",
+            "password": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-11T09:22:58",
+            "apellido": "Gatto",
+            "tipoUsuario": "ADMINISTRADOR",
+            "telefono": "4656465465465",
+            "nombre": "Gaston",
+            "email": "gastongatto@gmail.com",
+            "fechaUltimoAcceso": "2025-11-11T09:22:58",
+            "intentosFallidos": 0
+        }
+    ],
+    "totalElementos": 6
+}

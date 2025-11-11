@@ -1,97 +1,129 @@
 package Clases.login;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import Clases.Administracion.GestorAdministrador;
+import Clases.Administracion.GestorPeliculas;
+import Clases.Administracion.VistaCartelera;
+import Clases.GestionDePagos.HistorialCompras;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
+import Clases.login.usuario.Cliente;
+import Clases.login.usuario.Usuario;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
-public class SistemaPrincipal extends JFrame {
+import java.util.List;
+
+public class SistemaPrincipal extends Application {
     private String usuarioActual;
     private String tipoUsuario;
+    private Stage stage;
+    private GestorFunciones gestorFunciones;
+    private GestorUsuarios gestorUsuarios;
+    private BorderPane mainPanel;
+    private StackPane contentPanel;
 
     public SistemaPrincipal(String usuario, String tipoUsuario) {
         this.usuarioActual = usuario;
         this.tipoUsuario = tipoUsuario;
-        inicializarInterfaz();
+        this.gestorFunciones = new GestorFunciones();
+        this.gestorUsuarios = new GestorUsuarios();
     }
 
-    private void inicializarInterfaz() {
-        setTitle("CINE LOS CULIA - Sistema de Gestión");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 800);
-        setLocationRelativeTo(null);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+    @Override
+    public void start(Stage primaryStage) {
+        this.stage = primaryStage;
+
+        // Si es cliente, abrir directamente la vista de cliente
+        if (tipoUsuario.equalsIgnoreCase("cliente")) {
+            Cliente cliente = obtenerClienteActual();
+            if (cliente != null) {
+                GestorCliente.iniciarCliente(gestorFunciones,cliente);
+                stage.close();
+                return;
+            }
+        }
+
+        inicializarInterfaz(obtenerClienteActual());
+    }
+
+    private void inicializarInterfaz(Cliente cliente) {
+        stage.setTitle("CINE MARCENTER - Sistema de Gestión");
+        stage.setOnCloseRequest(e -> Platform.exit());
+        stage.setWidth(1200);
+        stage.setHeight(800);
+        stage.setMaximized(true);
 
         // Panel principal
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel = new BorderPane();
 
         // Header
-        JPanel headerPanel = crearHeaderPanel();
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        HBox headerPanel = crearHeaderPanel(cliente);
+        mainPanel.setTop(headerPanel);
 
         // Menu lateral
-        JPanel menuPanel = crearMenuPanel();
-        mainPanel.add(menuPanel, BorderLayout.WEST);
+        VBox menuPanel = crearMenuPanel(cliente);
+        mainPanel.setLeft(menuPanel);
 
         // Contenido principal
-        JPanel contentPanel = crearContentPanel();
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        contentPanel = crearContentPanel();
+        mainPanel.setCenter(contentPanel);
 
-        add(mainPanel);
+        Scene scene = new Scene(mainPanel);
+        stage.setScene(scene);
+        stage.centerOnScreen();
     }
 
-    private JPanel crearHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(new Color(25, 25, 35));
-        headerPanel.setPreferredSize(new Dimension(getWidth(), 70));
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+    private HBox crearHeaderPanel(Cliente cliente) {
+        HBox headerPanel = new HBox();
+        headerPanel.setStyle("-fx-background-color: #191923;");
+        headerPanel.setPadding(new Insets(10, 20, 10, 20));
+        headerPanel.setPrefHeight(70);
+        headerPanel.setAlignment(Pos.CENTER_LEFT);
 
         // Título
-        JLabel titleLabel = new JLabel("CINE LOS CULIA - Sistema de Gestión Cinematográfica");
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        Label titleLabel = new Label("CINE MARCENTER- Sistema de Gestión Cinematográfica");
+        titleLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20;");
 
         // Info usuario
-        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        userPanel.setBackground(new Color(25, 25, 35));
+        HBox userPanel = new HBox(10);
+        userPanel.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(userPanel, Priority.ALWAYS);
 
-        JLabel userLabel = new JLabel("Usuario: " + usuarioActual + " (" + tipoUsuario + ")");
-        userLabel.setForeground(Color.WHITE);
-        userLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        Label userLabel = new Label("Usuario: " + usuarioActual + " (" + tipoUsuario + ")");
+        userLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14;");
 
-        JButton logoutButton = new JButton("Cerrar Sesión");
-        logoutButton.setBackground(new Color(150, 50, 50));
-        logoutButton.setForeground(Color.WHITE);
-        logoutButton.setFocusPainted(false);
-        logoutButton.addActionListener(e -> cerrarSesion());
+        Button logoutButton = new Button("Cerrar Sesión");
+        logoutButton.setStyle("-fx-background-color: #963232; -fx-text-fill: white;");
+        logoutButton.setOnAction(e -> cerrarSesion(cliente));
 
-        userPanel.add(userLabel);
-        userPanel.add(logoutButton);
-
-        headerPanel.add(titleLabel, BorderLayout.WEST);
-        headerPanel.add(userPanel, BorderLayout.EAST);
+        userPanel.getChildren().addAll(userLabel, logoutButton);
+        headerPanel.getChildren().addAll(titleLabel, userPanel);
 
         return headerPanel;
     }
 
-    private JPanel crearMenuPanel() {
-        JPanel menuPanel = new JPanel();
-        menuPanel.setBackground(new Color(40, 40, 60));
-        menuPanel.setPreferredSize(new Dimension(250, getHeight()));
-        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
+    private VBox crearMenuPanel(Cliente cliente) {
+        VBox menuPanel = new VBox();
+        menuPanel.setStyle("-fx-background-color: #28283c;");
+        menuPanel.setPrefWidth(250);
+        menuPanel.setPadding(new Insets(20, 10, 20, 10));
+        menuPanel.setSpacing(10);
 
         // Botones del menú según tipo de usuario
         String[] opcionesMenu = getOpcionesMenu();
 
         for (String opcion : opcionesMenu) {
-            JButton menuButton = crearBotonMenu(opcion);
-            menuPanel.add(menuButton);
-            menuPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+            Button menuButton = crearBotonMenu(opcion,cliente);
+            menuPanel.getChildren().add(menuButton);
         }
 
-        menuPanel.add(Box.createVerticalGlue());
-
+        VBox.setVgrow(menuPanel, Priority.ALWAYS);
         return menuPanel;
     }
 
@@ -117,80 +149,260 @@ public class SistemaPrincipal extends JFrame {
         }
     }
 
-    private JButton crearBotonMenu(String texto) {
-        JButton button = new JButton(texto);
-        button.setAlignmentX(Component.LEFT_ALIGNMENT);
-        button.setMaximumSize(new Dimension(230, 45));
-        button.setBackground(new Color(60, 60, 80));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 14));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                manejarOpcionMenu(texto);
-            }
-        });
-
+    private Button crearBotonMenu(String texto,Cliente cliente) {
+        Button button = new Button(texto);
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.setPrefHeight(45);
+        button.setStyle("-fx-background-color: #3c3c50; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 15 10 15;");
+        button.setOnAction(e -> manejarOpcionMenu(texto,cliente));
         return button;
     }
 
-    private JPanel crearContentPanel() {
-        JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(Color.WHITE);
+    private StackPane crearContentPanel() {
+        StackPane contentPanel = new StackPane();
+        contentPanel.setStyle("-fx-background-color: white;");
 
         // Panel de bienvenida por defecto
-        JPanel welcomePanel = new JPanel(new GridBagLayout());
-        welcomePanel.setBackground(Color.WHITE);
+        VBox welcomePanel = new VBox(10);
+        welcomePanel.setAlignment(Pos.CENTER);
+        welcomePanel.setPadding(new Insets(20));
 
-        JLabel welcomeLabel = new JLabel("¡Bienvenido al Sistema CINE LOS CULIA!");
-        welcomeLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        welcomeLabel.setForeground(new Color(25, 25, 35));
+        Label welcomeLabel = new Label("¡Bienvenido al Sistema CINE MARCENTER!");
+        welcomeLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #191923;");
 
-        JLabel userInfoLabel = new JLabel("Usuario: " + usuarioActual + " | Tipo: " + tipoUsuario);
-        userInfoLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        userInfoLabel.setForeground(new Color(100, 100, 120));
+        Label userInfoLabel = new Label("Usuario: " + usuarioActual + " | Tipo: " + tipoUsuario);
+        userInfoLabel.setStyle("-fx-font-size: 16; -fx-text-fill: #646478;");
 
-        JLabel instructionsLabel = new JLabel("Seleccione una opción del menú lateral para comenzar");
-        instructionsLabel.setFont(new Font("Arial", Font.ITALIC, 14));
-        instructionsLabel.setForeground(new Color(150, 150, 150));
+        Label instructionsLabel = new Label("Seleccione una opción del menú lateral para comenzar");
+        instructionsLabel.setStyle("-fx-font-size: 14; -fx-font-style: italic; -fx-text-fill: #969696;");
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 10, 10, 10);
-
-        welcomePanel.add(welcomeLabel, gbc);
-        welcomePanel.add(userInfoLabel, gbc);
-        welcomePanel.add(instructionsLabel, gbc);
-
-        contentPanel.add(welcomePanel, BorderLayout.CENTER);
+        welcomePanel.getChildren().addAll(welcomeLabel, userInfoLabel, instructionsLabel);
+        contentPanel.getChildren().add(welcomePanel);
 
         return contentPanel;
     }
 
-    private void manejarOpcionMenu(String opcion) {
-        // Aquí implementarías la lógica para cada opción del menú
-        JOptionPane.showMessageDialog(this,
-                "Has seleccionado: " + opcion + "\n\n" +
-                        "Esta funcionalidad está en desarrollo.",
-                "Opción del Menú",
-                JOptionPane.INFORMATION_MESSAGE);
+    private void manejarOpcionMenu(String opcion,Cliente cliente) {
+        switch (opcion) {
+            case "Dashboard":
+                if (esAdministrador()) {
+                    new DashboardAdmin(gestorUsuarios,gestorFunciones).mostrarDashboard();
+                }
+                break;
+
+            case "Gestión de Películas":
+            case "Gestión de Salas":
+            case "Gestión de Usuarios":
+            case "Reportes y Estadísticas":
+            case "Configuración del Sistema":
+                if (esAdministrador()) {
+                    GestorAdministrador.iniciarAdministrador(gestorFunciones,cliente);
+                }
+                break;
+
+            case "Venta de Entradas":
+            case "Clientes":
+            case "Reportes de Ventas":
+            case "Configuración Horarios":
+                case "Cartelera":
+            case "Comprar Entradas":
+                if (esCliente()) {
+                   cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        GestorCliente.iniciarCliente(gestorFunciones,cliente);
+                    }
+                } else {
+                    abrirCarteleraGeneral(cliente);
+                }
+                break;
+
+            case "Mis Compras":
+                if (esCliente()) {
+                    cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        HistorialCompras.mostrarHistorial(cliente);
+                    }
+                }
+                break;
+
+            case "Promociones":
+                if (esCliente()) {
+                   cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        mostrarPromocionesCliente(cliente);
+                    }
+                }
+                break;
+
+            case "Perfil":
+                if (esCliente()) {
+                     cliente = obtenerClienteActual();
+                    if (cliente != null) {
+                        mostrarPerfilCliente(cliente);
+                    }
+                }
+                break;
+
+            case "Ventas y Facturación":
+                if (esAdministrador()) {
+                    mostrarVentasFacturacion();
+                }
+                break;
+
+            default:
+                mostrarMensajeDesarrollo(opcion);
+                break;
+        }
     }
 
-    private void cerrarSesion() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro que desea cerrar sesión?",
-                "Confirmar Cierre de Sesión",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+    // ===== MÉTODOS AUXILIARES =====
 
-        if (confirm == JOptionPane.YES_OPTION) {
-            this.dispose();
-            new CineLogin().setVisible(true);
+    private boolean esAdministrador() {
+        return tipoUsuario.equalsIgnoreCase("administrador");
+    }
+
+
+    private boolean esCliente() {
+        return tipoUsuario.equalsIgnoreCase("cliente");
+    }
+
+    private Cliente obtenerClienteActual() {
+        try {
+            Usuario usuario = gestorUsuarios.buscarPorEmail(usuarioActual);
+            if (usuario instanceof Cliente) {
+                return (Cliente) usuario;
+            }
+        } catch (Exception e) {
+            System.out.println("Error obteniendo cliente: " + e.getMessage());
+            mostrarAlerta("Error", "No se pudo obtener la información del cliente");
+        }
+        return null;
+    }
+
+    private void abrirCarteleraGeneral(Cliente cliente) {
+        Stage carteleraStage = new Stage();
+        carteleraStage.setTitle("Cartelera - CINE MARCENTER");
+
+        HBox contenedor = new HBox(20);
+        contenedor.setStyle("-fx-background-color: #6E0A17; -fx-padding: 20;");
+
+        // Cargar películas
+        GestorPeliculas.setListaPeliculas(ManejoJSON.FuncionesJSON.deserializarPeliculas());
+        List<Pelicula> listaPeliculas = GestorPeliculas.getListaPeliculas();
+
+        for(Pelicula p: listaPeliculas){
+            VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(),cliente);
+            contenedor.getChildren().add(vista);
+        }
+
+        Scene escena = new Scene(contenedor, 1200, 500);
+        carteleraStage.setScene(escena);
+        carteleraStage.show();
+    }
+
+
+    private void mostrarPromocionesCliente(Cliente cliente) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Promociones Activas");
+        alert.setHeaderText("¡Aprovecha nuestras promociones!");
+        alert.setContentText("🎁 PROMOCIONES PARA TI:\n\n" +
+                "• Martes de Descuento: 20% OFF\n" +
+                "• Combo Familiar: 25% OFF\n" +
+                "• Canje de Puntos: " + cliente.getPuntosFidelidad() + " puntos disponibles\n\n" +
+                "¡Disfruta del cine con los mejores precios!");
+        alert.showAndWait();
+    }
+
+    private void mostrarPerfilCliente(Cliente cliente) {
+        Stage perfilStage = new Stage();
+        perfilStage.setTitle("Mi Perfil - " + cliente.getNombre());
+
+        VBox panel = new VBox(15);
+        panel.setPadding(new Insets(20));
+        panel.setAlignment(Pos.CENTER_LEFT);
+        panel.setStyle("-fx-background-color: #2a2a2a;");
+
+        Label titulo = new Label("👤 MI PERFIL");
+        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffcc00;");
+
+        // Información del cliente
+        VBox info = new VBox(8);
+        info.setStyle("-fx-background-color: #34495e; -fx-padding: 15; -fx-border-radius: 5;");
+
+        info.getChildren().addAll(
+                crearFilaPerfil("Nombre:", cliente.getNombre() + " " + cliente.getApellido()),
+                crearFilaPerfil("Email:", cliente.getEmail()),
+                crearFilaPerfil("Teléfono:", cliente.getTelefono()),
+                crearFilaPerfil("Puntos de fidelidad:", String.valueOf(cliente.getPuntosFidelidad())),
+                crearFilaPerfil("Tipo de cuenta:", "Cliente")
+        );
+
+        Button btnCerrar = new Button("Cerrar");
+        btnCerrar.setStyle("-fx-background-color: #3498db; -fx-text-fill: white;");
+        btnCerrar.setOnAction(e -> perfilStage.close());
+
+        panel.getChildren().addAll(titulo, info, btnCerrar);
+
+        Scene escena = new Scene(panel, 400, 350);
+        perfilStage.setScene(escena);
+        perfilStage.show();
+    }
+
+    private HBox crearFilaPerfil(String etiqueta, String valor) {
+        HBox fila = new HBox(10);
+
+        Label lblEtiqueta = new Label(etiqueta);
+        lblEtiqueta.setStyle("-fx-font-weight: bold; -fx-text-fill: #1abc9c; -fx-min-width: 150;");
+
+        Label lblValor = new Label(valor);
+        lblValor.setStyle("-fx-text-fill: white;");
+
+        fila.getChildren().addAll(lblEtiqueta, lblValor);
+        return fila;
+    }
+
+    private void mostrarVentasFacturacion() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Ventas y Facturación");
+        alert.setHeaderText("Módulo de Ventas y Facturación");
+        alert.setContentText("Esta funcionalidad permite:\n\n" +
+                "• Gestión de ventas de entradas\n" +
+                "• Facturación electrónica\n" +
+                "• Reportes de ingresos\n" +
+                "• Control de inventario\n\n" +
+                "Próximamente disponible...");
+        alert.showAndWait();
+    }
+
+    private void mostrarMensajeDesarrollo(String opcion) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Opción del Menú");
+        alert.setHeaderText(null);
+        alert.setContentText("Has seleccionado: " + opcion + "\n\nEsta funcionalidad está en desarrollo.");
+        alert.showAndWait();
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void cerrarSesion(Cliente cliente) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Cierre de Sesión");
+        alert.setHeaderText(null);
+        alert.setContentText("¿Está seguro que desea cerrar sesión?");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            stage.close();
+            // Volver al login
+            Platform.runLater(() -> {
+                LoginInterfaz login = new LoginInterfaz();
+                login.start(new Stage(),cliente);
+            });
         }
     }
 }
