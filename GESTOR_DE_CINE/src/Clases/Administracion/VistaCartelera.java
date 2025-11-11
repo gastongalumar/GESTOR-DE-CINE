@@ -54,10 +54,13 @@ public class VistaCartelera {
         titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
             duracion.setStyle("-fx-text-fill: black;");
 
+        Label estreno = new Label("Estrena el " + pelicula.getFechaEstreno().format(fechaFormateador));
+        estreno.setStyle("-fx-text-fill: black;");
+
         Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida().format(fechaFormateador));
         ultimaFecha.setStyle("-fx-text-fill: black;");
 
-        VBox contenedor = new VBox(10, imageNode, titulo,duracion, ultimaFecha);
+        VBox contenedor = new VBox(10, imageNode, titulo,duracion,estreno, ultimaFecha);
         contenedor.setAlignment(Pos.BASELINE_LEFT);
         contenedor.setStyle("-fx-background-color: #0A6E61; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 

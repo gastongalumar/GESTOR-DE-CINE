@@ -43,7 +43,6 @@ public class LoginInterfaz extends Application {
         GestorFunciones gestorFunciones = new GestorFunciones();
         cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 9,14), new SalaCine("Sala 2", 9,14));
         crearInterfaz(cliente);
-        GestorAdministrador.iniciarAdministrador(gestorFunciones,cliente);
         configurarEventos(gestorFunciones,cliente);
         stage.show();
     }
@@ -241,6 +240,8 @@ public class LoginInterfaz extends Application {
         passwordField.setOnAction(e -> realizarLogin(gestorFunciones));
     }
 
+
+    // Abre la ventana de registro de usuario
     private void registrarUsuario() {
 
         Platform.runLater(() -> {
@@ -259,6 +260,9 @@ public class LoginInterfaz extends Application {
             }
         });
     }
+
+
+    // Valida el login y redirige segun el tipo de usuario
     private void realizarLogin(GestorFunciones gestorFunciones) {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
@@ -299,7 +303,7 @@ public class LoginInterfaz extends Application {
         }
     }
 
-    // En LoginInterfaz.java - Modificar el métoo autenticarUsuario
+    // Verifica si el usuario existe y si la contrasena es correcta
     private boolean autenticarUsuario(String email, String password) {
         try {
            // Usuario usuario = gestorUsuarios.autenticarUsuario(email, password);
@@ -320,6 +324,8 @@ public class LoginInterfaz extends Application {
         }
     }
 
+
+    // Obtiene el tipo de usuario (admin o cliente)
     private String determinarTipoUsuario(String email) {
         try {
             Usuario usuario = gestorUsuarios.buscarPorEmail(email);
@@ -330,7 +336,7 @@ public class LoginInterfaz extends Application {
     }
 
 
-
+    // Redirige segun el tipo de usuario
     private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones) {
         mostrarAlerta("Login Exitoso",
                 "¡Bienvenido " + usuario + "!\nTipo: " + tipoUsuario,
@@ -338,7 +344,6 @@ public class LoginInterfaz extends Application {
 
         stage.close();
 
-        // Redirigir según el tipo de usuario
         if (tipoUsuario.equals("Administrador")) {
             abrirPanelAdministrador(gestorFunciones);
         } else {
@@ -375,6 +380,8 @@ public class LoginInterfaz extends Application {
         });
     }
 
+
+    // Abre la interfaz del cliente
     private void abrirPanelCliente(String usuario, GestorFunciones gestorFunciones) {
         Platform.runLater(() -> {
             // Buscar el cliente por email
@@ -425,6 +432,8 @@ public class LoginInterfaz extends Application {
         });
     }
 
+
+    // Crea el contenido principal del cliente (cartelera)
     private HBox crearContenidoGestorCliente(GestorFunciones gestorFunciones, Cliente cliente, Stage ventana) {
         HBox contenedor = new HBox(20);
         contenedor.setPadding(new Insets(20));
@@ -492,7 +501,7 @@ public class LoginInterfaz extends Application {
     private void mostrarPromociones(Cliente cliente) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Promociones Activas");
-        alert.setHeaderText("🎁 PROMOCIONES ESPECIALES");
+        alert.setHeaderText("PROMOCIONES ESPECIALES");
         alert.setContentText("• Miercoles de Descuento: 20% OFF\n• Combo Familiar: 25% OFF\n• Canje de Puntos: 100 pts = 10% OFF");
         alert.showAndWait();
     }

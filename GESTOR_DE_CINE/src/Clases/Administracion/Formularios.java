@@ -51,14 +51,16 @@ public class Formularios {
         // --- Sección Fechas ---
         Label labelEstreno = crearLabelSeccion("Fecha de estreno:");
         Label labelSalida = crearLabelSeccion("Fecha de finalización:");
+        Label labelDuracion = crearLabelSeccion("Duracion de la pelicula (minutos):");
 
         GridPane gridFechas = new GridPane();
         gridFechas.setHgap(10);
         gridFechas.setVgap(10);
         gridFechas.addRow(0, labelEstreno, campoEstreno);
         gridFechas.addRow(1, labelSalida, campoSalida);
+        gridFechas.addRow(2, labelDuracion, comboDuracion);
 
-        VBox seccionFechas = new VBox(5, gridFechas, comboDuracion);
+        VBox seccionFechas = new VBox(5, gridFechas);
         seccionFechas.setAlignment(Pos.CENTER_LEFT);
 
         // --- Selección de imagen ---
@@ -83,8 +85,7 @@ public class Formularios {
 
 
             if (nombre.isEmpty() || fechaEstrenoStr.isEmpty() || fechaSalidaStr.isEmpty() || archivoSeleccionado[0] == null || duracionSelecciona.isZero()) {
-                mostrarAlerta("Por favor, completa todos los campos y selecciona una imagen.");
-                return;
+               throw new CamposIncompletosException("Por favor, completa todos los campos y selecciona una imagen.");
             }
 
             try {
@@ -92,20 +93,30 @@ public class Formularios {
                 LocalDate fechaEstreno = LocalDate.parse(fechaEstrenoStr, formato);
                 LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr, formato);
 
-                String rutaImagen = guardarImagenPelicula(archivoSeleccionado[0]);
-                Pelicula pelicula = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida, duracionSelecciona);
+                if(fechaEstreno.isBefore(fechaSalida)) {
+                    String rutaImagen = guardarImagenPelicula(archivoSeleccionado[0]);
+                    Pelicula pelicula = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida, duracionSelecciona);
 
-                GestorPeliculas.agregarPelicula(pelicula);
-                mostrarAlerta("Película agregada correctamente.");
-                ventana.close();
+                    GestorPeliculas.agregarPelicula(pelicula);
+                    mostrarAlerta("Película agregada correctamente.");
+                    ventana.close();
+                    ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
+                }else {
+                    throw new FechaInvalidaException("Por favor, revise las fechas nuevamente");
+                }
 
-            } catch (Exception ex) {
+            }catch (FechaInvalidaException ex){
+                mostrarAlerta("Por favor, revise las fechas nuevamente");
+            }catch (CamposIncompletosException ex){
+                mostrarAlerta("Por favor, completa todos los campos y selecciona una imagen.");
+            }
+            catch (Exception ex) {
                 ex.printStackTrace();
                 mostrarAlerta("Error al procesar las fechas o la imagen.");
             }
 
-            ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
+            //ventana.close();
+            //ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
         });
 
         VBox layout = crearLayout(titulo, campoNombre, seccionFechas, seccionImagen, botonGuardar);
@@ -221,15 +232,20 @@ public class Formularios {
         // --- Campos con datos actuales ---
         TextField campoNombre = crearCampoTexto(p.getNombrePelicula());
         campoNombre.setText(p.getNombrePelicula());
+        campoNombre.setAlignment(Pos.CENTER_LEFT);
         TextField campoEstreno = crearCampoTexto(p.getFechaEstreno().toString());
         campoEstreno.setText(p.getFechaEstreno().toString());
         campoEstreno.setEditable(false);
+        campoEstreno.setAlignment(Pos.CENTER_LEFT);
         TextField campoSalida = crearCampoTexto(p.getFechaSalida().toString());
         campoSalida.setText(p.getFechaSalida().toString());
         campoSalida.setEditable(false);
-        TextField campoDuracion = crearCampoTexto(String.valueOf(p.getDuracion().toMinutes()));
-        campoDuracion.setText(String.valueOf(p.getDuracion().toMinutes()));
+        campoSalida.setAlignment(Pos.CENTER_LEFT);
+        TextField campoDuracion =new TextField(String.valueOf(p.getDuracion().toMinutes()));
+       // campoDuracion.setText(String.valueOf(p.getDuracion().toMinutes()));
+        campoDuracion.setMaxWidth(150);
         campoDuracion.setEditable(false);
+
 
         // --- Imagen actual ---
         Label labelImagen = new Label("Imagen actual:");
@@ -239,7 +255,6 @@ public class Formularios {
             javafx.scene.image.Image imagenActual = new javafx.scene.image.Image(p.getRutaImagen(), 120, 180, true, true);
             imagenVista.setImage(imagenActual);
         } catch (Exception ex) {
-            System.out.println("No se pudo cargar la imagen actual de la película.");
         }
 
         final String[] nuevaRutaImagen = {p.getRutaImagen()};
@@ -328,7 +343,7 @@ public class Formularios {
 
 
 
-    public static void formularioAgregar(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Cliente cliente) throws CamposIncompletosException {
+    public static void formularioAgregar(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Cliente cliente) throws CamposIncompletosException, FechaInvalidaException {
         Stage ventana = new Stage();
         ventana.setTitle("Agregar nueva función");
 
@@ -418,7 +433,7 @@ public class Formularios {
             }
 
             if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty()|| !encontrado || precio < 0) {
-                mostrarAlerta("Por favor, completa todos los campos.");
+                mostrarAlerta("Por favor, completa todos los campos correctamente");
             } else {
                 try {
 
@@ -445,7 +460,7 @@ public class Formularios {
                                 return;
                             }
 
-                            if(fechaInicialTime.toLocalDate().isAfter(peliculaSeleccionada.getFechaEstreno())&& fechaFinalTime.toLocalDate().isBefore(peliculaSeleccionada.getFechaSalida())) {
+                            if(!fechaInicialTime.toLocalDate().isBefore(peliculaSeleccionada.getFechaEstreno())&& !fechaFinalTime.toLocalDate().isAfter(peliculaSeleccionada.getFechaSalida())) {
                                 Duration duracion = peliculaSeleccionada.getDuracion();
 
                                 for (long i = 0; i <= diasDiferencia; i++) {
@@ -522,7 +537,7 @@ public class Formularios {
     }
 
 
-    public static void formularioEliminarFuncion(GestorFunciones gestorFunciones,Cliente cliente){
+    public static void formularioEliminarFuncion(GestorFunciones gestorFunciones,Cliente cliente) throws CamposIncompletosException{
         Stage ventana = new Stage();
         ventana.setTitle("Eliminar funcion");
 
@@ -581,8 +596,12 @@ public class Formularios {
             String horario = campoHorario.getText();
             DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             String fechaTotal = campoFecha.getText().trim().concat(" ").concat(campoHorario.getText().trim());
-            LocalDateTime fechaHora = LocalDateTime.parse(fechaTotal, formato);
-
+            LocalDateTime fechaHora = null;
+            try {
+                fechaHora = LocalDateTime.parse(fechaTotal, formato);
+            }catch (DateTimeParseException ex){
+                mostrarAlerta("Formato de fecha y hora incorrecto");
+            }
 
             boolean encontrado = false;
             Funcion funcionEliminar = null;
@@ -594,18 +613,20 @@ public class Formularios {
                 }
             }
 
-            if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty()|| !encontrado) {
-                mostrarAlerta("Por favor, completa todos los campos.");
+            if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty() || !encontrado) {
+
+               mostrarAlerta("Por favor, completa todos los campos");
             } else {
                 try {
                     gestorFunciones.eliminarFuncion(funcionEliminar);
+                    GestorJsonAsientos.borrarArchivoAsientosDeFuncion(funcionEliminar);
                     mostrarAlerta("Funcion eliminada correctamente");
 
                     ventana.close();
                     ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
-                }catch (DateTimeParseException ex){
-
-                    mostrarAlerta("Formato de fecha y hora incorrecto");
+                }
+                catch (CamposIncompletosException ex){
+                    mostrarAlerta("Por favor, complete todos los campos");
                 }
 
             }

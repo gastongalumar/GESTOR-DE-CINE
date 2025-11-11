@@ -7,6 +7,7 @@ import Clases.Utilidades.ListaGenerica;
 import Clases.login.GestorEstadisticasLogin;
 import Clases.login.usuario.Cliente;
 import ManejoJSON.FuncionesJSON;
+import ManejoJSON.GestorJsonAsientos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -19,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -42,18 +44,7 @@ public class GestorAdministrador {
                 vigentes.add(f);
             } else {
                 try {
-                    String nombrePelicula = f.getPelicula().getNombrePelicula()
-                            .replace(" ", "_")
-                            .replaceAll("[^a-zA-Z0-9_]", ""); // limpiar caracteres raros
-
-                    String nombreArchivo = String.format(
-                            "Asientos_%s_%s.json",
-                            nombrePelicula,
-                            f.getHorarioFuncion().format(formatoFecha)
-                    );
-
-                    File archivo = new File(nombreArchivo);
-                    archivo.delete();
+                    GestorJsonAsientos.borrarArchivoAsientosSiFuncionPaso(f);
                 } catch (Exception e) {
                 }
             }
@@ -63,6 +54,21 @@ public class GestorAdministrador {
         return vigentes;
     }
 
+
+    public static List<Pelicula> filtrarYBorrarPeliculasPasadas(List<Pelicula> listaPeliculas) {
+        List<Pelicula> vigentes = new ArrayList<>();
+        LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+        for(Pelicula p: listaPeliculas){
+            if(p.getFechaSalida().isAfter(ahora.toLocalDate())){
+                vigentes.add(p);
+            }
+        }
+
+
+        return vigentes;
+    }
     public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Cliente cliente){
 
 
@@ -80,7 +86,10 @@ public class GestorAdministrador {
         -fx-background-color: #6E0A17;
     """);
 
-        for(Pelicula p: listaPeliculas){
+        List<Pelicula> peliculasVigentes = filtrarYBorrarPeliculasPasadas(listaPeliculas);
+        GestorPeliculas.setListaPeliculas(peliculasVigentes);
+        FuncionesJSON.serializarPeliculas(peliculasVigentes);
+        for(Pelicula p: peliculasVigentes){
             VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(), cliente);
             contenedor.getChildren().add(vista);
         }

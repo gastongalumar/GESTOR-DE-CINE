@@ -15,10 +15,12 @@ import org.json.JSONObject;
 
 public class HistorialCompras {
 
+    // Agrega una reserva al historial del cliente
     public static void agregarReservaAlHistorial(Cliente cliente, Reserva reserva) {
         JSONReservas.guardarReserva(reserva);
     }
 
+    // Muestra la ventana del historial de reservas del cliente
     public static void mostrarHistorialReservas(Cliente cliente) {
         Stage stage = new Stage();
         stage.setTitle("Mi Historial de Reservas - CINE MARCENTER");
@@ -155,7 +157,7 @@ public class HistorialCompras {
         stage.show();
     }
 
-
+    // Cancela una reserva específica después de confirmación
     private static void cancelarReserva(String numeroTicket, Cliente cliente, Stage stageActual) {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar Cancelación");
@@ -179,20 +181,20 @@ public class HistorialCompras {
                 } else {
                     Alert error = new Alert(Alert.AlertType.ERROR);
                     error.setTitle("Error");
-                    error.setHeaderText("No se pudo cancelar la reserva");
-                    error.setContentText("El ticket " + numeroTicket + " no existe o ya fue cancelado.");
+                    error.setHeaderText("No se puede eliminar la reserva: la función ya pasó o está en curso");
+                    error.setContentText("El ticket " + numeroTicket + " no se puede cancelar.");
                     error.showAndWait();
                 }
             }
         });
     }
 
-
+    // Metodo público para mostrar el historial (alias de mostrarHistorialReservas)
     public static void mostrarHistorial(Cliente cliente) {
         mostrarHistorialReservas(cliente);
     }
 
-
+    // Metodo público para agregar compra con reserva (alias de agregarReservaAlHistorial)
     public static void agregarCompraConReserva(Cliente cliente, Reserva reserva) {
         agregarReservaAlHistorial(cliente, reserva);
     }

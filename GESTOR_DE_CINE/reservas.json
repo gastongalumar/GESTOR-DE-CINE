@@ -152,47 +152,15 @@
         "clienteNombre": "Santiago Stellatelli",
         "monto": 8000,
         "asientosSeleccionados": [
-            "E8",
-            "E9"
+            "C6",
+            "C7"
         ],
-        "nombrePelicula": "Ace Ventura",
+        "nombrePelicula": "Los 4 Fantasticos",
         "clienteEmail": "santistella@gmail.com",
-        "codigoOR": "OR-CMX-1762820900790195",
-        "fechaEmision": "2025-11-10T21:28:20.7899768",
+        "codigoOR": "OR-CMX-1762882527631603",
+        "fechaEmision": "2025-11-11T14:35:27.631801",
         "salaNombre": "Sala 1",
-        "numeroTicket": "TK1762820900790195",
-        "horarioFuncion": "15/12/2025 21:00"
-    },
-    {
-        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
-        "clienteNombre": "Santiago Stellatelli",
-        "monto": 8000,
-        "asientosSeleccionados": [
-            "G8",
-            "G9"
-        ],
-        "nombrePelicula": "Ace Ventura",
-        "clienteEmail": "santistella@gmail.com",
-        "codigoOR": "OR-CMX-1762821615830147",
-        "fechaEmision": "2025-11-10T21:40:15.8295548",
-        "salaNombre": "Sala 1",
-        "numeroTicket": "TK1762821615830147",
-        "horarioFuncion": "16/12/2025 21:00"
-    },
-    {
-        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
-        "clienteNombre": "Santiago Stellatelli",
-        "monto": 8000,
-        "asientosSeleccionados": [
-            "E7",
-            "E8"
-        ],
-        "nombrePelicula": "Ace Ventura",
-        "clienteEmail": "santistella@gmail.com",
-        "codigoOR": "OR-CMX-1762822233229933",
-        "fechaEmision": "2025-11-10T21:50:33.2293801",
-        "salaNombre": "Sala 1",
-        "numeroTicket": "TK1762822233229933",
-        "horarioFuncion": "16/12/2025 21:00"
+        "numeroTicket": "TK1762882527631603",
+        "horarioFuncion": "11/11/2025 14:36"
     }
 ]

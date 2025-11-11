@@ -26,7 +26,7 @@ import java.util.Optional;
 
 public class SelectorAsientos {
 
-    // Configuraci贸n de la sala
+    // Configuración fija de las dimensiones de la sala
     private final int FILAS = 12;
     private final int FILAS_ASIENTOS = 10;
     private final int LEFT_BLOCK = 3;
@@ -44,17 +44,13 @@ public class SelectorAsientos {
     private Funcion funcion;
     private GestorDePagos gestorDePagos;
 
-    /**
-     * Constructor por defecto para uso interno
-     */
+    // Constructor por defecto - inicializa columnas y gestor de pagos
     public SelectorAsientos() {
         inicializarColumnasValidas();
         this.gestorDePagos = new GestorDePagos(this);
     }
 
-    /**
-     * Constructor para funci贸n espec铆fica
-     */
+    // Constructor para función específica
     public SelectorAsientos(Funcion funcion) {
         this.funcion = funcion;
         inicializarColumnasValidas();
@@ -102,6 +98,8 @@ public class SelectorAsientos {
 
 
     //METODOS
+
+    // Actualiza la visualización de todos los asientos en la interfaz
     public void actualizarVisualizacionAsientos() {
         for (int i = 0; i < FILAS_ASIENTOS; i++) {
             for (int j = 0; j < COLUMNAS; j++) {
@@ -115,7 +113,7 @@ public class SelectorAsientos {
         System.out.println(" Visualización actualizada");
     }
 
-
+    // Metodo estático para mostrar el selector de asientos
     public static void mostrarSelectorAsientos(Funcion funcion,Usuario usuario) {
         Platform.runLater(() -> {
             SelectorAsientos selector = new SelectorAsientos(funcion);
@@ -124,6 +122,7 @@ public class SelectorAsientos {
         });
     }
 
+    // Inicializa el selector con una función específica
     private void inicializarConFuncion(Funcion funcion) {
         String nombrePelicula = funcion.getPelicula() != null ? funcion.getPelicula().getNombrePelicula() : "pelicula";
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
@@ -134,6 +133,7 @@ public class SelectorAsientos {
         this.gestorJson = new GestorJsonAsientos(sala, archivo);
     }
 
+    // Inicializa la lista de columnas válidas donde existen asientos
     private void inicializarColumnasValidas() {
         columnasValidas.clear();
 
@@ -149,6 +149,7 @@ public class SelectorAsientos {
         System.out.println(" Columnas validas (donde hay asientos): " + columnasValidas);
     }
 
+    // Inicializa la ventana principal del selector de asientos
     private void inicializarSelectorAsientos(Stage stage,Usuario usuario) {
 
         // Inicializar sala si no se hizo mediante constructor
@@ -172,6 +173,7 @@ public class SelectorAsientos {
         });
     }
 
+    // Configura las propiedades básicas de la ventana
     private void configurarVentana(Stage stage) {
         String titulo = "Selector de Asientos - Sala de Cine";
         if (funcion != null && funcion.getPelicula() != null) {
@@ -186,6 +188,7 @@ public class SelectorAsientos {
         });
     }
 
+    // Inicializa todos los componentes de la interfaz gráfica
     private void inicializarComponentes(Stage stage,Usuario usuario) {
         rootLayout = new VBox();
         rootLayout.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -201,6 +204,7 @@ public class SelectorAsientos {
         stage.show();
     }
 
+    // Crea el panel que representa la pantalla del cine
     private BorderPane crearPanelPantalla() {
         BorderPane pantalla = new BorderPane();
         pantalla.setBackground(new Background(new BackgroundFill(Color.rgb(70, 130, 180), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -218,6 +222,7 @@ public class SelectorAsientos {
         return pantalla;
     }
 
+    // Crea el panel central que contiene la disposición de asientos
     private BorderPane crearPanelCentral() {
         BorderPane panelCentral = new BorderPane();
         panelCentral.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -229,6 +234,7 @@ public class SelectorAsientos {
         return panelCentral;
     }
 
+    // Crea el panel lateral con las letras de identificación de filas
     private VBox crearPanelFilas() {
         VBox panelFilas = new VBox();
         panelFilas.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -250,6 +256,7 @@ public class SelectorAsientos {
         return panelFilas;
     }
 
+    // Crea el panel superior con los números de columnas
     private GridPane crearPanelColumnas() {
         GridPane panelLetras = new GridPane();
         panelLetras.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -276,6 +283,7 @@ public class SelectorAsientos {
         return panelLetras;
     }
 
+    // Crea el panel del pasillo delantero principal
     private BorderPane crearPasilloDelantero() {
         BorderPane pasilloDelantero = new BorderPane();
         pasilloDelantero.setBackground(new Background(new BackgroundFill(Color.rgb(80, 80, 80), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -292,6 +300,7 @@ public class SelectorAsientos {
         return pasilloDelantero;
     }
 
+    // Crea el panel principal que contiene todos los asientos con sus identificadores
     private BorderPane crearPanelAsientosConNumeros() {
         BorderPane panelAsientosConNumeros = new BorderPane();
         panelAsientosConNumeros.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -302,6 +311,7 @@ public class SelectorAsientos {
         return panelAsientosConNumeros;
     }
 
+    // Crea el panel principal de asientos organizado en bloques
     private GridPane crearPanelPrincipalAsientos() {
         GridPane panelPrincipal = new GridPane();
         panelPrincipal.setBackground(new Background(new BackgroundFill(Color.rgb(40, 40, 40), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -327,6 +337,7 @@ public class SelectorAsientos {
         return panelPrincipal;
     }
 
+    // Crea un bloque específico del diseño de asientos
     private Pane crearPanelBloque(int bloque) {
         if (bloque == 1 || bloque == 3) {
             return crearPanelPasilloLateral(bloque);
@@ -335,6 +346,7 @@ public class SelectorAsientos {
         }
     }
 
+    // Crea un panel de pasillo lateral
     private VBox crearPanelPasilloLateral(int bloque) {
         VBox panelPasillo = new VBox();
         panelPasillo.setBackground(new Background(new BackgroundFill(Color.rgb(80, 80, 80), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -352,6 +364,7 @@ public class SelectorAsientos {
         return panelPasillo;
     }
 
+    // Crea un bloque de asientos (izquierdo, central o derecho)
     private VBox crearPanelBloqueAsientos(int bloque) {
         VBox panelBloque = new VBox();
         panelBloque.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -387,6 +400,7 @@ public class SelectorAsientos {
         return panelBloque;
     }
 
+    // Obtiene la columna inicial para un bloque específico
     private int obtenerStartColumna(int bloque) {
         switch (bloque) {
             case 0:
@@ -400,6 +414,7 @@ public class SelectorAsientos {
         }
     }
 
+    // Obtiene el número de columnas para un bloque específico
     private int obtenerNumColumnas(int bloque) {
         switch (bloque) {
             case 0:
@@ -413,6 +428,7 @@ public class SelectorAsientos {
         }
     }
 
+    // Crea el panel inferior con leyenda y controles
     private BorderPane crearPanelInferior(Usuario usuario) {
         BorderPane panelInferior = new BorderPane();
         panelInferior.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -427,6 +443,7 @@ public class SelectorAsientos {
         return panelInferior;
     }
 
+    // Crea el panel de leyenda que explica los colores de los asientos
     private HBox crearPanelLeyenda() {
         HBox leyenda = new HBox(10);
         leyenda.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -441,6 +458,7 @@ public class SelectorAsientos {
         return leyenda;
     }
 
+    // Crea un ítem individual para la leyenda
     private HBox crearItemLeyenda(Color color, String texto) {
         HBox item = new HBox(6);
         item.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -461,6 +479,7 @@ public class SelectorAsientos {
         return item;
     }
 
+    // Crea el panel derecho con contadores y botones de acción
     private VBox crearPanelDerecho(Usuario usuario) {
         VBox panelDerecho = new VBox(5);
         panelDerecho.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -517,18 +536,21 @@ public class SelectorAsientos {
         return panelDerecho;
     }
 
+    // Configura el estilo básico de un botón normal
     private void configurarBoton(Button boton) {
         boton.setStyle("-fx-background-color: #4682B4; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 15 8 15;");
         boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #64A0D2; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 15 8 15;"));
         boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: #4682B4; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 15 8 15;"));
     }
 
+    // Configura el estilo del botón de confirmación (verde)
     private void configurarBotonConfirmar(Button boton) {
         boton.setStyle("-fx-background-color: #28A03C; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 15 8 15;");
         boton.setOnMouseEntered(e -> boton.setStyle("-fx-background-color: #3CB43C; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 15 8 15;"));
         boton.setOnMouseExited(e -> boton.setStyle("-fx-background-color: #28A03C; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 8 15 8 15;"));
     }
 
+    // Genera y muestra un reporte del estado actual de la sala
     private void generarReporte() {
         try {
             org.json.JSONObject reporte = gestorJson.generarReporte();
@@ -563,6 +585,7 @@ public class SelectorAsientos {
         }
     }
 
+    // Limpia todas las selecciones de asientos realizadas por el cliente
     private void limpiarSelecciones() {
         int seleccionados = sala.contarAsientosSeleccionados();
 
@@ -591,6 +614,7 @@ public class SelectorAsientos {
         }
     }
 
+    // Obtiene el cliente actual del gestor de pagos
     public Cliente getCliente() {
         return gestorDePagos.getCliente();
 

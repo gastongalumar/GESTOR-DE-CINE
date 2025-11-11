@@ -5,6 +5,9 @@ import java.awt.*;
 
 public class PanelLeyenda extends JPanel {
 
+
+//REFERENCIA DE COLORES Y ESTADOS DE ASIENTO
+
     public PanelLeyenda() {
         setBackground(new Color(20, 20, 20));
         setLayout(new FlowLayout(FlowLayout.LEFT, 10, 2));
