@@ -178,5 +178,21 @@
         "salaNombre": "Sala 1",
         "numeroTicket": "TK1762821615830147",
         "horarioFuncion": "16/12/2025 21:00"
+    },
+    {
+        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
+        "clienteNombre": "Santiago Stellatelli",
+        "monto": 8000,
+        "asientosSeleccionados": [
+            "E7",
+            "E8"
+        ],
+        "nombrePelicula": "Ace Ventura",
+        "clienteEmail": "santistella@gmail.com",
+        "codigoOR": "OR-CMX-1762822233229933",
+        "fechaEmision": "2025-11-10T21:50:33.2293801",
+        "salaNombre": "Sala 1",
+        "numeroTicket": "TK1762822233229933",
+        "horarioFuncion": "16/12/2025 21:00"
     }
 ]

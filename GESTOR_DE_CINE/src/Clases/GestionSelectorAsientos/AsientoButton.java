@@ -1,6 +1,5 @@
 package Clases.GestionSelectorAsientos;
 
-import Clases.SalaCine;
 import Enumeradores.EstadoAsiento;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
@@ -24,7 +23,7 @@ public class AsientoButton extends StackPane {
         this.fila = fila;
         this.columna = columna;
         this.sala = sala;
-        this.columnasValidas = columnasValidas; // ✅ Guardar la referencia
+        this.columnasValidas = columnasValidas;
         this.estado = sala.getEstadoAsiento(fila, columna);
 
         configurarApariencia();
@@ -36,12 +35,11 @@ public class AsientoButton extends StackPane {
     private void configurarApariencia() {
         setPrefSize(60, 52);
         setStyle("-fx-background-color: transparent;");
-        setPickOnBounds(true); // ✅ IMPORTANTE: Permite clicks en áreas transparentes
+        setPickOnBounds(true);
     }
 
     private void agregarListeners() {
         setOnMouseClicked(event -> {
-            System.out.println("🖱️ Click en asiento " + fila + "-" + columna + " estado: " + estado);
 
             EstadoAsiento estadoActual = sala.getEstadoAsiento(fila, columna);
             if (estadoActual == EstadoAsiento.LIBRE ||
@@ -49,24 +47,21 @@ public class AsientoButton extends StackPane {
 
                 sala.toggleSeleccionAsiento(fila, columna);
                 this.estado = sala.getEstadoAsiento(fila, columna);
-                System.out.println("🔄 Nuevo estado: " + estado);
 
                 dibujarAsiento();
                 actualizarToolTip();
 
-                // Notificar que el asiento cambió
                 if (onAsientoCambiado != null) {
                     onAsientoCambiado.run();
                 }
             }
-            event.consume(); // Evitar que el evento se propague
+            event.consume();
         });
     }
 
     private void dibujarAsiento() {
         getChildren().clear();
 
-        // Determinar colores según estado
         Color colorBase, colorSombra, colorBorde;
 
         switch (estado) {
@@ -123,7 +118,7 @@ public class AsientoButton extends StackPane {
         respaldo.setStrokeWidth(2);
         respaldo.setTranslateY(18);
 
-        // ✅ APOYABRAZOS (NUEVO)
+        //  APOYABRAZOS
         Rectangle apoyoIzquierdo = new Rectangle(6, 20);
         apoyoIzquierdo.setArcWidth(8);
         apoyoIzquierdo.setArcHeight(8);
@@ -208,18 +203,16 @@ public class AsientoButton extends StackPane {
         String asientoStr = letraFila + numeroColumnaVisible;
         Tooltip.install(this, new Tooltip("Asiento " + asientoStr + " (" + estadoStr + ")"));
     }
-    /**
-     * Metodo público para forzar el redibujado del asiento
-     */
+
+     //Metodo público para forzar el redibujado del asiento
     public void redibujar() {
         this.estado = sala.getEstadoAsiento(fila, columna);
         dibujarAsiento();
         actualizarToolTip();
     }
 
-    /**
-     * Metodo para establecer callback cuando el asiento cambia
-     */
+
+      //Metodo para establecer callback cuando el asiento cambia
     public void setOnAsientoCambiado(Runnable callback) {
         this.onAsientoCambiado = callback;
     }

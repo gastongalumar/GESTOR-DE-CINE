@@ -1,10 +1,7 @@
 package Clases.GestionSelectorAsientos;
 
-import Clases.Funcion;
+import Clases.GestionFunciones.Funcion;
 import Clases.GestionDePagos.GestorDePagos;
-import Clases.ManejoVentanas;
-import Clases.SalaCine;
-import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import ManejoJSON.GestorJsonAsientos;
@@ -115,12 +112,10 @@ public class SelectorAsientos {
         }
         gestorDePagos.actualizarContador();
         gestorDePagos.actualizarPrecioTotal();
-        System.out.println("馃攧 Visualizaci贸n actualizada");
+        System.out.println(" Visualización actualizada");
     }
 
-    /**
-     * M茅todo est谩tico para mostrar el selector
-     */
+
     public static void mostrarSelectorAsientos(Funcion funcion,Usuario usuario) {
         Platform.runLater(() -> {
             SelectorAsientos selector = new SelectorAsientos(funcion);
@@ -151,7 +146,7 @@ public class SelectorAsientos {
         // Columnas del bloque derecho (13, 14, 15)
         for (int c = LEFT_BLOCK + AISLE_WIDTH + CENTER_BLOCK + AISLE_WIDTH; c < COLUMNAS; c++) columnasValidas.add(c);
 
-        System.out.println("馃搷 Columnas v谩lidas (donde hay asientos): " + columnasValidas);
+        System.out.println(" Columnas validas (donde hay asientos): " + columnasValidas);
     }
 
     private void inicializarSelectorAsientos(Stage stage,Usuario usuario) {
@@ -169,25 +164,25 @@ public class SelectorAsientos {
         Platform.runLater(() -> {
             boolean cargaExitosa = gestorJson.cargarEstadoGuardado();
             if (!cargaExitosa) {
-                System.out.println("鈿狅笍  No se pudo cargar el estado, usando valores por defecto");
+                System.out.println("  No se pudo cargar el estado, usando valores por defecto");
             }
             actualizarVisualizacionAsientos();
             gestorDePagos.actualizarPrecioTotal();
-            System.out.println("馃帀 APLICACI脫N INICIADA CORRECTAMENTE");
+            System.out.println("APLICACIÓN INICIADA CORRECTAMENTE");
         });
     }
 
     private void configurarVentana(Stage stage) {
-        String titulo = "馃幀 Selector de Asientos - Sala de Cine";
+        String titulo = "Selector de Asientos - Sala de Cine";
         if (funcion != null && funcion.getPelicula() != null) {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             String horarioStr = funcion.getHorarioFuncion() != null ? funcion.getHorarioFuncion().format(fmt) : "";
-            titulo = "馃幀 " + funcion.getPelicula().getNombrePelicula() + " - " + horarioStr;
+            titulo = " " + funcion.getPelicula().getNombrePelicula() + " - " + horarioStr;
         }
         stage.setTitle(titulo);
 
         stage.setOnCloseRequest(event -> {
-            System.out.println("馃敋 Selector de asientos cerrado, continuando ejecuci贸n...");
+            System.out.println("Selector de asientos cerrado, continuando ejecución...");
         });
     }
 
@@ -374,13 +369,13 @@ public class SelectorAsientos {
             for (int j = 0; j < numColumnas; j++) {
                 int columnaReal = startCol + j;
 
-                // 鉁� PASAR columnasValidas al constructor
+                // PASAR columnasValidas al constructor
                 AsientoButton asiento = new AsientoButton(i, columnaReal, sala, columnasValidas);
 
                 asiento.setOnAsientoCambiado(() -> {
                     gestorDePagos.actualizarContador();
                     gestorDePagos.actualizarPrecioTotal();
-                    System.out.println("馃攧 Asiento cambiado, contador actualizado");
+                    System.out.println("Asiento cambiado, contador actualizado");
                 });
 
                 botonesAsientos[i][columnaReal] = asiento;
@@ -482,9 +477,6 @@ public class SelectorAsientos {
         panelBotones.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
         panelBotones.setAlignment(Pos.CENTER_RIGHT);
 
-        System.out.println("------------------------------------------------------------------------------");
-        System.out.println(usuario);
-
         if(usuario instanceof Cliente) {
             // PANEL PARA CLIENTE
             Button btnLimpiar = new Button("Anular Selecciones");
@@ -501,6 +493,7 @@ public class SelectorAsientos {
             });
 
 
+            btnLimpiar.setOnAction(e-> limpiarSelecciones());
 
             panelBotones.getChildren().addAll(btnLimpiar, btnConfirmar);
 
@@ -557,7 +550,7 @@ public class SelectorAsientos {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Estado de Sala");
-            alert.setHeaderText("馃搳 REPORTE DE SALA");
+            alert.setHeaderText("REPORTE DE SALA");
             alert.setContentText(mensaje);
             alert.showAndWait();
 
@@ -583,8 +576,8 @@ public class SelectorAsientos {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Anular Selecciones");
-        alert.setHeaderText("驴Est谩s seguro de que quieres Anular el/los " + seleccionados + " asiento(s) seleccionado(s)?");
-        alert.setContentText("Esto convertir谩 todos los asientos seleccionados a libres.");
+        alert.setHeaderText("驴Estas seguro de que quieres Anular el/los " + seleccionados + " asiento(s) seleccionado(s)?");
+        alert.setContentText("Esto convertira todos los asientos seleccionados a libres.");
 
         Optional<ButtonType> resultado = alert.showAndWait();
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
@@ -592,8 +585,8 @@ public class SelectorAsientos {
             actualizarVisualizacionAsientos();
 
             Alert exito = new Alert(Alert.AlertType.INFORMATION);
-            exito.setTitle("脡xito");
-            exito.setHeaderText(seleccionados + " selecci贸n(es) Anulada(s) correctamente.");
+            exito.setTitle("Exito");
+            exito.setHeaderText(seleccionados + " seleccion(es) Anulada(s) correctamente.");
             exito.showAndWait();
         }
     }

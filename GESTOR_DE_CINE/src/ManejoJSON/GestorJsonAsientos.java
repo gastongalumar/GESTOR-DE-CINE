@@ -1,8 +1,8 @@
 package ManejoJSON;
 
-import Clases.Funcion;
-import Clases.GestorFunciones;
-import Clases.SalaCine;
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionSelectorAsientos.SalaCine;
 import Interfaces.ConversorJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,16 +45,15 @@ public class GestorJsonAsientos implements ConversorJson {
         inicializarArchivo();
     }
 
-    /**
-     * Crea la carpeta JSONasientos si no existe
-     */
+
+
     public void crearCarpetaJSON() {
         File carpeta = new File(CARPETA_JSON);
         if (!carpeta.exists()) {
             if (carpeta.mkdirs()) {
-                System.out.println("📁 Carpeta creada: " + CARPETA_JSON);
+                System.out.println("Carpeta creada: " + CARPETA_JSON);
             } else {
-                System.err.println("❌ No se pudo crear la carpeta: " + CARPETA_JSON);
+                System.err.println("No se pudo crear la carpeta: " + CARPETA_JSON);
             }
         }
     }
@@ -62,10 +61,7 @@ public class GestorJsonAsientos implements ConversorJson {
     public void inicializarArchivo() {
         File archivo = new File(archivoAsientos);
         if (!archivo.exists()) {
-            System.out.println("📝 Creando nuevo archivo JSON... -> " + archivoAsientos);
             guardarEstadoCompleto();
-        } else {
-            System.out.println("📁 Archivo JSON encontrado: " + archivoAsientos);
         }
     }
 
@@ -73,14 +69,13 @@ public class GestorJsonAsientos implements ConversorJson {
         try {
             JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
             if (estadoSala == null) {
-                System.err.println("❌ No se pudo leer el archivo JSON o está vacío");
+                System.err.println("No se pudo leer el archivo JSON o está vacío");
                 return false;
             }
 
             JSONArray matrizAsientos = estadoSala.getJSONArray("matrizAsientos");
 
-            System.out.println("📊 ===== CARGANDO ESTADO DESDE JSON =====");
-            System.out.println("📅 Última actualización: " + estadoSala.getString("fechaActualizacion"));
+            System.out.println("===== CARGANDO ESTADO DESDE JSON =====");
 
             int libresJson = 0, ocupadosJson = 0;
             for (int i = 0; i < matrizAsientos.length(); i++) {
@@ -99,7 +94,7 @@ public class GestorJsonAsientos implements ConversorJson {
                 }
             }
 
-            System.out.println("📦 ESTADOS EN ARCHIVO JSON:");
+            System.out.println("ESTADOS EN ARCHIVO JSON:");
             System.out.println("   ⚪ Libres: " + libresJson);
             System.out.println("   🔴 Ocupados: " + ocupadosJson);
 
@@ -107,20 +102,20 @@ public class GestorJsonAsientos implements ConversorJson {
             sala.cargarEstadosDesdeJSON(matrizAsientos);
 
             // Mostrar información después de cargar
-            System.out.println("📈 ESTADOS DESPUÉS DE CARGAR:");
+            System.out.println(" ESTADOS DESPUÉS DE CARGAR:");
             System.out.println("   ⚪ Libres: " + sala.contarAsientosLibres());
             System.out.println("   🔴 Ocupados: " + sala.contarAsientosOcupados());
             System.out.println("   🔵 Seleccionados: " + sala.contarAsientosSeleccionados() + " (temporal)");
-            System.out.println("✅ ===== ESTADO CARGADO CORRECTAMENTE =====");
+            System.out.println(" ===== ESTADO CARGADO CORRECTAMENTE =====");
 
             return true;
 
         } catch (JSONException e) {
-            System.err.println("❌ Error de JSON al cargar estado: " + e.getMessage());
+            System.err.println(" Error de JSON al cargar estado: " + e.getMessage());
             e.printStackTrace();
             return false;
         } catch (Exception e) {
-            System.err.println("❌ Error inesperado al cargar estado: " + e.getMessage());
+            System.err.println("Error inesperado al cargar estado: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -155,12 +150,12 @@ public class GestorJsonAsientos implements ConversorJson {
 
             JSONUtiles.grabar(estadoSala, archivoAsientos);
 
-            System.out.println("💾 Estado guardado en JSON: -> " + archivoAsientos);
+            System.out.println("Estado guardado en JSON: -> " + archivoAsientos);
             System.out.println("   🔴 Ocupados: " + sala.contarAsientosOcupados());
             System.out.println("   ⚪ Libres: " + sala.contarAsientosLibres());
 
         } catch (Exception e) {
-            System.err.println("❌ Error al guardar el estado de asientos: " + e.getMessage());
+            System.err.println("Error al guardar el estado de asientos: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -195,7 +190,7 @@ public class GestorJsonAsientos implements ConversorJson {
             return reporte;
 
         } catch (Exception e) {
-            System.err.println("❌ Error al generar reporte: " + e.getMessage());
+            System.err.println("Error al generar reporte: " + e.getMessage());
             try {
                 return new JSONObject().put("error", "No se pudo generar el reporte");
             } catch (JSONException ex) {
@@ -204,10 +199,6 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
-    public boolean archivoExiste() {
-        File archivo = new File(archivoAsientos);
-        return archivo.exists();
-    }
 
     private String generarEtiquetaAsiento(int fila, int columna) {
         return String.valueOf((char) ('A' + columna)) + (fila + 1);
@@ -222,29 +213,6 @@ public class GestorJsonAsientos implements ConversorJson {
     }
 
 
-    public static void renombrarArchivoAsientos(Funcion funcionVieja, Funcion funcionNueva) {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
-
-        String nombreAnt = funcionVieja.getPelicula().getNombrePelicula().replaceAll("\\s+", "_");
-        String horarioAnt = funcionVieja.getHorarioFuncion().format(fmt);
-        String nombreNuev = funcionNueva.getPelicula().getNombrePelicula().replaceAll("\\s+", "_");
-        String horarioNuev = funcionNueva.getHorarioFuncion().format(fmt);
-
-        File fileViejo = new File(CARPETA_JSON, String.format("Asientos_%s_%s.json", nombreAnt, horarioAnt));
-        File fileNuevo = new File(CARPETA_JSON, String.format("Asientos_%s_%s.json", nombreNuev, horarioNuev));
-
-        if (fileViejo.exists()) {
-            boolean renombrado = fileViejo.renameTo(fileNuevo);
-            if (renombrado) {
-                System.out.println("✅ Archivo renombrado correctamente: " + fileNuevo.getName());
-            } else {
-                System.out.println("⚠️ No se pudo renombrar el archivo de asientos");
-            }
-        } else {
-            System.out.println("⚠️ No se encontró el archivo de asientos original: " + fileViejo.getName());
-        }
-    }
-
 
     public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
         try {
@@ -253,7 +221,7 @@ public class GestorJsonAsientos implements ConversorJson {
 
             boolean algunaCopia = false;
 
-            // 🔸 PRIMERA PASADA: copiar y eliminar archivos
+            //  copiar y eliminar archivos
             for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
                 String nombreFuncion = funcion.getPelicula().getNombrePelicula();
                 String horarioFuncion = funcion.getHorarioFuncion().format(fmt);
@@ -321,7 +289,7 @@ public class GestorJsonAsientos implements ConversorJson {
             // Convertir letra a índice de fila
             int fila = letraFila - 'A';
 
-            // ✅ MAPEO DE COLUMNAS VISIBLES A COLUMNAS REALES
+            //  MAPEO DE COLUMNAS VISIBLES A COLUMNAS REALES
             // Columnas visibles: 1-14
             // Columnas reales en JSON: 0-2, 4-11, 13-15 (16 columnas total con pasillos)
             int columnaReal = -1;
@@ -337,37 +305,37 @@ public class GestorJsonAsientos implements ConversorJson {
                 columnaReal = columnaVisible + 1;
             }
 
-            System.out.println("🔍 Etiqueta '" + etiqueta + "' -> Fila:" + fila +
+            System.out.println("Etiqueta '" + etiqueta + "' -> Fila:" + fila +
                     ", ColVisible:" + columnaVisible + ", ColReal:" + columnaReal);
 
             if (columnaReal == -1) {
-                System.err.println("❌ Columna visible inválida: " + columnaVisible);
+                System.err.println("Columna visible inválida: " + columnaVisible);
                 return new int[]{-1, -1};
             }
 
             return new int[]{fila, columnaReal};
 
         } catch (NumberFormatException e) {
-            System.err.println("❌ Error parseando etiqueta: " + etiqueta);
+            System.err.println("Error parseando etiqueta: " + etiqueta);
             return new int[]{-1, -1};
         }
     }
 
     public boolean liberarAsientos(List<String> asientosALiberar) {
         try {
-            System.out.println("🔄 Liberando " + asientosALiberar.size() + " asientos: " + asientosALiberar);
-            System.out.println("📁 Archivo: " + archivoAsientos);
+            System.out.println(" Liberando " + asientosALiberar.size() + " asientos: " + asientosALiberar);
+            System.out.println("Archivo: " + archivoAsientos);
 
             File archivo = new File(archivoAsientos);
             if (!archivo.exists()) {
-                System.err.println("❌ Archivo no existe: " + archivoAsientos);
+                System.err.println("Archivo no existe: " + archivoAsientos);
                 return false;
             }
 
             // Leer archivo JSON
             JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
             if (estadoSala == null) {
-                System.err.println("❌ No se pudo leer el archivo JSON");
+                System.err.println("No se pudo leer el archivo JSON");
                 return false;
             }
 
@@ -377,19 +345,16 @@ public class GestorJsonAsientos implements ConversorJson {
             // Para cada etiqueta a liberar
             for (String etiqueta : asientosALiberar) {
                 String etiquetaNormalizada = etiqueta.trim().toUpperCase();
-                System.out.println("🎯 Procesando: '" + etiquetaNormalizada + "'");
 
                 // Convertir etiqueta a coordenadas
                 int[] coordenadas = etiquetaACoordenadas(etiquetaNormalizada);
                 if (coordenadas[0] == -1 || coordenadas[1] == -1) {
-                    System.err.println("❌ No se pudo convertir etiqueta: " + etiquetaNormalizada);
                     continue;
                 }
 
                 int fila = coordenadas[0];
                 int columna = coordenadas[1];
 
-                System.out.println("📍 Coordenadas: Fila " + fila + ", Columna " + columna);
 
                 // Verificar que las coordenadas estén dentro de los límites
                 if (fila >= 0 && fila < matrizAsientos.length()) {
@@ -399,37 +364,32 @@ public class GestorJsonAsientos implements ConversorJson {
                         String estadoActual = asientoJson.getString("estado");
                         String etiquetaEnJson = asientoJson.getString("etiqueta");
 
-                        System.out.println("📋 En JSON: " + etiquetaEnJson + " -> Estado: " + estadoActual);
+                        System.out.println("En JSON: " + etiquetaEnJson + " -> Estado: " + estadoActual);
 
                         if ("OCUPADO".equals(estadoActual)) {
                             asientoJson.put("estado", "LIBRE");
                             liberados++;
-                            System.out.println("✅ Asiento liberado: " + etiquetaNormalizada);
+                            System.out.println("Asiento liberado: " + etiquetaNormalizada);
                         } else {
-                            System.out.println("⚠️ Asiento " + etiquetaNormalizada + " no está ocupado (estado: " + estadoActual + ")");
+                            System.out.println("Asiento " + etiquetaNormalizada + " no está ocupado (estado: " + estadoActual + ")");
                         }
-                    } else {
-                        System.err.println("❌ Columna fuera de rango: " + columna + " para etiqueta: " + etiquetaNormalizada);
                     }
-                } else {
-                    System.err.println("❌ Fila fuera de rango: " + fila + " para etiqueta: " + etiquetaNormalizada);
                 }
-                System.out.println("---");
             }
 
             if (liberados > 0) {
                 // Guardar cambios
                 estadoSala.put("fechaActualizacion", LocalDateTime.now().toString());
                 JSONUtiles.grabar(estadoSala, archivoAsientos);
-                System.out.println("💾 " + liberados + " asientos liberados exitosamente");
+                System.out.println(liberados + " asientos liberados exitosamente");
                 return true;
             } else {
-                System.out.println("⚠️ No se liberó ningún asiento");
+                System.out.println("No se liberó ningún asiento");
                 return false;
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Error liberando asientos: " + e.getMessage());
+            System.out.println("Error liberando asientos: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

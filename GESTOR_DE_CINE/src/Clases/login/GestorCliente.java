@@ -1,13 +1,12 @@
 package Clases.login;
 
-import Clases.GestorFunciones;
-import Clases.GestorPeliculas;
-import Clases.Pelicula;
-import Clases.VistaCartelera;
-import Clases.login.usuario.Usuario;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.Administracion.GestorPeliculas;
+import Clases.GestionFunciones.Pelicula;
+import Clases.Administracion.VistaCartelera;
+import Clases.login.usuario.Cliente;
 import ManejoJSON.FuncionesJSON;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -22,12 +21,12 @@ import javafx.scene.control.Separator;
 
 public class GestorCliente {
 
-    public static void iniciarCliente(GestorFunciones gestorFunciones, Usuario cliente) {
-        Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
+    public static void iniciarCliente(GestorFunciones gestorFunciones, Cliente cliente) {
+        GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
         vistaCliente(GestorPeliculas.getListaPeliculas(), gestorFunciones,cliente);
     }
 
-    public static void vistaCliente(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Usuario cliente) {
+    public static void vistaCliente(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones,Cliente cliente) {
         Stage ventana = new Stage();
         HBox contenedor = new HBox(20);
         contenedor.setStyle("""
@@ -75,10 +74,8 @@ public class GestorCliente {
 
         botonCerrarSesion.setOnAction(e -> {
             ventana.close();
-            // Aquí puedes agregar la lógica para volver a la pantalla de login si es necesario
         });
 
-        // === PANEL LATERAL SOLO CON INFORMACIÓN Y CERRAR SESIÓN ===
         VBox panelLateral = new VBox(10,
                 tituloPeliculas,
                 tituloFunciones,
@@ -94,11 +91,4 @@ public class GestorCliente {
         ventana.show();
     }
 
-   /* public static void mostrarAlerta(String mensaje) {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setTitle("Información");
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
-    }*/
 }

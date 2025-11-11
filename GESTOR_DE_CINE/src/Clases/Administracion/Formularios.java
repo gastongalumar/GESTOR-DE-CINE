@@ -1,5 +1,9 @@
-package Clases;
+package Clases.Administracion;
 
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
+import Clases.Utilidades.ManejoVentanas;
 import Clases.login.usuario.Cliente;
 import Excepciones.CamposIncompletosException;
 import Excepciones.FechaInvalidaException;
@@ -27,8 +31,8 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static Clases.GestorAdministrador.guardarImagenPelicula;
-import static Clases.GestorAdministrador.mostrarAlerta;
+import static Clases.Administracion.GestorAdministrador.guardarImagenPelicula;
+import static Clases.Administracion.GestorAdministrador.mostrarAlerta;
 
 public class Formularios {
 
@@ -296,7 +300,6 @@ public class Formularios {
                 p.setFechaSalida(nuevaFechaSalida);
                 p.setRutaImagen(nuevaRutaImagen[0]);
                 p.setDuracion(Duration.ofMinutes((long)Long.parseLong(campoDuracion.getText())));
-                //FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
                 FuncionesJSON.serializarPeliculas(GestorPeliculas.getListaPeliculas());
 
             }catch (CamposIncompletosException | FechaInvalidaException ex){
@@ -418,21 +421,15 @@ public class Formularios {
                 mostrarAlerta("Por favor, completa todos los campos.");
             } else {
                 try {
-                    DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
 
                     LocalDateTime fechaInicialTime = LocalDateTime.parse(fechaInicial + " " + horario, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                     LocalDateTime fechaFinalTime = LocalDateTime.parse(fechaFinal + " " + horario, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
                     long diasDiferencia = ChronoUnit.DAYS.between(fechaInicialTime.toLocalDate(), fechaFinalTime.toLocalDate());
-
                     if(diasDiferencia < 0){
                         mostrarAlerta("Ingresá un rango de fechas válido");
                     }else {
                         LocalDateTime fechaAgregar = fechaInicialTime;
-                        System.out.println("Días de diferencia: " + diasDiferencia);
-                        System.out.println("Fecha inicial: " + fechaInicialTime);
-                        System.out.println("Fecha final: " + fechaFinalTime);
 
                         if (sala.equalsIgnoreCase("Sala 1") || sala.equalsIgnoreCase("Sala 2")) {
                             Pelicula peliculaSeleccionada = null;
@@ -448,40 +445,41 @@ public class Formularios {
                                 return;
                             }
 
-                            Duration duracion = peliculaSeleccionada.getDuracion();
+                            if(fechaInicialTime.toLocalDate().isAfter(peliculaSeleccionada.getFechaEstreno())&& fechaFinalTime.toLocalDate().isBefore(peliculaSeleccionada.getFechaSalida())) {
+                                Duration duracion = peliculaSeleccionada.getDuracion();
 
-                            for (long i = 0; i <= diasDiferencia; i++) {
-                                LocalDateTime inicio = fechaAgregar;
-                                LocalDateTime fin = inicio.plus(duracion);
+                                for (long i = 0; i <= diasDiferencia; i++) {
+                                    LocalDateTime inicio = fechaAgregar;
+                                    LocalDateTime fin = inicio.plus(duracion);
 
-                                boolean seSuperpone = false;
-                                for (Funcion f : gestorFunciones.getListaFunciones().getElementos()) {
-                                    if (f.getSala().getNombreSala().equalsIgnoreCase(sala)) {
-                                        LocalDateTime inicioExistente = f.getHorarioFuncion();
-                                        LocalDateTime finExistente = inicioExistente.plus(f.getPelicula().getDuracion());
+                                    boolean seSuperpone = false;
+                                    for (Funcion f : gestorFunciones.getListaFunciones().getElementos()) {
+                                        if (f.getSala().getNombreSala().equalsIgnoreCase(sala)) {
+                                            LocalDateTime inicioExistente = f.getHorarioFuncion();
+                                            LocalDateTime finExistente = inicioExistente.plus(f.getPelicula().getDuracion());
 
-                                        // Si los horarios se solapan
-                                        if (!(fin.isBefore(inicioExistente) || inicio.isAfter(finExistente))) {
-                                            seSuperpone = true;
-                                            break;
+                                            // Si los horarios se solapan
+                                            if (!(fin.isBefore(inicioExistente) || inicio.isAfter(finExistente))) {
+                                                seSuperpone = true;
+                                                break;
+                                            }
                                         }
                                     }
+
+                                    if (seSuperpone) {
+                                        mostrarAlerta("Ya existe una función en la misma sala que se superpone con el horario.");
+                                        return;
+                                    }
+
+                                    Funcion funcion = new Funcion(sala, nombrePelicula, inicio, listaPeliculas, precio, gestorFunciones);
+                                    gestorFunciones.agregarFuncion(funcion);
+                                    System.out.println(gestorFunciones);
+                                    fechaAgregar = fechaAgregar.plusDays(1);
                                 }
 
-                                if (seSuperpone) {
-                                    mostrarAlerta("Ya existe una función en la misma sala que se superpone con el horario.");
-                                    return;
-                                }
-
-                                Funcion funcion = new Funcion(sala, nombrePelicula, inicio, listaPeliculas, precio, gestorFunciones);
-                                gestorFunciones.agregarFuncion(funcion);
-                                fechaAgregar = fechaAgregar.plusDays(1);
+                                FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
+                                mostrarAlerta("Funciones agregadas correctamente.");
                             }
-
-                            FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
-                            mostrarAlerta("Funciones agregadas correctamente.");
-
-
                         } else {
                             String desc = "Sala inválida";
                             throw new CamposIncompletosException(desc);
@@ -501,8 +499,6 @@ public class Formularios {
 
             }
 
-            //ventana.close();
-            // ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
         });
 
 

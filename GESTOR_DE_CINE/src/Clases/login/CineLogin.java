@@ -61,19 +61,15 @@ public class CineLogin extends Application {
     }
 
 private void configurarComponentes() {
-    System.out.println("🎯 CONFIGURANDO COMPONENTES CineLogin");
 
     loginButton.setOnAction(e -> {
-        System.out.println("🎯 BOTÓN LOGIN PRESIONADO");
         realizarLogin();
     });
 
     registerButton.setOnAction(e -> {
-        System.out.println("🎯 BOTÓN REGISTRAR PRESIONADO");
         registrarUsuario();
     });
 
-    System.out.println("🎯 BOTONES CONECTADOS - Login: " + loginButton + ", Registrar: " + registerButton);
 }
 
     private VBox createHeaderPanel() {
@@ -189,6 +185,7 @@ private void configurarComponentes() {
         }
     }
 
+    //ADMIN DEFAULT
     private boolean autenticarUsuario(String email, String password) {
         return (email.equals("admin@cine.com") && password.equals("admin123")) ||
                 (email.equals("cliente@cine.com") && password.equals("cliente123")) ||
@@ -209,33 +206,15 @@ private void configurarComponentes() {
         });
     }
 
-    private void recuperarContrasena() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Recuperar Contraseña");
-        dialog.setHeaderText(null);
-        dialog.setContentText("Ingrese su email para recuperar contraseña:");
-
-        dialog.showAndWait().ifPresent(email -> {
-            if (!email.trim().isEmpty()) {
-                mostrarAlerta("Recuperación Enviada",
-                        "Se ha enviado un enlace de recuperación a: " + email,
-                        Alert.AlertType.INFORMATION);
-            }
-        });
-    }
 
 private void registrarUsuario() {
-    System.out.println("🎯 MÉTODO registrarUsuario EJECUTADO EN CineLogin");
 
     Platform.runLater(() -> {
-        System.out.println("🎯 Platform.runLater EJECUTADO");
 
         try {
-            System.out.println("🎯 LLAMANDO RegistroUsuario.abrirRegistroCliente()");
             RegistroUsuario.abrirRegistroCliente();
-            System.out.println("🎯 LLAMADA EXITOSA");
         } catch (Exception e) {
-            System.out.println("❌ ERROR: " + e.getMessage());
+            System.out.println(" ERROR: " + e.getMessage());
             e.printStackTrace();
         }
     });

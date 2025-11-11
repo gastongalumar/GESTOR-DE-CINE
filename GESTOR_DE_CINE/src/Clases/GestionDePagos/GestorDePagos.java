@@ -2,9 +2,9 @@
 package Clases.GestionDePagos;
 
 import Clases.GestionSelectorAsientos.AsientoButton;
-import Clases.Funcion;
+import Clases.GestionFunciones.Funcion;
 import Clases.GestionSelectorAsientos.SelectorAsientos;
-import Clases.ListaGenerica;
+import Clases.Utilidades.ListaGenerica;
 import Clases.login.usuario.Cliente;
 import Enumeradores.EstadoAsiento;
 import javafx.scene.control.*;
@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class GestorDePagos {
     private ListaGenerica<Pago> listaPagos = new ListaGenerica<>();
@@ -50,19 +49,9 @@ public class GestorDePagos {
         metodoDePagos.agregar(metodo);
     }
 
-    public void eliminarMetodoDePago(MetodoDePago metodo) {
-        metodoDePagos.eliminar(metodo);
-    }
 
-    public void mostrarOpcionesDePago() {
-        System.out.println("Opciones de pago disponibles:");
-        for (MetodoDePago metodo : metodoDePagos.getElementos()) {
-            System.out.println(metodo.getId() + ". " + metodo.getNombre());
-        }
-    }
 
     public static boolean procesarPago(MetodoDePago metodoPago, double totalAPagar, String descripcion) {
-        System.out.println("Procesando pago de $" + totalAPagar + " usando " + metodoPago.getNombre() + " para: " + descripcion);
         return true;
     }
 
@@ -186,7 +175,6 @@ public class GestorDePagos {
         Optional<ButtonType> resultado2 = exito.showAndWait();
 
         if (resultado2.isPresent() && resultado2.get() == btnImprimirTicket) {
-            // ✅ SOLUCIÓN: Usar datos básicos pero REALES
             Cliente clienteTemp = new Cliente("Usuario", "Cine", "usuario@cine.com", "", "000-0000");
             imprimirTicketCompra(metodoSeleccionado, totalAPagar, cantidadAsientos, asientosSeleccionados, cliente);
         }
@@ -209,7 +197,7 @@ public class GestorDePagos {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmar Selección");
         alert.setHeaderText("¿Confirmar " + seleccionados + " asiento(s) seleccionado(s)?");
-        alert.setContentText("✅ Los asientos seleccionados (azules) pasarán a OCUPADOS (rojos)\n🔒 No podrán ser modificados después");
+        alert.setContentText(" Los asientos seleccionados (azules) pasarán a OCUPADOS (rojos)\n No podrán ser modificados después");
 
         Optional<ButtonType> resultado = alert.showAndWait();
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
@@ -218,8 +206,8 @@ public class GestorDePagos {
 
             Alert exito = new Alert(Alert.AlertType.INFORMATION);
             exito.setTitle("Confirmación Exitosa");
-            exito.setHeaderText("✅ " + confirmados + " asiento(s) confirmado(s) exitosamente!");
-            exito.setContentText("🔴 Ahora aparecen en ROJO (ocupados)\n💾 Guardados correctamente!!!\n🔒 Ya no se pueden modificar");
+            exito.setHeaderText(confirmados + " asiento(s) confirmado(s) exitosamente!");
+            exito.setContentText("Ahora aparecen en ROJO (ocupados)\n Guardados correctamente!!!\n Ya no se pueden modificar");
             exito.showAndWait();
             return seleccionados;
         }
@@ -230,26 +218,22 @@ public class GestorDePagos {
         try {
             Funcion funcion = selectorAsientos.getFuncion();
 
-            // ✅ VERIFICAR QUE EL CLIENTE TENGA DATOS
+            // VERIFICAR QUE EL CLIENTE TENGA DATOS
             if (cliente == null || cliente.getNombre() == null || cliente.getApellido() == null) {
-                System.out.println("⚠️ Cliente incompleto, usando datos por defecto");
-                // Crear un cliente temporal con datos básicos si es necesario
                 if (cliente == null) {
                     cliente = new Cliente("Cliente", "Cinemax", "cliente@cinemax.com", "", "000-0000");
                 }
             }
 
-            // ✅ CREAR RESERVA CON CLIENTE REAL
+            // CREAR RESERVA CON CLIENTE REAL
             Reserva reserva = new Reserva(cliente, funcion, metodoSeleccionado, totalAPagar, asientosSeleccionados);
 
-            // ✅ GUARDAR EN JSON Y EN HISTORIAL
+            // GUARDAR EN JSON Y EN HISTORIAL
             HistorialCompras.agregarCompraConReserva(cliente, reserva);
 
             // Imprimir ticket
             imprimirTicketDesdeReserva(reserva);
 
-            System.out.println("✅ Reserva COMPLETA guardada para: " + cliente.getEmail());
-            System.out.println("✅ Nombre del cliente: " + cliente.getNombre() + " " + cliente.getApellido());
 
         } catch (Exception e) {
             mostrarAlertaError(e);
@@ -259,50 +243,35 @@ public class GestorDePagos {
 
     private void imprimirTicketDesdeReserva(Reserva reserva) {
         try {
-            System.out.println("🔍 Asientos seleccionados para ticket: " + reserva.getAsientosSeleccionados());
-            System.out.println("🔍 Total de asientos: " + reserva.getAsientosSeleccionados().size());
-
 
             // 1. Obtener ruta base
             String userDir = System.getProperty("user.dir");
-            System.out.println("📂 Directorio actual: " + userDir);
 
             // 2. Si estamos en out/, retroceder
             File proyectoRoot;
             if (userDir.contains("out")) {
                 proyectoRoot = new File(userDir).getParentFile();
-                System.out.println("🔄 Retrocediendo desde out/ a: " + proyectoRoot.getAbsolutePath());
             } else {
                 proyectoRoot = new File(userDir);
             }
 
             // 3. Crear directorio src/Tickets
             File ticketsDir = new File(proyectoRoot, "Tickets");
-            System.out.println("📁 Intentando crear: " + ticketsDir.getAbsolutePath());
 
             if (!ticketsDir.exists()) {
                 if (ticketsDir.mkdirs()) {
-                    System.out.println("✅ Directorio creado exitosamente");
                 } else {
-                    System.err.println("❌ NO SE PUDO CREAR EL DIRECTORIO");
                     // Intentar crear en ubicación alternativa
                     ticketsDir = new File(proyectoRoot, "Tickets");
                     ticketsDir.mkdirs();
-                    System.out.println("🔄 Intentando en: " + ticketsDir.getAbsolutePath());
                 }
             }
 
             // 4. Crear archivo
-            String fileName = ticketsDir.getAbsolutePath() + File.separator + "ticket_cine_" + reserva.getNumeroTicket() + ".html";
-            System.out.println("📄 Creando archivo: " + fileName);
+            String fileName; /*ticketsDir.getAbsolutePath() + File.separator + "ticket_cine_" + reserva.getNumeroTicket() + ".html";*/
 
             // Verificar permisos
-            File testFile = new File(fileName);
-            if (testFile.getParentFile().canWrite()) {
-                System.out.println("✅ Permisos de escritura OK");
-            } else {
-                System.err.println("❌ Sin permisos de escritura");
-            }
+            //File testFile = new File(fileName);
 
 
             fileName = ticketsDir + "/ticket_cine_" + reserva.getNumeroTicket() + ".html";
@@ -570,7 +539,6 @@ public class GestorDePagos {
 
     private List<String> obtenerAsientosSeleccionados() {
         List<String> asientos = new ArrayList<>();
-        System.out.println("🔍 BUSCANDO ASIENTOS SELECCIONADOS...");
 
         for (int filaIndex = 0; filaIndex < selectorAsientos.getFilasAsientos(); filaIndex++) {
             for (int colIndex = 0; colIndex < selectorAsientos.getColumnas(); colIndex++) {
@@ -591,15 +559,12 @@ public class GestorDePagos {
                         if (numeroColumna != -1) {
                             String asiento = letraFila + numeroColumna;
                             asientos.add(asiento);
-                            System.out.println("✅ Asiento seleccionado: " + asiento + " (fila=" + filaIndex + ", col=" + colIndex + ")");
                         }
                     }
                 }
             }
         }
 
-        System.out.println("🔍 Total de asientos encontrados: " + asientos.size());
-        System.out.println("🔍 Asientos: " + asientos);
         return asientos;
     }
 
@@ -610,7 +575,7 @@ public class GestorDePagos {
     }
 
     public String obtenerRutaAbsolutaImagen(String nombreArchivo) {
-        System.out.println("🔍 BUSCANDO IMAGEN: " + nombreArchivo);
+
 
         // Lista TODAS las ubicaciones posibles
         String[] rutasPosibles = {
@@ -625,14 +590,11 @@ public class GestorDePagos {
 
         for (String ruta : rutasPosibles) {
             File archivo = new File(ruta);
-            System.out.println("   Probando: " + ruta + " → " + (archivo.exists() ? "✅ EXISTE" : "❌ NO EXISTE"));
             if (archivo.exists()) {
-                System.out.println("   ✅ ENCONTRADA: " + archivo.getAbsolutePath());
                 return archivo.getAbsolutePath();
             }
         }
 
-        System.out.println("❌ No se pudo encontrar la imagen en ninguna ubicación: " + nombreArchivo);
         return null;
     }
 
@@ -641,14 +603,12 @@ public class GestorDePagos {
             java.io.File file = new java.io.File(fileName);
             if (file.exists()) {
                 java.awt.Desktop.getDesktop().open(file);
-                System.out.println("🌐 Navegador abierto con el ticket: " + fileName);
             }
         } catch (Exception e) {
-            System.err.println("❌ No se pudo abrir automáticamente: " + e.getMessage());
 
             Alert info = new Alert(Alert.AlertType.INFORMATION);
             info.setTitle("Ticket Listo");
-            info.setHeaderText("📄 TICKET GENERADO");
+            info.setHeaderText(" TICKET GENERADO");
             info.setContentText("El ticket se guardó como: " + fileName +
                     "\n\nPuedes abrirlo manualmente desde:\n" +
                     new java.io.File(".").getAbsolutePath() +
@@ -660,41 +620,27 @@ public class GestorDePagos {
     private void mostrarAlertaError(Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error al Generar Ticket");
-        alert.setHeaderText("❌ ERROR AL GENERAR EL TICKET");
+        alert.setHeaderText("ERROR AL GENERAR EL TICKET");
         alert.setContentText("Ocurrió un error al generar el ticket:\n" + e.getMessage());
         alert.showAndWait();
     }
 
 
     private Cliente obtenerClienteActual() {
-        // Aquí necesitas obtener el cliente que está actualmente logueado
-        // Depende de cómo tengas implementada la sesión
-
-        // Opción 1: Si tienes una sesión global
-        // return SesionManager.getClienteActual();
-
-        // Opción 2: Si el selectorAsientos tiene referencia al cliente
         if (selectorAsientos != null && selectorAsientos.getCliente() != null) {
             return selectorAsientos.getCliente();
         }
 
-        // Opción 3: Temporal - crear con datos del login
-        // Necesitas pasar el email del login de alguna manera
-        String emailCliente = obtenerEmailClienteLogueado(); // Implementar esto
+        String emailCliente = obtenerEmailClienteLogueado();
 
         if (emailCliente != null && !emailCliente.isEmpty()) {
             return new Cliente("Cliente", "Cinemax", emailCliente, "", "000-0000");
         }
-
-        // Último recurso: cliente temporal
-        System.out.println("⚠️ No se pudo obtener cliente real, usando temporal");
         return new Cliente("Cliente", "Cinemax", "cliente@cinemax.com", "", "000-0000");
     }
 
 
     private String obtenerEmailClienteLogueado() {
-        // Implementa cómo obtienes el email del cliente logueado
-        // Por ahora retorna null, luego lo implementas
         return null;
     }
 
@@ -707,7 +653,6 @@ public class GestorDePagos {
             // Siempre usar el nombre completo con prefijo
             new File("Tickets/ticket_cine_" + numeroTicket + ".html").delete();
         } catch (Exception e) {
-            // Silencio
         }
     }
 }

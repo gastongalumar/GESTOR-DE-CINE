@@ -1,12 +1,8 @@
 {
-    "asientosOcupados": 2,
+    "asientosOcupados": 4,
     "totalColumnas": 16,
     "totalFilas": 10,
-<<<<<<<< HEAD:JSONasientos/Asientos_Havoc_20251112_2030.json
-    "fechaActualizacion": "2025-11-09T00:36:30.615281900",
-========
-    "fechaActualizacion": "2025-11-10T21:40:14.341555100",
->>>>>>>> origin/Cartelera:GESTOR_DE_CINE/JSONasientos/Asientos_Ace_Ventura_20251216_2100.json
+    "fechaActualizacion": "2025-11-10T21:50:31.725381",
     "matrizAsientos": [
         [
             {
@@ -342,13 +338,13 @@
             {
                 "columna": 6,
                 "etiqueta": "G4",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 3
             },
             {
                 "columna": 7,
                 "etiqueta": "H4",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 3
             },
             {
@@ -446,13 +442,13 @@
             {
                 "columna": 7,
                 "etiqueta": "H5",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 4
             },
             {
                 "columna": 8,
                 "etiqueta": "I5",
-                "estado": "LIBRE",
+                "estado": "OCUPADO",
                 "fila": 4
             },
             {

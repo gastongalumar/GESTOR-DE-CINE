@@ -1,6 +1,6 @@
 package Clases.login;
 
-import Clases.ListaGenerica;
+import Clases.Utilidades.ListaGenerica;
 import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
@@ -36,9 +36,7 @@ public class GestorUsuarios {
         try {
             List<Usuario> lista = FuncionesJSON.deserializarUsuarios();
             this.usuarios = new ListaGenerica<>(lista);
-            System.out.println("✅ Usuarios cargados: " + usuarios.tamaño());
         } catch (Exception e) {
-            System.err.println("❌ Error al cargar usuarios: " + e.getMessage());
             this.usuarios = new ListaGenerica<>();
         }
     }

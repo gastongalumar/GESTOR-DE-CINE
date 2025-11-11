@@ -1,8 +1,9 @@
-package Clases;
+package Clases.Administracion;
 
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.Pelicula;
 import Clases.GestionSelectorAsientos.SelectorAsientos;
 import Clases.login.usuario.Cliente;
-import Clases.login.usuario.Usuario;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -21,10 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.SwingUtilities;
 public class VistaCartelera {
 
-    public static VBox crearVista(Pelicula pelicula, List<Funcion> listaFunciones,Usuario usuario){
+    public static VBox crearVista(Pelicula pelicula, List<Funcion> listaFunciones, Cliente cliente){
         String rutaImagen = pelicula.getRutaImagen();
 
         Node imageNode;
@@ -61,7 +61,7 @@ public class VistaCartelera {
         contenedor.setAlignment(Pos.BASELINE_LEFT);
         contenedor.setStyle("-fx-background-color: #0A6E61; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 
-        contenedor.setOnMouseClicked(e -> verFunciones(pelicula, listaFunciones,usuario));
+        contenedor.setOnMouseClicked(e -> verFunciones(pelicula, listaFunciones,cliente));
 
         return contenedor;
     }
@@ -74,10 +74,10 @@ public class VistaCartelera {
     }
 
 
-    public static void verFunciones(Pelicula pelicula, List<Funcion> listaFunciones, Usuario usuario){
+    public static void verFunciones(Pelicula pelicula, List<Funcion> listaFunciones, Cliente cliente){
         Stage ventana = new Stage();
 
-        VBox peliculaSeleccionada = crearVista(pelicula, listaFunciones,usuario);
+        VBox peliculaSeleccionada = crearVista(pelicula, listaFunciones,cliente);
         peliculaSeleccionada.setScaleX(0.7);
         peliculaSeleccionada.setScaleY(0.7);
 
@@ -125,12 +125,10 @@ public class VistaCartelera {
 
 
                 horario.setOnMouseClicked(ev -> {
-                    SwingUtilities.invokeLater(() -> {
-                        SelectorAsientos.mostrarSelectorAsientos(f,usuario);
-
-
-                    });
+                    SelectorAsientos.mostrarSelectorAsientos(f, cliente);
+                    ventana.close();
                 });
+
 
                 horariosDelDia.getChildren().add(horario);
             }
@@ -158,7 +156,6 @@ public class VistaCartelera {
             peliculaSeleccionada.setScaleY(1);
         });
 
-        // antes se devolvía el contenedor pero no era usado; ahora es void
     }
 
 

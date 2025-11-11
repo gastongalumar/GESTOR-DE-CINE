@@ -17,9 +17,6 @@ public class Administrador extends Usuario {
         this.nivelAcceso = nivelAcceso;
     }
 
-    public Administrador() {
-        super();
-    }
 
     public Administrador(String nombre, String apellido, String email, String password, String telefono,
                          String estado, LocalDateTime fechaRegistro, LocalDateTime fechaUltimoAcceso,
@@ -45,14 +42,6 @@ public class Administrador extends Usuario {
         }
     }
 
-    // Métodos específicos del administrador
-    public boolean puedeGestionarUsuarios() {
-        return !nivelAcceso.equals("basico");
-    }
-
-    public boolean puedeConfigurarSistema() {
-        return nivelAcceso.equals("super");
-    }
 
     // Getters y Setters específicos
     public String getNivelAcceso() {

@@ -41,18 +41,6 @@ public class Cliente extends Usuario {
         }
     }
 
-    // Método específico del cliente
-    public void agregarPuntos(int puntos) {
-        this.puntosFidelidad += puntos;
-    }
-
-    public boolean canjearPuntos(int puntos) {
-        if (puntosFidelidad >= puntos) {
-            puntosFidelidad -= puntos;
-            return true;
-        }
-        return false;
-    }
 
     // Getters y Setters específicos
     public int getPuntosFidelidad() {

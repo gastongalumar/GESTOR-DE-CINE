@@ -1,8 +1,7 @@
 package Clases.login;
 
-import Clases.GestorFunciones;
-import Clases.HashUtil;
-import Clases.ManejoVentanas;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.Utilidades.HashUtil;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Excepciones.UsuarioException;
@@ -30,17 +29,15 @@ public class RegistroUsuario {
     private boolean esAdministrador;
     private GestorFunciones gestorFunciones;
 
-    // ✅ CONSTRUCTOR PARA CLIENTES
     public RegistroUsuario() {
         this(false, null);
     }
 
-    // ✅ CONSTRUCTOR PARA ADMINS (con GestorFunciones)
     public RegistroUsuario(boolean esAdministrador) {
         this(esAdministrador, null);
     }
 
-    // ✅ CONSTRUCTOR CON PARÁMETRO (para modo admin)
+
     public RegistroUsuario(boolean esAdministrador, GestorFunciones gestorFunciones) {
         this.esAdministrador = esAdministrador;
         this.gestorUsuarios = new GestorUsuarios();
@@ -48,30 +45,8 @@ public class RegistroUsuario {
 
     }
 
-    public static void abrirRegistroAdministrativo() {
-        System.out.println("🎯 abrirRegistroAdministrativo() EJECUTADO");
-
-        Platform.runLater(() -> {
-            System.out.println("🎯 Platform.runLater EN RegistroUsuario (ADMIN) EJECUTADO");
-
-            try {
-                System.out.println("🎯 CREANDO NUEVA INSTANCIA RegistroUsuario PARA ADMIN");
-                RegistroUsuario registro = new RegistroUsuario(true); // ✅ true para modo admin
-                System.out.println("🎯 INSTANCIA CREADA: " + registro);
-
-                System.out.println("🎯 LLAMANDO mostrarVentana()");
-                registro.mostrarVentana();
-                System.out.println("🎯 mostrarVentana() COMPLETADO");
-
-            } catch (Exception e) {
-                System.out.println("❌ ERROR EN RegistroUsuario ADMIN: " + e.getMessage());
-                e.printStackTrace();
-            }
-        });
-    }
-
     private void inicializarInterfaz() {
-        // ✅ TÍTULO DINÁMICO SEGÚN MODO
+        //  TÍTULO DINÁMICO SEGÚN MODO
         stage.setTitle("CINE MARCENTER - " +
                 (esAdministrador ? "Registro de Administrador" : "Registro de Cliente"));
         stage.setOnCloseRequest(e -> stage.close());
@@ -110,7 +85,6 @@ public class RegistroUsuario {
         configurarComponentes();
         stage.show();
 
-        System.out.println("🎯 VENTANA REGISTRO " + (esAdministrador ? "ADMIN" : "CLIENTE") + " MOSTRADA");
     }
 
     private VBox crearHeaderPanel() {
@@ -119,7 +93,7 @@ public class RegistroUsuario {
         headerPanel.setSpacing(5);
         headerPanel.setPadding(new Insets(15, 0, 10, 0));
 
-        // ✅ TEXTO DINÁMICO SEGÚN MODO
+        // TEXTO DINÁMICO SEGÚN MODO
         Label titleLabel = new Label(esAdministrador ?
                 "REGISTRO DE ADMINISTRADOR" : "CREAR CUENTA CLIENTE");
         titleLabel.setStyle("-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: white;");
@@ -152,7 +126,7 @@ public class RegistroUsuario {
         // Teléfono
         VBox telefonoBox = crearCampo("Teléfono", telefonoField = crearTextField(), 420);
 
-        // ✅ AGREGAR INDICADOR DE TIPO EN MODO ADMIN
+        // AGREGAR INDICADOR DE TIPO EN MODO ADMIN
         if (esAdministrador) {
             VBox tipoBox = new VBox(5);
             tipoBox.setAlignment(Pos.CENTER_LEFT);
@@ -183,7 +157,7 @@ public class RegistroUsuario {
         buttonPanel.setAlignment(Pos.CENTER);
         buttonPanel.setPadding(new Insets(25, 0, 0, 0));
 
-        // ✅ TEXTO DEL BOTÓN SEGÚN MODO
+        //  TEXTO DEL BOTÓN SEGÚN MODO
         String textoBoton = esAdministrador ? "REGISTRAR ADMIN" : "REGISTRARSE";
         registrarButton = new Button(textoBoton);
         registrarButton.setStyle("-fx-background-color: #009664; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 25 10 25;");
@@ -231,7 +205,7 @@ public class RegistroUsuario {
         footerPanel.setAlignment(Pos.CENTER);
         footerPanel.setPadding(new Insets(5, 0, 5, 0));
 
-        // ✅ MENSAJE DINÁMICO SEGÚN MODO
+        //  MENSAJE DINÁMICO SEGÚN MODO
         String mensaje = esAdministrador ?
                 "Registro administrativo - Todos los campos son obligatorios" :
                 "Registro de cliente - Todos los campos son obligatorios";
@@ -244,15 +218,12 @@ public class RegistroUsuario {
     }
 
     private void configurarComponentes() {
-        System.out.println("🎯 CONFIGURANDO BOTONES REGISTRO " + (esAdministrador ? "ADMIN" : "CLIENTE") + "...");
 
         registrarButton.setOnAction(e -> {
-            System.out.println("🎯 ¡BOTÓN REGISTRAR " + (esAdministrador ? "ADMIN" : "CLIENTE") + " PRESIONADO!");
             registrarUsuario();
         });
 
         cancelarButton.setOnAction(e -> {
-            System.out.println("🎯 BOTÓN CANCELAR PRESIONADO");
             cancelarRegistro();
         });
     }
@@ -263,7 +234,7 @@ public class RegistroUsuario {
                 return;
             }
 
-            // ✅ CREAR USUARIO SEGÚN MODO
+            //  CREAR USUARIO SEGÚN MODO
             Usuario nuevoUsuario;
             String passwordHasheada = HashUtil.hashSHA256(passwordField.getText());
 
@@ -289,7 +260,6 @@ public class RegistroUsuario {
 
             gestorUsuarios.registrarUsuario(nuevoUsuario);
 
-            // ✅ MENSAJE DE ÉXITO SEGÚN TIPO
             String mensajeExito;
             if (esAdministrador) {
                 mensajeExito = "¡Administrador registrado exitosamente!\n\n" +
@@ -331,7 +301,6 @@ public class RegistroUsuario {
             return false;
         }
 
-        // validacion nombre sin numeros
         if (!validarNombreApellido(nombreField.getText().trim())) {
             mostrarError("El nombre solo puede contener letras\nNo se permiten números ni caracteres especiales");
             nombreField.requestFocus();
@@ -339,7 +308,6 @@ public class RegistroUsuario {
             return false;
         }
 
-        // ✅ validacion apellido sin numeros
         if (!validarNombreApellido(apellidoField.getText().trim())) {
             mostrarError("El apellido solo puede contener letras y espacios\nNo se permiten números ni caracteres especiales");
             apellidoField.requestFocus();
@@ -347,7 +315,6 @@ public class RegistroUsuario {
             return false;
         }
 
-        // Resto de validaciones existentes...
         if (!Usuario.validarEmail(emailField.getText().trim())) {
             mostrarError("Por favor ingrese un email válido\nEjemplo: usuario@correo.com");
             emailField.requestFocus();
@@ -426,33 +393,25 @@ public class RegistroUsuario {
                 registro.mostrarVentana();
 
             } catch (Exception e) {
-                System.out.println("❌ ERROR EN RegistroUsuario: " + e.getMessage());
                 e.printStackTrace();
             }
         });
     }
 
     public void mostrarVentana() {
-        System.out.println("🎯 mostrarVentana() EJECUTADO");
         this.stage = new Stage();
-        System.out.println("🎯 STAGE CREADO: " + this.stage);
         inicializarInterfaz();
     }
     private void reiniciarAplicacion() {
-        System.out.println("🔄 REINICIANDO APLICACIÓN...");
 
         Platform.runLater(() -> {
             try {
-                // Cerrar esta ventana de registro
                 if (stage != null && stage.isShowing()) {
                     stage.close();
                 }
 
                 if (esAdministrador) {
-                    // ✅ CASO: ADMIN REGISTRANDO OTRO ADMIN
-                    System.out.println("🎯 ADMIN REGISTRÓ NUEVO ADMIN - REINICIANDO DASHBOARD");
 
-                    // Cerrar solo el dashboard actual del admin
                     for (Stage ventana : Stage.getWindows().toArray(new Stage[0])) {
                         if (ventana.getTitle() != null &&
                                 ventana.getTitle().contains("Dashboard Administrador")) {
@@ -460,20 +419,16 @@ public class RegistroUsuario {
                         }
                     }
 
-                    // Pequeña pausa
                     Thread.sleep(300);
 
                     // Reabrir dashboard fresco (con los nuevos usuarios cargados)
-                    // Necesitamos recrear el dashboard con el gestor actualizado
+                    //  recrear el dashboard con el gestor actualizado
                     GestorUsuarios gestorActualizado = new GestorUsuarios();
                     DashboardAdmin nuevoDashboard = new DashboardAdmin(gestorActualizado, gestorFunciones);
                     nuevoDashboard.mostrarDashboard();
 
                 } else {
-                    // ✅ CASO: CLIENTE REGISTRÁNDOSE
-                    System.out.println("🎯 CLIENTE REGISTRADO - REINICIANDO LOGIN");
 
-                    // Cerrar ventanas de login existentes
                     for (Stage ventana : Stage.getWindows().toArray(new Stage[0])) {
                         if (ventana.getTitle() != null &&
                                 ventana.getTitle().contains("CINE MARCENTER - Inicio de Sesión")) {
@@ -481,21 +436,17 @@ public class RegistroUsuario {
                         }
                     }
 
-                    // Pequeña pausa
                     Thread.sleep(300);
 
-                    // Reabrir login
                     Clases.login.LoginInterfaz.abrirLogin();
                 }
 
             } catch (Exception e) {
-                System.out.println("❌ Error al reiniciar: " + e.getMessage());
-                // Fallback según el caso
-                if (esAdministrador) {
-                    Clases.login.LoginInterfaz.abrirLogin();
-                } else {
-                    Clases.login.LoginInterfaz.abrirLogin();
-                }
+
+
+                //
+                Clases.login.LoginInterfaz.abrirLogin();
+
             }
         });
     }

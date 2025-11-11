@@ -93,7 +93,6 @@ public abstract class Usuario{
         }
     }
 
-    // Métodos comunes (mantener igual)
     public void incrementarIntentosFallidos() {
         this.intentosFallidos++;
         if (this.intentosFallidos >= 5) {
@@ -110,138 +109,47 @@ public abstract class Usuario{
     }
 
     // Getters y Setters (mantener igual)
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getApellido() { return apellido; }
+    public void setApellido(String apellido) { this.apellido = apellido; }
 
-    public String getApellido() {
-        return apellido;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public TipoUsuario getTipoUsuario() { return tipoUsuario; }
+    public void setTipoUsuario(TipoUsuario tipoUsuario) { this.tipoUsuario = tipoUsuario; }
 
-    public String getPassword() {
-        return password;
-    }
+    public LocalDateTime getFechaRegistro() { return fechaRegistro; }
+    public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
-    }
-
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
-    }
-
-    public LocalDateTime getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(LocalDateTime fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
-    }
-
-    public LocalDateTime getFechaUltimoAcceso() {
-        return fechaUltimoAcceso;
-    }
-
+    public LocalDateTime getFechaUltimoAcceso() { return fechaUltimoAcceso; }
     public void setFechaUltimoAcceso(LocalDateTime fechaUltimoAcceso) {
         this.fechaUltimoAcceso = fechaUltimoAcceso;
     }
 
-    public EstadoUsuario getEstado() {
-        return estado;
-    }
+    public EstadoUsuario getEstado() { return estado; }
+    public void setEstado(EstadoUsuario estado) { this.estado = estado; }
 
-    public void setEstado(EstadoUsuario estado) {
-        this.estado = estado;
-    }
-
-    public int getIntentosFallidos() {
-        return intentosFallidos;
-    }
-
+    public int getIntentosFallidos() { return intentosFallidos; }
     public void setIntentosFallidos(int intentosFallidos) {
         this.intentosFallidos = intentosFallidos;
     }
 
 
 
-   /* @Override
-    public Usuario fromJson(JSONObject json) {
-        try {
-            String nivel = json.has("nivelAcceso") ? json.getString("nivelAcceso") : null;
-            int puntos = json.has("puntosFidelidad") ? json.getInt("puntosFidelidad") : 0;
-
-            return new Usuario(
-                    json.getString("nombre"),
-                    json.getString("apellido"),
-                    json.getString("email"),
-                    json.getString("telefono"),
-                    json.getString("password"),
-                    json.getString("tipoUsuario"),
-                    json.getString("estado"),
-                    nivel,
-                    puntos,
-                    json.getInt("intentosFallidos"),
-                    LocalDateTime.parse(json.getString("fechaRegistro")),
-                    LocalDateTime.parse(json.getString("fechaUltimoAcceso"))
-            );
-
-        } catch (Exception e) {
-            throw new RuntimeException("❌ Error al convertir JSON a Usuario: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public JSONObject toJson(Usuario usuario) {
-        JSONObject obj = new JSONObject();
-        obj.put("nombre", usuario.getNombre());
-        obj.put("password", usuario.getPassword());
-        obj.put("rol", usuario.getRol());
-        return obj;
-    }
-    */
 
     @Override
     public String toString() {
         return String.format("Usuario{nombre='%s', apellido='%s', email='%s', tipo=%s, estado=%s}",
                 nombre, apellido, email, tipoUsuario.getDescripcion(), estado.getDescripcion());
-    }
-
-    public String toJSONString() {
-        return String.format(
-                "{\"nombre\":\"%s\",\"apellido\":\"%s\",\"email\":\"%s\",\"password\":\"%s\"," +
-                        "\"telefono\":\"%s\",\"tipoUsuario\":\"%s\",\"fechaRegistro\":\"%s\"," +
-                        "\"fechaUltimoAcceso\":\"%s\",\"estado\":\"%s\",\"intentosFallidos\":%d}",
-                nombre, apellido, email, password, telefono, tipoUsuario.name(),
-                fechaRegistro, fechaUltimoAcceso, estado.name(), intentosFallidos
-        );
     }
 
 }

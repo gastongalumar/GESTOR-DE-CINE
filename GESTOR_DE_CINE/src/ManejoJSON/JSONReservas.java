@@ -2,8 +2,8 @@ package ManejoJSON;
 
 import Clases.GestionDePagos.GestorDePagos;
 import Clases.GestionDePagos.Reserva;
-import Clases.ListaGenerica;
-import Clases.SalaCine;
+import Clases.Utilidades.ListaGenerica;
+import Clases.GestionSelectorAsientos.SalaCine;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,10 +40,10 @@ public class JSONReservas {
             reservasExistentes.agregar(reservaJson);
             guardarEnArchivo(reservasExistentes);
 
-            System.out.println("✅ Reserva guardada para: " + reserva.getClienteEmail());
+            System.out.println("Reserva guardada para: " + reserva.getClienteEmail());
 
         } catch (Exception e) {
-            System.err.println("❌ Error al guardar reserva: " + e.getMessage());
+            System.err.println("Error al guardar reserva: " + e.getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ public class JSONReservas {
                     reservasFiltradas.agregar(reserva);
                 }
             } catch (JSONException e) {
-                System.err.println("❌ Error al leer reserva: " + e.getMessage());
+                System.err.println("Error al leer reserva: " + e.getMessage());
             }
         }
 
@@ -85,7 +85,7 @@ public class JSONReservas {
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Error al leer reservas: " + e.getMessage());
+            System.err.println("Error al leer reservas: " + e.getMessage());
         }
 
         return reservas;
@@ -100,7 +100,7 @@ public class JSONReservas {
             file.write(jsonArray.toString(4));
             file.flush();
         } catch (Exception e) {
-            System.err.println("❌ Error al guardar archivo: " + e.getMessage());
+            System.err.println("Error al guardar archivo: " + e.getMessage());
         }
     }
 
@@ -128,15 +128,15 @@ public class JSONReservas {
             if (encontrada && reservaAEliminar != null) {
                 liberarAsientosReserva(reservaAEliminar);
                 guardarEnArchivo(reservasFiltradas);
-                System.out.println("✅ Reserva eliminada: " + numeroTicket);
+                System.out.println("Reserva eliminada: " + numeroTicket);
                 return true;
             } else {
-                System.out.println("❌ Reserva no encontrada: " + numeroTicket);
+                System.out.println("Reserva no encontrada: " + numeroTicket);
                 return false;
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Error al eliminar reserva: " + e.getMessage());
+            System.err.println("Error al eliminar reserva: " + e.getMessage());
             return false;
         }
     }
@@ -152,25 +152,13 @@ public class JSONReservas {
 
             GestorDePagos.eliminarTicketTemporal(numeroTicket);
 
-            System.out.println("🔄 Liberando asientos para: " + nombrePelicula);
-            System.out.println("🎫 Asientos: " + asientosSeleccionados.toString());
 
             // Buscar archivo de asientos
             String nombreArchivo = buscarArchivoAsientos(nombrePelicula, horarioFuncion);
 
-            if (nombreArchivo == null) {
-                System.err.println("❌ No se puede liberar asientos - archivo no encontrado");
-                return;
-            }
 
             String archivoAsientos = "JSONasientos/" + nombreArchivo;
 
-            System.out.println("📁 Ruta completa: " + archivoAsientos);
-
-            if (!new File(archivoAsientos).exists()) {
-                System.err.println("❌ Archivo no encontrado: " + archivoAsientos);
-                return;
-            }
 
             // Convertir JSONArray a List<String>
             List<String> asientosList = new ArrayList<>();
@@ -185,13 +173,13 @@ public class JSONReservas {
             boolean exito = gestorAsientos.liberarAsientos(asientosList);
 
             if (exito) {
-                System.out.println("✅ Asientos liberados exitosamente");
+                System.out.println("Asientos liberados exitosamente");
             } else {
-                System.err.println("❌ Error al liberar asientos");
+                System.err.println("Error al liberar asientos");
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Error en liberarAsientosReserva: " + e.getMessage());
+            System.err.println("Error en liberarAsientosReserva: " + e.getMessage());
         }
     }
 
@@ -202,13 +190,13 @@ public class JSONReservas {
 
             // Si la carpeta no existe, mostrar error
             if (!directorio.exists()) {
-                System.err.println("❌ Carpeta JSONasientos no encontrada");
+                System.err.println(" Carpeta JSONasientos no encontrada");
                 return null;
             }
 
             String nombreBusqueda = nombrePelicula.replaceAll("\\s+", "_");
 
-            System.out.println("🔍 Buscando archivo EXACTO:");
+            System.out.println("Buscando archivo EXACTO:");
             System.out.println("   Película: " + nombreBusqueda);
             System.out.println("   Horario reserva: " + horarioFuncion);
 
@@ -223,20 +211,20 @@ public class JSONReservas {
                 String nombreArchivoExacto = String.format("Asientos_%s_%s.json",
                         nombreBusqueda, horarioFormateado);
 
-                System.out.println("🔍 Archivo exacto esperado: " + nombreArchivoExacto);
+                System.out.println("Archivo exacto esperado: " + nombreArchivoExacto);
 
                 File archivoExacto = new File(directorio, nombreArchivoExacto);
                 if (archivoExacto.exists()) {
-                    System.out.println("✅ Archivo exacto encontrado: " + nombreArchivoExacto);
+                    System.out.println("Archivo exacto encontrado: " + nombreArchivoExacto);
                     return nombreArchivoExacto;
                 } else {
-                    System.err.println("❌ Archivo exacto NO encontrado: " + nombreArchivoExacto);
+                    System.err.println("Archivo exacto NO encontrado: " + nombreArchivoExacto);
 
                     // Listar archivos disponibles para debug
                     String[] archivos = directorio.list((dir, name) ->
                             name.startsWith("Asientos_") && name.endsWith(".json"));
                     if (archivos != null && archivos.length > 0) {
-                        System.out.println("📂 Archivos disponibles en JSONasientos:");
+                        System.out.println(" Archivos disponibles en JSONasientos:");
                         for (String f : archivos) {
                             System.out.println("   - " + f);
                         }
@@ -244,35 +232,15 @@ public class JSONReservas {
                     return null;
                 }
             } catch (Exception e) {
-                System.err.println("❌ Error buscando archivo exacto: " + e.getMessage());
+                System.err.println("Error buscando archivo exacto: " + e.getMessage());
                 return null;
             }
 
         } catch (Exception e) {
-            System.err.println("❌ Error buscando archivo: " + e.getMessage());
+            System.err.println("Error buscando archivo: " + e.getMessage());
             return null;
         }
     }
-
-    public void eliminarTicketTemporal(String fileName) {
-        try {
-            java.io.File file = new java.io.File(fileName);
-            if (file.exists()) {
-                if (file.delete()) {
-                    System.out.println("🗑️ Ticket temporal eliminado: " + fileName);
-                } else {
-                    System.err.println("❌ No se pudo eliminar el ticket temporal: " + fileName);
-                }
-            } else {
-                System.out.println("ℹ️  El archivo no existe, no requiere eliminación: " + fileName);
-            }
-        } catch (SecurityException e) {
-            System.err.println("❌ Error de seguridad al eliminar ticket temporal " + fileName + ": " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("❌ Error al eliminar ticket temporal " + fileName + ": " + e.getMessage());
-        }
-    }
-
 
 
 }

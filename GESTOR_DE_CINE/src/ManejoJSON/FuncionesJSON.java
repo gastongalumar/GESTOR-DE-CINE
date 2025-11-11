@@ -1,12 +1,13 @@
 package ManejoJSON;
 
-import Clases.*;
-import Clases.GestionDePagos.Pago;
-import Clases.login.GestorUsuarios;
+import Clases.Administracion.GestorPeliculas;
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
+import Clases.GestionSelectorAsientos.SalaCine;
 import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
-import Interfaces.ConversorJson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,10 +28,8 @@ public class FuncionesJSON{
             try {
                 if(!listaFunciones.isEmpty()) {
                     for (int i = 0; i < listaFunciones.size(); i++) {
-                       // System.out.println(listaFunciones.get(i));
                         JSONObject jsonFuncion = new JSONObject();
                         Funcion funcion = listaFunciones.get(i);
-                      //  System.out.println(funcion.getSala().getNombreSala()); descartamos aca NO NULL EL GETTER
                         jsonFuncion.put("Sala", funcion.getSala().getNombreSala());
                         jsonFuncion.put("Pelicula", funcion.getPelicula().getNombrePelicula());
                         jsonFuncion.put("Fecha y hora", funcion.getHorarioFuncion().format(formato));
@@ -57,7 +56,6 @@ public class FuncionesJSON{
         try {
             JSONArray jsonFunciones = new JSONArray(JSONUtiles.leer("funciones.json"));
             if (jsonFunciones == null) {
-                System.out.println("⚠️ No hay funciones guardadas en el JSON.");
                 return listaFunciones;
             }
 
@@ -70,29 +68,24 @@ public class FuncionesJSON{
                 double precioFuncion = obj.getDouble("Precio");
 
                 SalaCine salaEncontrada = buscarSalaPorNombre(listaSalas, nombreSala);
-                //System.out.println(salaEncontrada); DESCARTAMOS ACA TAMBIEN, LA SALA LA ENCUENTRA
                 Pelicula peliculaEncontrada = buscarPeliculaPorNombre(listaPeliculas, nombrePelicula);
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                 if (salaEncontrada != null && peliculaEncontrada != null) {
                     LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraStr, formato);
                     Funcion f = new Funcion(salaEncontrada, peliculaEncontrada, fechaHora, precioFuncion, gestorFunciones);
                     listaFunciones.add(f);
-                   // gestorFunciones.agregarFuncion(f);
                 } else {
-                    System.out.println("⚠️ No se encontró coincidencia para: " + nombrePelicula + " / " + nombreSala);
                 }
             }
 
-            //GestorFunciones.setListaFunciones(new ListaGenerica<>(listaFunciones));
 
         } catch (Exception e) {
-            System.out.println("❌ Error al deserializar funciones: " + e.getMessage());
         }
 
         return listaFunciones;
     }
 
-    // 🔸 Métodos auxiliares de búsqueda
+    // Métodos auxiliares de búsqueda
     private static Pelicula buscarPeliculaPorNombre(List<Pelicula> lista, String nombre) {
         for (Pelicula p : lista) {
             if (p.getNombrePelicula().equalsIgnoreCase(nombre)) {
@@ -160,7 +153,6 @@ public class FuncionesJSON{
 
             GestorPeliculas.setListaPeliculas(listaPeliculas);
         } catch (Exception e) {
-            System.out.println("❌ Error al deserializar películas: " + e.getMessage());
         }
 
         return listaPeliculas;
@@ -213,7 +205,6 @@ public class FuncionesJSON{
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Error al deserializar usuarios: " + e.getMessage());
         }
 
         return listaUsuarios;
@@ -248,7 +239,6 @@ public class FuncionesJSON{
                     dataArray.put(obj);
 
                 } catch (Exception ex) {
-                    System.out.println("⚠️ Error al procesar usuario " + u.getEmail() + ": " + ex.getMessage());
                 }
             }
 
@@ -258,32 +248,9 @@ public class FuncionesJSON{
             raiz.put("totalElementos", listaUsuarios.size());
 
             JSONUtiles.grabar(raiz, "usuarios.json");
-            System.out.println("💾 Usuarios guardados correctamente en usuarios.json");
 
         } catch (Exception e) {
-            System.out.println("❌ Error al serializar usuarios: " + e.getMessage());
-        }
-    }
 
-
-    public static void serializarPagos(List<Pago> listaPagos) {
-        JSONArray jsonPagos = new JSONArray();
-
-        try {
-            for (Pago pago : listaPagos) {
-                JSONObject jsonPago = new JSONObject();
-                jsonPago.put("ID", pago.getIdPago());
-                jsonPago.put("Monto", pago.getMonto());
-                jsonPago.put("Fecha", pago.getFechaPago().toString());
-                jsonPago.put("Metodo", pago.getMetodoPago());
-
-                jsonPagos.put(jsonPago);
-            }
-
-            JSONUtiles.grabar(jsonPagos, "pagos.json");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 }

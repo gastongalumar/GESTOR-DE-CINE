@@ -1,7 +1,11 @@
 package Clases.login;
 
-import Clases.*;
+import Clases.Administracion.GestorAdministrador;
+import Clases.Administracion.GestorPeliculas;
+import Clases.Administracion.VistaCartelera;
 import Clases.GestionDePagos.HistorialCompras;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import javafx.application.Application;
@@ -269,7 +273,7 @@ public class SistemaPrincipal extends Application {
                 return (Cliente) usuario;
             }
         } catch (Exception e) {
-            System.out.println("❌ Error obteniendo cliente: " + e.getMessage());
+            System.out.println("Error obteniendo cliente: " + e.getMessage());
             mostrarAlerta("Error", "No se pudo obtener la información del cliente");
         }
         return null;
@@ -296,14 +300,6 @@ public class SistemaPrincipal extends Application {
         carteleraStage.show();
     }
 
-    private void mostrarFuncionalidadEmpleado(String opcion) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Funcionalidad Empleado");
-        alert.setHeaderText(opcion);
-        alert.setContentText("Esta funcionalidad está disponible para empleados.\n\n" +
-                "Próximamente: Gestión de ventas y atención al cliente.");
-        alert.showAndWait();
-    }
 
     private void mostrarPromocionesCliente(Cliente cliente) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
