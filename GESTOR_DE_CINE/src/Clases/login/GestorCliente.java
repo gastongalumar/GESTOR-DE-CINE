@@ -75,10 +75,8 @@ public class GestorCliente {
 
         botonCerrarSesion.setOnAction(e -> {
             ventana.close();
-            // Aquí puedes agregar la lógica para volver a la pantalla de login si es necesario
         });
 
-        // === PANEL LATERAL SOLO CON INFORMACIÓN Y CERRAR SESIÓN ===
         VBox panelLateral = new VBox(10,
                 tituloPeliculas,
                 tituloFunciones,
@@ -94,11 +92,4 @@ public class GestorCliente {
         ventana.show();
     }
 
-   /* public static void mostrarAlerta(String mensaje) {
-        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-        alerta.setTitle("Información");
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
-    }*/
 }

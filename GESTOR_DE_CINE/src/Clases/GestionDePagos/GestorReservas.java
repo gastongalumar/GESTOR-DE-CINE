@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.time.format.DateTimeFormatter;
 
-public class GestorReservas {
+/*public class GestorReservas {
     private Cliente cliente;
     private Funcion funcionSeleccionada;
     private int asientosSeleccionados;
@@ -21,11 +21,6 @@ public class GestorReservas {
         this.cliente = cliente;
     }
 
-    public void iniciarCompra(Funcion funcion, int asientos) {
-        this.funcionSeleccionada = funcion;
-        this.asientosSeleccionados = asientos;
-        mostrarResumenCompra();
-    }
 
     private void mostrarResumenCompra() {
         Stage stage = new Stage();
@@ -123,3 +118,6 @@ public class GestorReservas {
         alert.showAndWait();
     }
 }
+
+
+ */

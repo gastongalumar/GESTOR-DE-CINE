@@ -25,7 +25,7 @@ public class Pago {
         this.monto = monto;
         this.metodoDePago = metodoDePago;
         this.fechaPago = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-        this.idReserva = generarIdReserva(); // Puedes ajustar esto según tu lógica de reservas
+        this.idReserva = generarIdReserva();
     }
 
     // Getters y Setters
@@ -69,7 +69,6 @@ public class Pago {
         this.idReserva = idReserva;
     }
 
-    // ✅ CORREGIDO: Métodos que devolvían boolean ahora devuelven lo correcto
     public int getIdPago() {
         return this.id;
     }
@@ -78,17 +77,14 @@ public class Pago {
         return this.metodoDePago;
     }
 
-    // ✅ NUEVO: Metodo para generar ID único
     private int generarIdPago() {
         return (int) (System.currentTimeMillis() % 1000000);
     }
 
-    // ✅ NUEVO: Metodo para generar ID de reserva
     private int generarIdReserva() {
         return (int) (System.currentTimeMillis() % 100000) + 1000;
     }
 
-    // ✅ NUEVO: Metodo toString para mejor visualización
     @Override
     public String toString() {
         return String.format(

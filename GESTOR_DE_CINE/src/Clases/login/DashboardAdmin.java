@@ -28,7 +28,6 @@ public class DashboardAdmin {
     private GestorFunciones gestorFunciones;
     private Stage stage;
 
-    // ✅ Constructor modificado para recibir GestorFunciones
     public DashboardAdmin(GestorUsuarios gestorUsuarios, GestorFunciones gestorFunciones) {
         this.gestorUsuarios = gestorUsuarios;
         this.gestorFunciones = gestorFunciones;
@@ -56,11 +55,11 @@ public class DashboardAdmin {
             Tab tabEstadisticas = new Tab("Estadísticas", crearPanelEstadisticas());
             tabEstadisticas.setClosable(false);
 
-            // ✅ NUEVA PESTAÑA: Gestión de Cine
+            //  NUEVA PESTAÑA: Gestión de Cine
             Tab tabCine = new Tab("Gestión de Cine", crearPanelCine(cliente));
             tabCine.setClosable(false);
 
-            // ✅ Agregar todas las pestañas
+            // Agregar todas las pestañas
             tabPane.getTabs().addAll(tabResumen, tabUsuarios, tabEstadisticas, tabCine);
 
             Scene scene = new Scene(tabPane);
@@ -69,7 +68,6 @@ public class DashboardAdmin {
         });
     }
 
-    // ✅ Método corregido - sin parámetros
     private BorderPane crearPanelCine(Cliente cliente) {
         BorderPane panel = new BorderPane();
         panel.setPadding(new Insets(20));
@@ -109,7 +107,7 @@ public class DashboardAdmin {
         return panel;
     }
 
-    // Los demás métodos permanecen igual...
+
     private BorderPane crearPanelResumen() {
         BorderPane panel = new BorderPane();
         panel.setPadding(new Insets(20));
@@ -183,13 +181,12 @@ public class DashboardAdmin {
         Button btnEstadisticas = new Button("Ver Estadísticas Login");
         btnEstadisticas.setOnAction(e -> GestorEstadisticasLogin.getInstance().mostrarGraficaLogins());
 
-        // ✅ NUEVO BOTÓN: Registrar Administrador
+
+
         Button btnRegistrarAdmin = new Button("Registrar Nuevo Administrador");
         btnRegistrarAdmin.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
         btnRegistrarAdmin.setOnAction(e -> {
-            System.out.println("🎯 ADMIN SOLICITA REGISTRAR NUEVO ADMIN");
-//            RegistroUsuario.abrirRegistroAdministrativo();
-            RegistroUsuario registro = new RegistroUsuario(true, gestorFunciones); // ✅ Pasar gestorFunciones
+            RegistroUsuario registro = new RegistroUsuario(true, gestorFunciones);
             registro.mostrarVentana();
         });
 
@@ -197,7 +194,6 @@ public class DashboardAdmin {
         header.getChildren().addAll(titulo, botonesPanel);
         panel.setTop(header);
 
-        // Tabla de usuarios
         actualizarTablaUsuarios(panel);
 
         return panel;
@@ -205,7 +201,7 @@ public class DashboardAdmin {
     private void actualizarTablaUsuarios(BorderPane panel) {
         TableView<Usuario> tabla = new TableView<>();
 
-        // Columnas
+
         TableColumn<Usuario, String> colNombre = new TableColumn<>("Nombre");
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 

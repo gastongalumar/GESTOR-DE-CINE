@@ -12,7 +12,6 @@ public class Pelicula {
 
     public Pelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
-        // Inicializar fechas como null por defecto (VistaCartelera ya maneja nulls)
         this.fechaEstreno = null;
         this.fechaSalida = null;
     }

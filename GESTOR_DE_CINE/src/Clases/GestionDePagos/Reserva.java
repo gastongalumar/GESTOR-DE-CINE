@@ -35,7 +35,6 @@ public class Reserva {
         this.asientosSeleccionados = asientosSeleccionados;
         this.fechaEmision = LocalDateTime.now();
 
-        // ✅ MEJORADO: Guardar datos del cliente con manejo de null
         if (cliente != null) {
             this.clienteEmail = cliente.getEmail() != null ? cliente.getEmail() : "cliente@cinemax.com";
 
@@ -63,7 +62,7 @@ public class Reserva {
         this(null, funcion, metodoPago, monto, asientosSeleccionados);
     }
 
-    // Método para generar número de ticket
+    // generar número de ticket
     private String generarNumeroTicket() {
         return "TK" + System.currentTimeMillis() + String.format("%03d", (int)(Math.random() * 1000));
     }
@@ -82,30 +81,9 @@ public class Reserva {
     public String getClienteEmail() { return clienteEmail; }
     public String getClienteNombre() { return clienteNombre; }
 
-    // Método para obtener la fecha formateada
-    public String getFechaEmisionFormateada() {
-        return fechaEmision.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-    }
 
-    // Método para obtener asientos como string
     public String getAsientosComoString() {
         return asientosSeleccionados.isEmpty() ? "Por asignar" : String.join(", ", asientosSeleccionados);
-    }
-
-    // Método para obtener el monto formateado
-    public String getMontoFormateado() {
-        return String.format("%,.2f", monto);
-    }
-
-    // Método para obtener solo los números del ticket (sin "TK")
-    public String getNumeroTicketSinPrefijo() {
-        return numeroTicket.replace("TK", "");
-    }
-
-    // Método para obtener los primeros 6 dígitos del ticket
-    public String getNumeroTicketCorto() {
-        String sinPrefijo = getNumeroTicketSinPrefijo();
-        return sinPrefijo.substring(0, Math.min(6, sinPrefijo.length()));
     }
 
     @Override

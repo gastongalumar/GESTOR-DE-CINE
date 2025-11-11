@@ -269,7 +269,7 @@ public class SistemaPrincipal extends Application {
                 return (Cliente) usuario;
             }
         } catch (Exception e) {
-            System.out.println("❌ Error obteniendo cliente: " + e.getMessage());
+            System.out.println("Error obteniendo cliente: " + e.getMessage());
             mostrarAlerta("Error", "No se pudo obtener la información del cliente");
         }
         return null;
@@ -296,14 +296,6 @@ public class SistemaPrincipal extends Application {
         carteleraStage.show();
     }
 
-    private void mostrarFuncionalidadEmpleado(String opcion) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Funcionalidad Empleado");
-        alert.setHeaderText(opcion);
-        alert.setContentText("Esta funcionalidad está disponible para empleados.\n\n" +
-                "Próximamente: Gestión de ventas y atención al cliente.");
-        alert.showAndWait();
-    }
 
     private void mostrarPromocionesCliente(Cliente cliente) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

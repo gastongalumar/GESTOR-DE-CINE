@@ -188,7 +188,7 @@ public class GestorEstadisticasLogin {
         return panel;
     }
 
-    // Métodos para obtener estadísticas (mantener igual)
+
     public int getTotalLogins() {
         return registros.size();
     }
@@ -201,7 +201,4 @@ public class GestorEstadisticasLogin {
         return loginsCliente;
     }
 
-    public int[] getLoginsPorHora() {
-        return loginsPorHora.clone();
-    }
 }

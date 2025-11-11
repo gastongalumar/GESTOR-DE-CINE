@@ -296,7 +296,6 @@ public class Formularios {
                 p.setFechaSalida(nuevaFechaSalida);
                 p.setRutaImagen(nuevaRutaImagen[0]);
                 p.setDuracion(Duration.ofMinutes((long)Long.parseLong(campoDuracion.getText())));
-                //FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
                 FuncionesJSON.serializarPeliculas(GestorPeliculas.getListaPeliculas());
 
             }catch (CamposIncompletosException | FechaInvalidaException ex){
@@ -418,8 +417,6 @@ public class Formularios {
                 mostrarAlerta("Por favor, completa todos los campos.");
             } else {
                 try {
-                    DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                    DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
 
                     LocalDateTime fechaInicialTime = LocalDateTime.parse(fechaInicial + " " + horario, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
                     LocalDateTime fechaFinalTime = LocalDateTime.parse(fechaFinal + " " + horario, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
@@ -430,9 +427,6 @@ public class Formularios {
                         mostrarAlerta("Ingresá un rango de fechas válido");
                     }else {
                         LocalDateTime fechaAgregar = fechaInicialTime;
-                        System.out.println("Días de diferencia: " + diasDiferencia);
-                        System.out.println("Fecha inicial: " + fechaInicialTime);
-                        System.out.println("Fecha final: " + fechaFinalTime);
 
                         if (sala.equalsIgnoreCase("Sala 1") || sala.equalsIgnoreCase("Sala 2")) {
                             Pelicula peliculaSeleccionada = null;
@@ -501,8 +495,6 @@ public class Formularios {
 
             }
 
-            //ventana.close();
-            // ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
         });
 
 

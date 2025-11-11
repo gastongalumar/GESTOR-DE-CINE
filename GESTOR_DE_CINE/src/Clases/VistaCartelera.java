@@ -124,12 +124,10 @@ public class VistaCartelera {
 
 
                 horario.setOnMouseClicked(ev -> {
-                    SwingUtilities.invokeLater(() -> {
-                        SelectorAsientos.mostrarSelectorAsientos(f,cliente);
-
-
-                    });
+                    SelectorAsientos.mostrarSelectorAsientos(f, cliente);
+                    ventana.close();
                 });
+
 
                 horariosDelDia.getChildren().add(horario);
             }
@@ -157,7 +155,6 @@ public class VistaCartelera {
             peliculaSeleccionada.setScaleY(1);
         });
 
-        // antes se devolvía el contenedor pero no era usado; ahora es void
     }
 
 

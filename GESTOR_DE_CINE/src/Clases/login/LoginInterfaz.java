@@ -236,18 +236,15 @@ public class LoginInterfaz extends Application {
     }
 
     private void registrarUsuario() {
-        System.out.println("🎯 BOTÓN REGISTRAR PRESIONADO EN LOGININTERFAZ");
 
         Platform.runLater(() -> {
             try {
-                // ✅ Esto abre tu formulario de registro que YA funciona
                 RegistroUsuario.abrirRegistroCliente();
 
             } catch (Exception e) {
-                System.out.println("❌ ERROR AL ABRIR REGISTRO: " + e.getMessage());
                 e.printStackTrace();
 
-                // Mensaje de emergencia si falla
+
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("No se pudo abrir el formulario de registro");
@@ -312,7 +309,7 @@ public class LoginInterfaz extends Application {
             return true;
 
         } catch (AutenticacionException | UsuarioException e) {
-            System.out.println("❌ Error de autenticación: " + e.getMessage());
+            System.out.println("Error de autenticación: " + e.getMessage());
             return false;
         }
     }
@@ -327,7 +324,7 @@ public class LoginInterfaz extends Application {
     }
 
 
-    // En LoginInterfaz.java - Modificar el método abrirSistemaPrincipal
+
     private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones) {
         mostrarAlerta("Login Exitoso",
                 "¡Bienvenido " + usuario + "!\nTipo: " + tipoUsuario,
@@ -344,11 +341,11 @@ public class LoginInterfaz extends Application {
     }
 
     private void abrirPanelAdministrador(GestorFunciones gestorFunciones) {
-        System.out.println("🎯 INTENTANDO ABRIR PANEL ADMIN...");
+
 
         Platform.runLater(() -> {
             try {
-                System.out.println("🎯 CREANDO DASHBOARD ADMIN...");
+
 
 
                 DashboardAdmin dashboard = new DashboardAdmin(
@@ -358,10 +355,11 @@ public class LoginInterfaz extends Application {
                 dashboard.mostrarDashboard();
 
             } catch (Exception e) {
-                System.out.println("❌ ERROR EN PANEL ADMIN: " + e.getMessage());
+                System.out.println("ERROR EN PANEL ADMIN: " + e.getMessage());
                 e.printStackTrace();
 
-                // Mensaje de error
+
+
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("No se pudo abrir el panel de administrador");
@@ -373,11 +371,11 @@ public class LoginInterfaz extends Application {
 
     private void abrirPanelCliente(String usuario, GestorFunciones gestorFunciones) {
         Platform.runLater(() -> {
-            // Buscar el cliente por email (necesitas implementar esto)
+            // Buscar el cliente por email
             Cliente cliente = buscarClientePorEmail(usuario);
 
             if (cliente == null) {
-                // Cliente temporal si no lo encuentras
+                // Cliente temporal
                 cliente = new Cliente();
             }
 
@@ -461,20 +459,10 @@ public class LoginInterfaz extends Application {
         botonHistorial.setStyle("-fx-background-color: #4169E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
         botonHistorial.setOnAction(e -> HistorialCompras.mostrarHistorial(cliente));
 
-//        // Puntos de Fidelidad
-//        Button botonPuntos = new Button("Mis Puntos: " + cliente.getPuntosFidelidad());
-//        botonPuntos.setStyle("-fx-background-color: #FFAA4A; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
-//        botonPuntos.setOnAction(e -> mostrarInfoPuntos(cliente));
-
         // Promociones
         Button botonPromociones = new Button("Promociones Activas");
         botonPromociones.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
         botonPromociones.setOnAction(e -> mostrarPromociones(cliente));
-
-//        // Cancelar Reserva
-//        Button botonCancelarReserva = new Button("Cancelar Reserva");
-//        botonCancelarReserva.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 10;");
-//        botonCancelarReserva.setOnAction(e -> mostrarCancelarReserva(cliente, gestorFunciones));
 
         // Mi Perfil
         Button botonPerfil = new Button("Mi Perfil");
@@ -484,9 +472,7 @@ public class LoginInterfaz extends Application {
         VBox panelBotones = new VBox(10,
                 tituloFunciones,
                 botonHistorial,
-              //  botonPuntos,
                 botonPromociones,
-             //   botonCancelarReserva,
                 separacion,
                 tituloPeliculas,
                 botonPerfil
@@ -495,14 +481,7 @@ public class LoginInterfaz extends Application {
         return panelBotones;
     }
 
-    // Métodos auxiliares (agrégalos en la misma clase)
-    private void mostrarInfoPuntos(Cliente cliente) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Mis Puntos de Fidelidad");
-        alert.setHeaderText("Tus puntos: " + cliente.getPuntosFidelidad());
-        alert.setContentText("💡 Canjea 100 puntos por un 10% de descuento en tu próxima compra!");
-        alert.showAndWait();
-    }
+    // Métodos auxiliares
 
     private void mostrarPromociones(Cliente cliente) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -520,35 +499,24 @@ public class LoginInterfaz extends Application {
         alert.showAndWait();
     }
 
-    private void mostrarCancelarReserva(Cliente cliente, GestorFunciones gestorFunciones) {
 
-        // o implementar la lógica directamente
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Cancelar Reserva");
-        alert.setHeaderText("Funcionalidad de Cancelación");
-        alert.setContentText("Aquí se mostrarían tus reservas activas para cancelar.");
-        alert.showAndWait();
-    }
 
     private Cliente buscarClientePorEmail(String email) {
         try {
-            System.out.println("🔍 BUSCANDO CLIENTE: " + email);
 
             // Buscar el usuario en el GestorUsuarios
             Usuario usuario = gestorUsuarios.buscarPorEmail(email);
 
             if (usuario instanceof Cliente) {
                 Cliente cliente = (Cliente) usuario;
-                System.out.println("✅ CLIENTE ENCONTRADO: " + cliente.getNombre() + " " + cliente.getApellido());
                 return cliente;
             } else {
-                System.out.println("❌ El usuario no es un Cliente: " + usuario.getTipoUsuario());
                 // Si no es cliente, crear uno temporal con los datos básicos
                 return crearClienteTemporal(usuario);
             }
 
         } catch (UsuarioException e) {
-            System.out.println("❌ CLIENTE NO ENCONTRADO: " + e.getMessage());
+            System.out.println("CLIENTE NO ENCONTRADO: " + e.getMessage());
             // Crear cliente temporal con el email
             return crearClienteTemporal(email);
         }

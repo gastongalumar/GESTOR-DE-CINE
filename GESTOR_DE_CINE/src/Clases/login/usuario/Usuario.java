@@ -93,7 +93,6 @@ public abstract class Usuario{
         }
     }
 
-    // Métodos comunes (mantener igual)
     public void incrementarIntentosFallidos() {
         this.intentosFallidos++;
         if (this.intentosFallidos >= 5) {
@@ -146,57 +145,11 @@ public abstract class Usuario{
 
 
 
-   /* @Override
-    public Usuario fromJson(JSONObject json) {
-        try {
-            String nivel = json.has("nivelAcceso") ? json.getString("nivelAcceso") : null;
-            int puntos = json.has("puntosFidelidad") ? json.getInt("puntosFidelidad") : 0;
-
-            return new Usuario(
-                    json.getString("nombre"),
-                    json.getString("apellido"),
-                    json.getString("email"),
-                    json.getString("telefono"),
-                    json.getString("password"),
-                    json.getString("tipoUsuario"),
-                    json.getString("estado"),
-                    nivel,
-                    puntos,
-                    json.getInt("intentosFallidos"),
-                    LocalDateTime.parse(json.getString("fechaRegistro")),
-                    LocalDateTime.parse(json.getString("fechaUltimoAcceso"))
-            );
-
-        } catch (Exception e) {
-            throw new RuntimeException("❌ Error al convertir JSON a Usuario: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public JSONObject toJson(Usuario usuario) {
-        JSONObject obj = new JSONObject();
-        obj.put("nombre", usuario.getNombre());
-        obj.put("password", usuario.getPassword());
-        obj.put("rol", usuario.getRol());
-        return obj;
-    }
-    */
 
     @Override
     public String toString() {
         return String.format("Usuario{nombre='%s', apellido='%s', email='%s', tipo=%s, estado=%s}",
                 nombre, apellido, email, tipoUsuario.getDescripcion(), estado.getDescripcion());
     }
-
-    public String toJSONString() {
-        return String.format(
-                "{\"nombre\":\"%s\",\"apellido\":\"%s\",\"email\":\"%s\",\"password\":\"%s\"," +
-                        "\"telefono\":\"%s\",\"tipoUsuario\":\"%s\",\"fechaRegistro\":\"%s\"," +
-                        "\"fechaUltimoAcceso\":\"%s\",\"estado\":\"%s\",\"intentosFallidos\":%d}",
-                nombre, apellido, email, password, telefono, tipoUsuario.name(),
-                fechaRegistro, fechaUltimoAcceso, estado.name(), intentosFallidos
-        );
-    }
-
 
 }

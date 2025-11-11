@@ -21,7 +21,6 @@ public class HistorialCompras {
 
     public static void agregarReservaAlHistorial(Cliente cliente, Reserva reserva) {
         JSONReservas.guardarReserva(reserva);
-        System.out.println("✅ Reserva registrada para: " + cliente.getEmail());
     }
 
     public static void mostrarHistorialReservas(Cliente cliente) {
@@ -127,9 +126,6 @@ public class HistorialCompras {
         ObservableList<JSONObject> data = FXCollections.observableArrayList(reservasCliente.obtenerTodos());
         tabla.setItems(data);
 
-//        // Mostrar estadísticas
-//        Label puntosLabel = new Label("Tus puntos de fidelidad: " + cliente.getPuntosFidelidad());
-//        puntosLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #e67e22;");
 
         double totalGastado = reservasCliente.obtenerTodos().stream()
                 .mapToDouble(reserva -> {
@@ -146,7 +142,7 @@ public class HistorialCompras {
         Label reservasLabel = new Label("Total de reservas: " + reservasCliente.tamaño());
         reservasLabel.setStyle("-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #27ae60;");
 
-        // ✅ BOTÓN PARA ACTUALIZAR
+        //  BOTÓN PARA ACTUALIZAR
         Button btnActualizar = new Button("Actualizar Historial");
         btnActualizar.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
         btnActualizar.setOnAction(e -> {
@@ -177,7 +173,7 @@ public class HistorialCompras {
                 if (eliminada) {
                     Alert exito = new Alert(Alert.AlertType.INFORMATION);
                     exito.setTitle("Reserva Cancelada");
-                    exito.setHeaderText("✅ Reserva cancelada exitosamente");
+                    exito.setHeaderText("Reserva cancelada exitosamente");
                     exito.setContentText("El ticket " + numeroTicket + " ha sido cancelado.\nSe han reembolsado tus puntos si correspondía.");
                     exito.showAndWait();
 
@@ -187,7 +183,7 @@ public class HistorialCompras {
                 } else {
                     Alert error = new Alert(Alert.AlertType.ERROR);
                     error.setTitle("Error");
-                    error.setHeaderText("❌ No se pudo cancelar la reserva");
+                    error.setHeaderText("No se pudo cancelar la reserva");
                     error.setContentText("El ticket " + numeroTicket + " no existe o ya fue cancelado.");
                     error.showAndWait();
                 }
@@ -195,90 +191,14 @@ public class HistorialCompras {
         });
     }
 
-    public static void mostrarCancelarReserva(Cliente cliente) {
-        Stage stage = new Stage();
-        stage.setTitle("Cancelar Reserva - CINE MARCENTER");
-
-        VBox panel = new VBox(20);
-        panel.setPadding(new Insets(20));
-        panel.setStyle("-fx-background-color: #f8f9fa;");
-
-        Label titulo = new Label("Cancelar Reserva");
-        titulo.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
-
-        // Obtener reservas activas del cliente
-        var reservasCliente = JSONReservas.obtenerReservasPorCliente(cliente.getEmail());
-
-        if (reservasCliente.tamaño() == 0) {
-            Label sinReservas = new Label("No tienes reservas activas para cancelar.");
-            sinReservas.setStyle("-fx-font-size: 16; -fx-text-fill: #7f8c8d;");
-            panel.getChildren().addAll(titulo, sinReservas);
-        } else {
-            Label instrucciones = new Label("Selecciona una reserva para cancelar:");
-            instrucciones.setStyle("-fx-font-size: 14; -fx-text-fill: #34495e;");
-
-            ListView<String> listaReservas = new ListView<>();
-            ObservableList<String> items = FXCollections.observableArrayList();
-
-            for (JSONObject reserva : reservasCliente.obtenerTodos()) {
-                String pelicula = reserva.optString("nombrePelicula", "N/A");
-                String ticket = reserva.optString("numeroTicket", "N/A");
-                String funcion = reserva.optString("horarioFuncion", "N/A");
-                String item = String.format("🎬 %s - Ticket: %s - %s", pelicula, ticket, funcion);
-                items.add(item);
-            }
-
-            listaReservas.setItems(items);
-
-            Button btnCancelar = new Button("Cancelar Reserva Seleccionada");
-            btnCancelar.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
-            btnCancelar.setOnAction(e -> {
-                String seleccionado = listaReservas.getSelectionModel().getSelectedItem();
-                if (seleccionado != null) {
-                    // Extraer el número de ticket del texto
-                    String[] partes = seleccionado.split("Ticket: ");
-                    if (partes.length > 1) {
-                        String numeroTicket = partes[1].split(" -")[0];
-                        cancelarReserva(numeroTicket, cliente, stage);
-                    }
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Selección Requerida");
-                    alert.setHeaderText("Por favor selecciona una reserva");
-                    alert.setContentText("Debes seleccionar una reserva de la lista para cancelar.");
-                    alert.showAndWait();
-                }
-            });
-
-            panel.getChildren().addAll(titulo, instrucciones, listaReservas, btnCancelar);
-        }
-
-        Scene scene = new Scene(panel, 500, 400);
-        stage.setScene(scene);
-        stage.show();
-    }
 
     public static void mostrarHistorial(Cliente cliente) {
         mostrarHistorialReservas(cliente);
     }
 
-    public static void agregarCompra(Cliente cliente, Funcion funcionSeleccionada, int asientosSeleccionados, double total) {
-        Reserva reserva = new Reserva(
-                cliente,
-                funcionSeleccionada,
-                "Método de Pago Desconocido",
-                total,
-                List.of()
-        );
-        agregarReservaAlHistorial(cliente, reserva);
-    }
 
     public static void agregarCompraConReserva(Cliente cliente, Reserva reserva) {
         agregarReservaAlHistorial(cliente, reserva);
     }
 
-    // ✅ MÉTODO PARA VERIFICAR SI UN CLIENTE TIENE RESERVAS
-    public static boolean tieneReservasActivas(Cliente cliente) {
-        return JSONReservas.obtenerReservasPorCliente(cliente.getEmail()).tamaño() > 0;
-    }
 }

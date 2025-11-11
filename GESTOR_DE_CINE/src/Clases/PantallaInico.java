@@ -152,7 +152,6 @@ public class PantallaInico extends Application {
 
         // Detectar interacción
         root.setOnMouseClicked(e -> {
-            System.out.println("🎯 Click detectado - Cerrando pantalla de inicio");
             cerrarConAnimacion();
         });
 
@@ -161,17 +160,14 @@ public class PantallaInico extends Application {
                 case SPACE:
                 case ENTER:
                 case ESCAPE:
-                    System.out.println("🎯 Tecla " + e.getCode() + " detectada");
                     cerrarConAnimacion();
                     break;
             }
         });
 
-        // Cierre automático de respaldo
         javafx.animation.PauseTransition autoClose = new javafx.animation.PauseTransition(Duration.seconds(15));
         autoClose.setOnFinished(e -> {
             if (stage.isShowing()) {
-                System.out.println("🕐 Cierre automático después de 15 segundos");
                 cerrarConAnimacion();
             }
         });
@@ -237,9 +233,6 @@ public class PantallaInico extends Application {
         LoginInterfaz.abrirLogin();
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     public static void mostrarInicio() {
         PantallaInico pantalla = new PantallaInico();
