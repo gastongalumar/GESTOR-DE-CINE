@@ -479,6 +479,8 @@ public class Formularios {
 
                                 FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
                                 mostrarAlerta("Funciones agregadas correctamente.");
+                            }else{
+                                throw new FechaInvalidaException("La fecha que quieres ingresar es antes de la fecha de estreno o posterior a la fecha de salida");
                             }
                         } else {
                             String desc = "Sala inválida";
@@ -491,7 +493,12 @@ public class Formularios {
                     mostrarAlerta("Formato de fecha u hora incorrecto");
                     ventana.close();
                     ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
-                }catch (Exception ex){
+                }catch(FechaInvalidaException ex){
+                    mostrarAlerta("La fecha que quieres ingresar es antes de la fecha de estreno o posterior a la fecha de salida");
+                    ventana.close();
+                    ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
+                }
+                catch (Exception ex){
                     mostrarAlerta("Error en la carga de datos");
                     ventana.close();
                     ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);

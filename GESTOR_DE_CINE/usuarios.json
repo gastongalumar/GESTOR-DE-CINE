@@ -1,58 +1,6 @@
 {
-    "ultimaActualizacion": "2025-11-10T23:57:49.979007300",
+    "ultimaActualizacion": "2025-11-11T09:22:58.065056600",
     "data": [
-        {
-            "nivelAcceso": "avanzado",
-            "password": "admin123",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-07T22:01:35",
-            "apellido": "Sistema",
-            "tipoUsuario": "ADMINISTRADOR",
-            "telefono": "123456789",
-            "nombre": "Admin",
-            "email": "admin@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T19:31:00",
-            "intentosFallidos": 0
-        },
-        {
-            "password": "123456",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-07T22:01:35",
-            "apellido": "petete",
-            "tipoUsuario": "CLIENTE",
-            "puntosFidelidad": 0,
-            "telefono": "987654321",
-            "nombre": "Pelon",
-            "email": "pelon@cine.com",
-            "fechaUltimoAcceso": "2025-11-07T20:53:28",
-            "intentosFallidos": 0
-        },
-        {
-            "password": "654321",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-07T22:01:35",
-            "apellido": "ordonez",
-            "tipoUsuario": "CLIENTE",
-            "puntosFidelidad": 0,
-            "telefono": "22356466887",
-            "nombre": "nahuel",
-            "email": "nahuel@cine.com",
-            "fechaUltimoAcceso": "2025-11-07T21:06:22",
-            "intentosFallidos": 0
-        },
-        {
-            "password": "petete",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-07T22:01:35",
-            "apellido": "Stellatelli",
-            "tipoUsuario": "CLIENTE",
-            "puntosFidelidad": 0,
-            "telefono": "2544632123",
-            "nombre": "Santiago",
-            "email": "santi@cine.com",
-            "fechaUltimoAcceso": "2025-11-07T21:43:54",
-            "intentosFallidos": 1
-        },
         {
             "nivelAcceso": "avanzado",
             "password": "655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b",
@@ -63,85 +11,7 @@
             "telefono": "123456789",
             "nombre": "Admin",
             "email": "santideluxe@mail.com",
-            "fechaUltimoAcceso": "2025-11-10T23:57:49",
-            "intentosFallidos": 0
-        },
-        {
-            "password": "654321",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T19:02:33",
-            "apellido": "Gatto",
-            "tipoUsuario": "CLIENTE",
-            "puntosFidelidad": 0,
-            "telefono": "12345678",
-            "nombre": "Gaston",
-            "email": "gaston@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T19:02:33",
-            "intentosFallidos": 0
-        },
-        {
-            "nivelAcceso": "avanzado",
-            "password": "123456",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T19:32:30",
-            "apellido": "Stellatelli",
-            "tipoUsuario": "ADMINISTRADOR",
-            "telefono": "44657213",
-            "nombre": "Santiago",
-            "email": "admin2@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T20:00:11",
-            "intentosFallidos": 0
-        },
-        {
-            "password": "369369",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T19:40:59",
-            "apellido": "Lorenzo",
-            "tipoUsuario": "CLIENTE",
-            "puntosFidelidad": 0,
-            "telefono": "12335446887",
-            "nombre": "Enrique",
-            "email": "rick@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T19:40:59",
-            "intentosFallidos": 0
-        },
-        {
-            "password": "123456",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T19:43:14",
-            "apellido": "Goñi",
-            "tipoUsuario": "CLIENTE",
-            "puntosFidelidad": 0,
-            "telefono": "12364458",
-            "nombre": "Oriana",
-            "email": "ori@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T19:43:14",
-            "intentosFallidos": 0
-        },
-        {
-            "password": "123456",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T19:46:31",
-            "apellido": "Turchi",
-            "tipoUsuario": "CLIENTE",
-            "puntosFidelidad": 0,
-            "telefono": "69852147",
-            "nombre": "Dario",
-            "email": "dario@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T19:46:46",
-            "intentosFallidos": 0
-        },
-        {
-            "nivelAcceso": "avanzado",
-            "password": "123456",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-08T20:01:04",
-            "apellido": "Kong",
-            "tipoUsuario": "ADMINISTRADOR",
-            "telefono": "123456789",
-            "nombre": "King",
-            "email": "admin3@cine.com",
-            "fechaUltimoAcceso": "2025-11-08T20:01:04",
+            "fechaUltimoAcceso": "2025-11-11T09:19:50",
             "intentosFallidos": 0
         },
         {
@@ -195,7 +65,20 @@
             "email": "paredes@gmail.com",
             "fechaUltimoAcceso": "2025-11-10T20:33:27",
             "intentosFallidos": 0
+        },
+        {
+            "nivelAcceso": "avanzado",
+            "password": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-11T09:22:58",
+            "apellido": "Gatto",
+            "tipoUsuario": "ADMINISTRADOR",
+            "telefono": "4656465465465",
+            "nombre": "Gaston",
+            "email": "gastongatto@gmail.com",
+            "fechaUltimoAcceso": "2025-11-11T09:22:58",
+            "intentosFallidos": 0
         }
     ],
-    "totalElementos": 15
+    "totalElementos": 6
 }
