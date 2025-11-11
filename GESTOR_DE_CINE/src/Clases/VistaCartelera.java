@@ -50,12 +50,14 @@ public class VistaCartelera {
 
         DateTimeFormatter fechaFormateador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Label titulo = new Label(pelicula.getNombrePelicula());
-        titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;");
+        Label duracion = new Label(String.valueOf((int)pelicula.getDuracion().toMinutes()) + " MINUTOS");
+        titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20px;");
+            duracion.setStyle("-fx-text-fill: black;");
 
         Label ultimaFecha = new Label("Finaliza el " + pelicula.getFechaSalida().format(fechaFormateador));
         ultimaFecha.setStyle("-fx-text-fill: black;");
 
-        VBox contenedor = new VBox(10, imageNode, titulo, ultimaFecha);
+        VBox contenedor = new VBox(10, imageNode, titulo,duracion, ultimaFecha);
         contenedor.setAlignment(Pos.BASELINE_LEFT);
         contenedor.setStyle("-fx-background-color: #0A6E61; -fx-padding: 15; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 15, 0, 0, 5);");
 
@@ -121,11 +123,11 @@ public class VistaCartelera {
                 horario.setOnMouseEntered(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: yellow;"));
                 horario.setOnMouseExited(ev -> horario.setStyle("-fx-font-size: 14px; -fx-text-fill: white;"));
 
-                /// ACA ES DONDE LLAMA AL METODO DE SELECCION DE ASIENTOS
 
                 horario.setOnMouseClicked(ev -> {
                     SwingUtilities.invokeLater(() -> {
                         SelectorAsientos.mostrarSelectorAsientos(f,usuario);
+
 
                     });
                 });

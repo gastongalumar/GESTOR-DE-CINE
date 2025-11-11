@@ -2,6 +2,8 @@ package Clases.login.usuario;
 
 import Enumeradores.login.TipoUsuario;
 
+import java.time.LocalDateTime;
+
 public class Cliente extends Usuario {
     private int puntosFidelidad;
 
@@ -14,6 +16,14 @@ public class Cliente extends Usuario {
         super();
     }
 
+
+    public Cliente(String nombre, String apellido, String email, String password, String telefono,
+                   String estado, LocalDateTime fechaRegistro, LocalDateTime fechaUltimoAcceso,
+                   int intentosFallidos, int puntosFidelidad) {
+        super(nombre, apellido, email, password, telefono, estado, fechaRegistro,
+                fechaUltimoAcceso, intentosFallidos, TipoUsuario.CLIENTE);
+        this.puntosFidelidad = puntosFidelidad;
+    }
     @Override
     public boolean puedeRealizarAccion(String accion) {
         if (!isActivo()) return false;

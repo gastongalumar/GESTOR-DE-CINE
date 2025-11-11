@@ -1,8 +1,16 @@
 package Interfaces;
 
+import Clases.Funcion;
 import org.json.JSONObject;
 
-public interface ConversorJson<T>{
-    T desdeJson(JSONObject jsonUsuario);
-    JSONObject aJson(T objeto);
+import java.util.List;
+
+public interface ConversorJson{
+
+    void crearCarpetaJSON();
+    void inicializarArchivo();
+    boolean cargarEstadoGuardado();
+    void guardarEstadoCompleto();
+    int confirmarSelecciones();
+    JSONObject generarReporte();
 }

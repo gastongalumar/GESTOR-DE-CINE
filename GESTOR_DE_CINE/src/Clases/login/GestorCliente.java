@@ -1,7 +1,5 @@
 package Clases.login;
 
-
-
 import Clases.GestorFunciones;
 import Clases.GestorPeliculas;
 import Clases.Pelicula;
@@ -13,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.util.List;
 
 
@@ -21,6 +18,7 @@ import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+
 
 public class GestorCliente {
 
@@ -96,11 +94,11 @@ public class GestorCliente {
         ventana.show();
     }
 
-    public static void mostrarAlerta(String mensaje) {
+   /* public static void mostrarAlerta(String mensaje) {
         Alert alerta = new Alert(Alert.AlertType.INFORMATION);
         alerta.setTitle("Información");
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
         alerta.showAndWait();
-    }
+    }*/
 }

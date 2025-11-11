@@ -208,9 +208,9 @@ public class AsientoButton extends StackPane {
         String asientoStr = letraFila + numeroColumnaVisible;
         Tooltip.install(this, new Tooltip("Asiento " + asientoStr + " (" + estadoStr + ")"));
     }
-        /**
-         * Metodo público para forzar el redibujado del asiento
-         */
+    /**
+     * Metodo público para forzar el redibujado del asiento
+     */
     public void redibujar() {
         this.estado = sala.getEstadoAsiento(fila, columna);
         dibujarAsiento();
@@ -229,4 +229,3 @@ public class AsientoButton extends StackPane {
     public int getColumna() { return columna; }
     public EstadoAsiento getEstado() { return estado; }
 }
-

@@ -27,7 +27,7 @@ public class CineLogin extends Application {
     }
 
     private void inicializarInterfaz() {
-        stage.setTitle("CINE LOS CULIA - Inicio de Sesión");
+        stage.setTitle("CINE MARCENTER - Inicio de Sesión");
         stage.setOnCloseRequest(e -> Platform.exit());
         stage.setWidth(400);
         stage.setHeight(500);
@@ -60,15 +60,6 @@ public class CineLogin extends Application {
         stage.centerOnScreen();
     }
 
-//    private void configurarComponentes() {
-//        loginButton.setOnAction(e -> realizarLogin());
-//        recoverButton.setOnAction(e -> recuperarContrasena());
-//        registerButton.setOnAction(e -> registrarUsuario());
-//
-//        // Enter key listener
-//        emailField.setOnAction(e -> realizarLogin());
-//        passwordField.setOnAction(e -> realizarLogin());
-//    }
 private void configurarComponentes() {
     System.out.println("🎯 CONFIGURANDO COMPONENTES CineLogin");
 
@@ -91,7 +82,7 @@ private void configurarComponentes() {
         headerPanel.setPadding(new Insets(20, 0, 10, 0));
         headerPanel.setSpacing(5);
 
-        Label titleLabel = new Label("CINE LOS CULIA");
+        Label titleLabel = new Label("CINE MARCENTER");
         titleLabel.setStyle("-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: white;");
 
         Label subtitleLabel = new Label("Sistema de Gestión Cinematográfica");
@@ -170,7 +161,7 @@ private void configurarComponentes() {
         footerPanel.setAlignment(Pos.CENTER);
         footerPanel.setPadding(new Insets(10, 0, 10, 0));
 
-        Label copyrightLabel = new Label("© 2025 Cine Los Culia - Todos los derechos reservados");
+        Label copyrightLabel = new Label("© 2025 Cine Marcenter - Todos los derechos reservados");
         copyrightLabel.setStyle("-fx-font-size: 10; -fx-text-fill: #969696;");
 
         footerPanel.getChildren().add(copyrightLabel);
@@ -189,7 +180,7 @@ private void configurarComponentes() {
         // Autenticación simulada
         if (autenticarUsuario(email, password)) {
             String tipoUsuario = determinarTipoUsuario(email);
-            mostrarAlerta("Login Exitoso", "¡Bienvenido a CINE LOS CULIA!", Alert.AlertType.INFORMATION);
+            mostrarAlerta("Login Exitoso", "¡Bienvenido a CINE MARCENTER!", Alert.AlertType.INFORMATION);
 
             // Abrir sistema principal
             abrirSistemaPrincipal(email, tipoUsuario);
@@ -233,12 +224,6 @@ private void configurarComponentes() {
         });
     }
 
-//    private void registrarUsuario() {
-//        Platform.runLater(() -> {
-//            RegistroUsuario registro = new RegistroUsuario(false);
-//            registro.mostrarVentana();
-//        });
-//    }
 private void registrarUsuario() {
     System.out.println("🎯 MÉTODO registrarUsuario EJECUTADO EN CineLogin");
 

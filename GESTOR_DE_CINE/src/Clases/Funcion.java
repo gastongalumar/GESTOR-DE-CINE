@@ -24,8 +24,6 @@ public class Funcion {
         this.sala = sala;
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
-        // Registrar automáticamente la función en el gestor
-        //GestorFunciones.agregarFuncion(this);
         gestorFunciones.agregarFuncion(this);
     }
 
@@ -39,6 +37,7 @@ public class Funcion {
                 encontrado = true;
             }
         }
+
         for(Pelicula p: listaPeliculas){
             if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){
                 encontrado = true;
@@ -49,9 +48,7 @@ public class Funcion {
         this.sala = salaEncontrada;
         this.pelicula = peliculaEncontrada;
         this.horarioFuncion = horarioFuncion;
-       /* if(encontrado){
-            GestorFunciones.agregarFuncion(this);
-        }*/
+        this.precio = precio;
     }
 
     public Funcion(SalaCine sala, Pelicula pelicula, LocalDateTime horarioFuncion, double precio, GestorFunciones gestorFunciones) {
@@ -59,8 +56,6 @@ public class Funcion {
         this.pelicula = pelicula;
         this.horarioFuncion = horarioFuncion;
         this.precio = precio;
-        // Registrar automáticamente la función en el gestor
-        //GestorFunciones.agregarFuncion(this);
         gestorFunciones.agregarFuncion(this);
     }
 
@@ -104,6 +99,8 @@ public class Funcion {
     public void setPrecio(double precio) {
         this.precio = precio;
     }
+
+
 
     //TO STRING
     @Override

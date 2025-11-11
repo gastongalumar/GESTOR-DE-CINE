@@ -2,6 +2,8 @@ package Clases;
 
 import Enumeradores.EstadoAsiento;
 
+import java.util.Arrays;
+
 public class SalaCine {
 
     private String nombreSala;
@@ -227,4 +229,15 @@ public class SalaCine {
         return count;
     }
 
+
+    @Override
+    public String toString() {
+        return "SalaCine{" +
+                "nombreSala='" + nombreSala + '\'' +
+                ", capacidad=" + capacidad +
+                ", filas=" + filas +
+                ", columnas=" + columnas +
+                ", asientos=" + Arrays.toString(asientos) +
+                '}';
+    }
 }

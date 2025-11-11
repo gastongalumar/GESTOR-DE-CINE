@@ -1,8 +1,8 @@
 package Clases.GestionDePagos;
 
 import Clases.Funcion;
+import Clases.ListaGenerica;
 import Clases.login.usuario.Cliente;
-import Clases.login.usuario.Usuario;
 import ManejoJSON.JSONReservas;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,9 +24,9 @@ public class HistorialCompras {
         System.out.println("✅ Reserva registrada para: " + cliente.getEmail());
     }
 
-    public static void mostrarHistorialReservas(Usuario cliente) {
+    public static void mostrarHistorialReservas(Cliente cliente) {
         Stage stage = new Stage();
-        stage.setTitle("Mi Historial de Reservas - CINE LOS CULIA");
+        stage.setTitle("Mi Historial de Reservas - CINE MARCENTER");
 
         BorderPane panel = new BorderPane();
         panel.setPadding(new Insets(20));
@@ -163,8 +163,8 @@ public class HistorialCompras {
         stage.show();
     }
 
-    // ✅ MÉTODO MEJORADO PARA CANCELAR RESERVA
-    private static void cancelarReserva(String numeroTicket, Usuario cliente, Stage stageActual) {
+
+    private static void cancelarReserva(String numeroTicket, Cliente cliente, Stage stageActual) {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar Cancelación");
         confirmacion.setHeaderText("¿Estás seguro de que quieres cancelar esta reserva?");
@@ -195,10 +195,9 @@ public class HistorialCompras {
         });
     }
 
-    // ✅ NUEVO MÉTODO PARA CANCELAR RESERVA DESDE EL PANEL LATERAL
     public static void mostrarCancelarReserva(Cliente cliente) {
         Stage stage = new Stage();
-        stage.setTitle("Cancelar Reserva - CINEMAX");
+        stage.setTitle("Cancelar Reserva - CINE MARCENTER");
 
         VBox panel = new VBox(20);
         panel.setPadding(new Insets(20));
@@ -259,7 +258,7 @@ public class HistorialCompras {
         stage.show();
     }
 
-    public static void mostrarHistorial(Usuario cliente) {
+    public static void mostrarHistorial(Cliente cliente) {
         mostrarHistorialReservas(cliente);
     }
 

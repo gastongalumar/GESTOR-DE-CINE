@@ -43,7 +43,6 @@ public class GestorEstadisticasLogin {
 
     private void reiniciarContadores() {
         loginsAdmin = 0;
-        loginsEmpleado = 0;
         loginsCliente = 0;
         for (int i = 0; i < 24; i++) {
             loginsPorHora[i] = 0;
@@ -72,7 +71,7 @@ public class GestorEstadisticasLogin {
     public void mostrarGraficaLogins() {
         Platform.runLater(() -> {
             Stage stage = new Stage();
-            stage.setTitle("Estadísticas de Logins - CINE LOS CULIA");
+            stage.setTitle("Estadísticas de Logins - CINE MARCENTER");
             stage.setWidth(800);
             stage.setHeight(600);
 
@@ -196,10 +195,6 @@ public class GestorEstadisticasLogin {
 
     public int getLoginsAdmin() {
         return loginsAdmin;
-    }
-
-    public int getLoginsEmpleado() {
-        return loginsEmpleado;
     }
 
     public int getLoginsCliente() {

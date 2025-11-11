@@ -2,7 +2,11 @@
     "asientosOcupados": 3,
     "totalColumnas": 16,
     "totalFilas": 10,
+<<<<<<<< HEAD:JSONasientos/Asientos_Los_4_Fantasticos_20251102_2100.json
     "fechaActualizacion": "2025-11-09T16:35:27.646498900",
+========
+    "fechaActualizacion": "2025-11-10T20:21:11.418930300",
+>>>>>>>> origin/Cartelera:GESTOR_DE_CINE/JSONasientos/Asientos_Havoc_20251125_1700.json
     "matrizAsientos": [
         [
             {

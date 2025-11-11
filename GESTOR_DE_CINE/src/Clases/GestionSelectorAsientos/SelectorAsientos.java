@@ -1,8 +1,8 @@
-
 package Clases.GestionSelectorAsientos;
 
 import Clases.Funcion;
 import Clases.GestionDePagos.GestorDePagos;
+import Clases.ManejoVentanas;
 import Clases.SalaCine;
 import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
@@ -11,6 +11,7 @@ import ManejoJSON.GestorJsonAsientos;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -28,7 +29,7 @@ import java.util.Optional;
 
 public class SelectorAsientos {
 
-   // Configuración de la sala
+    // Configuraci贸n de la sala
     private final int FILAS = 12;
     private final int FILAS_ASIENTOS = 10;
     private final int LEFT_BLOCK = 3;
@@ -55,7 +56,7 @@ public class SelectorAsientos {
     }
 
     /**
-     * Constructor para función específica
+     * Constructor para funci贸n espec铆fica
      */
     public SelectorAsientos(Funcion funcion) {
         this.funcion = funcion;
@@ -65,7 +66,7 @@ public class SelectorAsientos {
     }
 
 
-//GETTER Y SETTER
+    //GETTER Y SETTER
     public SalaCine getSala() {
         return sala;
     }
@@ -114,11 +115,11 @@ public class SelectorAsientos {
         }
         gestorDePagos.actualizarContador();
         gestorDePagos.actualizarPrecioTotal();
-        System.out.println("🔄 Visualización actualizada");
+        System.out.println("馃攧 Visualizaci贸n actualizada");
     }
 
     /**
-     * Método estático para mostrar el selector
+     * M茅todo est谩tico para mostrar el selector
      */
     public static void mostrarSelectorAsientos(Funcion funcion,Usuario usuario) {
         Platform.runLater(() -> {
@@ -150,7 +151,7 @@ public class SelectorAsientos {
         // Columnas del bloque derecho (13, 14, 15)
         for (int c = LEFT_BLOCK + AISLE_WIDTH + CENTER_BLOCK + AISLE_WIDTH; c < COLUMNAS; c++) columnasValidas.add(c);
 
-        System.out.println("📍 Columnas válidas (donde hay asientos): " + columnasValidas);
+        System.out.println("馃搷 Columnas v谩lidas (donde hay asientos): " + columnasValidas);
     }
 
     private void inicializarSelectorAsientos(Stage stage,Usuario usuario) {
@@ -168,25 +169,25 @@ public class SelectorAsientos {
         Platform.runLater(() -> {
             boolean cargaExitosa = gestorJson.cargarEstadoGuardado();
             if (!cargaExitosa) {
-                System.out.println("⚠️  No se pudo cargar el estado, usando valores por defecto");
+                System.out.println("鈿狅笍  No se pudo cargar el estado, usando valores por defecto");
             }
             actualizarVisualizacionAsientos();
             gestorDePagos.actualizarPrecioTotal();
-            System.out.println("🎉 APLICACIÓN INICIADA CORRECTAMENTE");
+            System.out.println("馃帀 APLICACI脫N INICIADA CORRECTAMENTE");
         });
     }
 
     private void configurarVentana(Stage stage) {
-        String titulo = "🎬 Selector de Asientos - Sala de Cine";
+        String titulo = "馃幀 Selector de Asientos - Sala de Cine";
         if (funcion != null && funcion.getPelicula() != null) {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
             String horarioStr = funcion.getHorarioFuncion() != null ? funcion.getHorarioFuncion().format(fmt) : "";
-            titulo = "🎬 " + funcion.getPelicula().getNombrePelicula() + " - " + horarioStr;
+            titulo = "馃幀 " + funcion.getPelicula().getNombrePelicula() + " - " + horarioStr;
         }
         stage.setTitle(titulo);
 
         stage.setOnCloseRequest(event -> {
-            System.out.println("🔚 Selector de asientos cerrado, continuando ejecución...");
+            System.out.println("馃敋 Selector de asientos cerrado, continuando ejecuci贸n...");
         });
     }
 
@@ -373,13 +374,13 @@ public class SelectorAsientos {
             for (int j = 0; j < numColumnas; j++) {
                 int columnaReal = startCol + j;
 
-                // ✅ PASAR columnasValidas al constructor
+                // 鉁� PASAR columnasValidas al constructor
                 AsientoButton asiento = new AsientoButton(i, columnaReal, sala, columnasValidas);
 
                 asiento.setOnAsientoCambiado(() -> {
                     gestorDePagos.actualizarContador();
                     gestorDePagos.actualizarPrecioTotal();
-                    System.out.println("🔄 Asiento cambiado, contador actualizado");
+                    System.out.println("馃攧 Asiento cambiado, contador actualizado");
                 });
 
                 botonesAsientos[i][columnaReal] = asiento;
@@ -492,8 +493,14 @@ public class SelectorAsientos {
             configurarBoton(btnLimpiar);
             configurarBotonConfirmar(btnConfirmar);
 
-            btnLimpiar.setOnAction(e -> limpiarSelecciones());
-            btnConfirmar.setOnAction(e -> gestorDePagos.procesarPago((Cliente) usuario));
+
+            btnConfirmar.setOnAction(e -> {
+                Stage stagecopia = (Stage) ((Node)e.getSource()).getScene().getWindow();
+                gestorDePagos.procesarPago((Cliente) usuario);
+                stagecopia.close();
+            });
+
+
 
             panelBotones.getChildren().addAll(btnLimpiar, btnConfirmar);
 
@@ -533,13 +540,13 @@ public class SelectorAsientos {
         try {
             org.json.JSONObject reporte = gestorJson.generarReporte();
             String mensaje = String.format(
-                    "📊 REPORTE DE SALA\n\n" +
-                            "📅 Fecha del reporte: %s\n" +
-                            "🎫 Total de asientos: %d\n" +
-                            "🟢 Asientos libres: %d\n" +
-                            "🔵 Asientos seleccionados: %d\n" +
-                            "🔴 Asientos ocupados: %d\n" +
-                            "⏰ Última actualización: %s",
+                    "REPORTE DE SALA\n\n" +
+                            "Fecha del reporte: %s\n" +
+                            "Total de asientos: %d\n" +
+                            "Asientos libres: %d\n" +
+                            "Asientos seleccionados: %d\n" +
+                            "Asientos ocupados: %d\n" +
+                            "Ultima actualización: %s",
                     reporte.getString("fechaReporte"),
                     reporte.getInt("totalAsientos"),
                     reporte.getInt("asientosLibres"),
@@ -550,7 +557,7 @@ public class SelectorAsientos {
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Estado de Sala");
-            alert.setHeaderText("📊 REPORTE DE SALA");
+            alert.setHeaderText("馃搳 REPORTE DE SALA");
             alert.setContentText(mensaje);
             alert.showAndWait();
 
@@ -576,8 +583,8 @@ public class SelectorAsientos {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Anular Selecciones");
-        alert.setHeaderText("¿Estás seguro de que quieres Anular el/los " + seleccionados + " asiento(s) seleccionado(s)?");
-        alert.setContentText("Esto convertirá todos los asientos seleccionados a libres.");
+        alert.setHeaderText("驴Est谩s seguro de que quieres Anular el/los " + seleccionados + " asiento(s) seleccionado(s)?");
+        alert.setContentText("Esto convertir谩 todos los asientos seleccionados a libres.");
 
         Optional<ButtonType> resultado = alert.showAndWait();
         if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
@@ -585,8 +592,8 @@ public class SelectorAsientos {
             actualizarVisualizacionAsientos();
 
             Alert exito = new Alert(Alert.AlertType.INFORMATION);
-            exito.setTitle("Éxito");
-            exito.setHeaderText(seleccionados + " selección(es) Anulada(s) correctamente.");
+            exito.setTitle("脡xito");
+            exito.setHeaderText(seleccionados + " selecci贸n(es) Anulada(s) correctamente.");
             exito.showAndWait();
         }
     }

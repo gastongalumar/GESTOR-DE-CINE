@@ -2,7 +2,11 @@
     "asientosOcupados": 2,
     "totalColumnas": 16,
     "totalFilas": 10,
-    "fechaActualizacion": "2025-11-09T00:36:30.615281900",
+<<<<<<<< HEAD:JSONasientos/Asientos_F1_La_pelicula_20251015_2100.json
+    "fechaActualizacion": "2025-11-09T00:25:35.964001400",
+========
+    "fechaActualizacion": "2025-11-10T20:29:45.041019700",
+>>>>>>>> origin/Cartelera:GESTOR_DE_CINE/JSONasientos/Asientos_Havoc_20251204_1000.json
     "matrizAsientos": [
         [
             {
@@ -338,13 +342,13 @@
             {
                 "columna": 6,
                 "etiqueta": "G4",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 3
             },
             {
                 "columna": 7,
                 "etiqueta": "H4",
-                "estado": "OCUPADO",
+                "estado": "LIBRE",
                 "fila": 3
             },
             {

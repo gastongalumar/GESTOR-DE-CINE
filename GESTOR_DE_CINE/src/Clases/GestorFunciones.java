@@ -44,5 +44,6 @@ public class GestorFunciones {
 
     public void setListaFunciones(ListaGenerica<Funcion> listaFunciones) {
         this.listaFunciones = listaFunciones;
+        FuncionesJSON.serializarFunciones(listaFunciones.getElementos());
     }
 }
