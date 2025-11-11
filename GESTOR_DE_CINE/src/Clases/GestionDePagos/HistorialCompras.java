@@ -90,7 +90,7 @@ public class HistorialCompras {
             );
         });
 
-        // NUEVA COLUMNA: Acciones (Cancelar)
+        // ✅ NUEVA COLUMNA: Acciones (Cancelar)
         TableColumn<JSONObject, Void> colAcciones = new TableColumn<>("Acciones");
         colAcciones.setCellFactory(param -> new TableCell<JSONObject, Void>() {
             private final Button btnCancelar = new Button("Cancelar");
@@ -181,8 +181,8 @@ public class HistorialCompras {
                 } else {
                     Alert error = new Alert(Alert.AlertType.ERROR);
                     error.setTitle("Error");
-                    error.setHeaderText("No se pudo cancelar la reserva");
-                    error.setContentText("El ticket " + numeroTicket + " no existe o ya fue cancelado.");
+                    error.setHeaderText("No se puede eliminar la reserva: la función ya pasó o está en curso");
+                    error.setContentText("El ticket " + numeroTicket + " no se puede cancelar.");
                     error.showAndWait();
                 }
             }

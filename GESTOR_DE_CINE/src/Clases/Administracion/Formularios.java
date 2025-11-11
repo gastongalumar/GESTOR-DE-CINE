@@ -248,7 +248,6 @@ public class Formularios {
             javafx.scene.image.Image imagenActual = new javafx.scene.image.Image(p.getRutaImagen(), 120, 180, true, true);
             imagenVista.setImage(imagenActual);
         } catch (Exception ex) {
-            System.out.println("No se pudo cargar la imagen actual de la película.");
         }
 
         final String[] nuevaRutaImagen = {p.getRutaImagen()};
@@ -427,7 +426,7 @@ public class Formularios {
             }
 
             if (nombrePelicula.isEmpty() || sala.isEmpty() || horario.isEmpty()|| !encontrado || precio < 0) {
-                mostrarAlerta("Por favor, completa todos los campos.");
+                mostrarAlerta("Por favor, completa todos los campos correctamente");
             } else {
                 try {
 

@@ -19,5 +19,12 @@
         "Duracion": 150,
         "FechaEstreno": "2025-12-11",
         "FechaSalida": "2025-12-26"
+    },
+    {
+        "Nombre": "IT",
+        "RutaImagen": "/img/Itfoto.png",
+        "Duracion": 180,
+        "FechaEstreno": "2025-11-12",
+        "FechaSalida": "2025-11-14"
     }
 ]

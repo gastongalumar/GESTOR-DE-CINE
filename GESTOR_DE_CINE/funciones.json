@@ -76,5 +76,23 @@
         "Fecha y hora": "2025-11-13 17:00",
         "Pelicula": "Los 4 Fantasticos",
         "Precio": 2000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-11 15:34",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-14 02:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-15 02:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
     }
 ]
