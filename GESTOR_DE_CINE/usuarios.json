@@ -1,5 +1,5 @@
 {
-    "ultimaActualizacion": "2025-11-11T09:22:58.065056600",
+    "ultimaActualizacion": "2025-11-11T09:35:06.744915800",
     "data": [
         {
             "nivelAcceso": "avanzado",
@@ -76,9 +76,22 @@
             "telefono": "4656465465465",
             "nombre": "Gaston",
             "email": "gastongatto@gmail.com",
-            "fechaUltimoAcceso": "2025-11-11T09:22:58",
+            "fechaUltimoAcceso": "2025-11-11T09:25:20",
+            "intentosFallidos": 0
+        },
+        {
+            "password": "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-11T09:26:49",
+            "apellido": "prueba",
+            "tipoUsuario": "CLIENTE",
+            "puntosFidelidad": 0,
+            "telefono": "1232321",
+            "nombre": "prueba",
+            "email": "prueba1@mail.com",
+            "fechaUltimoAcceso": "2025-11-11T09:35:06",
             "intentosFallidos": 0
         }
     ],
-    "totalElementos": 6
+    "totalElementos": 7
 }

@@ -43,7 +43,6 @@ public class LoginInterfaz extends Application {
         GestorFunciones gestorFunciones = new GestorFunciones();
         cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 9,14), new SalaCine("Sala 2", 9,14));
         crearInterfaz(cliente);
-        GestorAdministrador.iniciarAdministrador(gestorFunciones,cliente);
         configurarEventos(gestorFunciones,cliente);
         stage.show();
     }
