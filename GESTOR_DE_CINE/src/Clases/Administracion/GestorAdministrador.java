@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -63,6 +64,21 @@ public class GestorAdministrador {
         return vigentes;
     }
 
+
+    public static List<Pelicula> filtrarYBorrarPeliculasPasadas(List<Pelicula> listaPeliculas) {
+        List<Pelicula> vigentes = new ArrayList<>();
+        LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+        for(Pelicula p: listaPeliculas){
+            if(p.getFechaSalida().isAfter(ahora.toLocalDate())){
+                vigentes.add(p);
+            }
+        }
+
+
+        return vigentes;
+    }
     public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Cliente cliente){
 
 
@@ -80,7 +96,10 @@ public class GestorAdministrador {
         -fx-background-color: #6E0A17;
     """);
 
-        for(Pelicula p: listaPeliculas){
+        List<Pelicula> peliculasVigentes = filtrarYBorrarPeliculasPasadas(listaPeliculas);
+        GestorPeliculas.setListaPeliculas(peliculasVigentes);
+        FuncionesJSON.serializarPeliculas(peliculasVigentes);
+        for(Pelicula p: peliculasVigentes){
             VBox vista = VistaCartelera.crearVista(p, gestorFunciones.getListaFunciones().getElementos(), cliente);
             contenedor.getChildren().add(vista);
         }

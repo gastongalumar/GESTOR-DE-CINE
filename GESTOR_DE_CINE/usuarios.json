@@ -1,19 +1,6 @@
 {
-    "ultimaActualizacion": "2025-11-11T09:22:58.065056600",
+    "ultimaActualizacion": "2025-11-11T11:31:26.617503800",
     "data": [
-        {
-            "nivelAcceso": "avanzado",
-            "password": "655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b",
-            "estado": "ACTIVO",
-            "fechaRegistro": "2025-11-07T22:01:35",
-            "apellido": "Sistema",
-            "tipoUsuario": "ADMINISTRADOR",
-            "telefono": "123456789",
-            "nombre": "Admin",
-            "email": "santideluxe@mail.com",
-            "fechaUltimoAcceso": "2025-11-11T09:19:50",
-            "intentosFallidos": 0
-        },
         {
             "password": "655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b",
             "estado": "ACTIVO",
@@ -24,7 +11,7 @@
             "telefono": "4454545",
             "nombre": "Santiago",
             "email": "santistella@gmail.com",
-            "fechaUltimoAcceso": "2025-11-10T22:59:01",
+            "fechaUltimoAcceso": "2025-11-11T11:31:26",
             "intentosFallidos": 0
         },
         {
@@ -63,7 +50,7 @@
             "telefono": "5464545465",
             "nombre": "Leandro",
             "email": "paredes@gmail.com",
-            "fechaUltimoAcceso": "2025-11-10T20:33:27",
+            "fechaUltimoAcceso": "2025-11-11T09:43:51",
             "intentosFallidos": 0
         },
         {
@@ -77,6 +64,19 @@
             "nombre": "Gaston",
             "email": "gastongatto@gmail.com",
             "fechaUltimoAcceso": "2025-11-11T09:22:58",
+            "intentosFallidos": 0
+        },
+        {
+            "nivelAcceso": "avanzado",
+            "password": "655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b",
+            "estado": "ACTIVO",
+            "fechaRegistro": "2025-11-11T09:44:31",
+            "apellido": "Stellatelli",
+            "tipoUsuario": "ADMINISTRADOR",
+            "telefono": "13158977",
+            "nombre": "Santiago",
+            "email": "santideluxe@gmail.com",
+            "fechaUltimoAcceso": "2025-11-11T10:18:04",
             "intentosFallidos": 0
         }
     ],

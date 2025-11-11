@@ -1,12 +1,5 @@
 [
     {
-        "Nombre": "F1 La pelicula",
-        "RutaImagen": "/img/pelicula1.jpg",
-        "Duracion": 120,
-        "FechaEstreno": "2025-07-02",
-        "FechaSalida": "2025-11-05"
-    },
-    {
         "Nombre": "Jhon Wick 4",
         "RutaImagen": "/img/pelicula3.jpg",
         "Duracion": 120,
@@ -26,5 +19,12 @@
         "Duracion": 150,
         "FechaEstreno": "2025-12-11",
         "FechaSalida": "2025-12-26"
+    },
+    {
+        "Nombre": "F1",
+        "RutaImagen": "/img/pelicula1.jpg",
+        "Duracion": 120,
+        "FechaEstreno": "2025-11-20",
+        "FechaSalida": "2025-11-21"
     }
 ]

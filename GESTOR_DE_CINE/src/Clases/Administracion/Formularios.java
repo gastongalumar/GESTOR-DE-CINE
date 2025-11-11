@@ -92,20 +92,27 @@ public class Formularios {
                 LocalDate fechaEstreno = LocalDate.parse(fechaEstrenoStr, formato);
                 LocalDate fechaSalida = LocalDate.parse(fechaSalidaStr, formato);
 
-                String rutaImagen = guardarImagenPelicula(archivoSeleccionado[0]);
-                Pelicula pelicula = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida, duracionSelecciona);
+                if(fechaEstreno.isBefore(fechaSalida)) {
+                    String rutaImagen = guardarImagenPelicula(archivoSeleccionado[0]);
+                    Pelicula pelicula = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida, duracionSelecciona);
 
-                GestorPeliculas.agregarPelicula(pelicula);
-                mostrarAlerta("Película agregada correctamente.");
-                ventana.close();
+                    GestorPeliculas.agregarPelicula(pelicula);
+                    mostrarAlerta("Película agregada correctamente.");
+                    ventana.close();
+                    ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
+                }else {
+                    throw new FechaInvalidaException("Por favor, revise las fechas nuevamente");
+                }
 
+            }catch (FechaInvalidaException ex){
+                mostrarAlerta("Por favor, revise las fechas nuevamente");
             } catch (Exception ex) {
                 ex.printStackTrace();
                 mostrarAlerta("Error al procesar las fechas o la imagen.");
             }
 
-            ventana.close();
-            ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
+            //ventana.close();
+            //ManejoVentanas.reiniciarGestorAdministrador(gestorFunciones,cliente);
         });
 
         VBox layout = crearLayout(titulo, campoNombre, seccionFechas, seccionImagen, botonGuardar);
@@ -328,7 +335,7 @@ public class Formularios {
 
 
 
-    public static void formularioAgregar(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Cliente cliente) throws CamposIncompletosException {
+    public static void formularioAgregar(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Cliente cliente) throws CamposIncompletosException, FechaInvalidaException {
         Stage ventana = new Stage();
         ventana.setTitle("Agregar nueva función");
 

@@ -284,7 +284,7 @@ public class GestorDePagos {
             writer.write("<!DOCTYPE html>\n");
             writer.write("<html>\n");
             writer.write("<head>\n");
-            writer.write("    <title>Ticket de Cine - CINEMAX</title>\n");
+            writer.write("    <title>Ticket de Cine - CINE MARCENTER</title>\n");
             writer.write("    <meta charset=\"UTF-8\">\n");
             writer.write("    <style>\n");
             writer.write("        body { \n");
@@ -438,7 +438,7 @@ public class GestorDePagos {
             writer.write("<body>\n");
             writer.write("    <div class=\"ticket-container\">\n");
             writer.write("        <div class=\"header\">\n");
-            writer.write("            <h1>🎬 CINEMAX THEATRES </h1>\n");
+            writer.write("            <h1>🎬 CINE MARCENTER </h1>\n");
             writer.write("            <div style=\"font-size: 11px; margin-top: 3px;\">¡Gracias por su compra!</div>\n");
             writer.write("        </div>\n");
             writer.write("        \n");
