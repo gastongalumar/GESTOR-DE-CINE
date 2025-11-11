@@ -6,17 +6,19 @@ import Clases.login.GestorUsuarios;
 import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
+import Interfaces.ConversorJson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuncionesJSON {
+public class FuncionesJSON{
 
     public static void serializarFunciones(List<Funcion> listaFunciones){
         JSONArray jsonFunciones = new JSONArray();
@@ -125,6 +127,7 @@ public class FuncionesJSON {
                 jsonPelicula.put("RutaImagen", p.getRutaImagen());
                 jsonPelicula.put("FechaEstreno", p.getFechaEstreno().format(formatoFecha));
                 jsonPelicula.put("FechaSalida", p.getFechaSalida().format(formatoFecha));
+                jsonPelicula.put("Duracion", ((int) p.getDuracion().toMinutes()));
 
                 jsonPeliculas.put(jsonPelicula);
             }
@@ -150,8 +153,8 @@ public class FuncionesJSON {
                 String rutaImagen = obj.getString("RutaImagen");
                 LocalDate fechaEstreno = LocalDate.parse(obj.getString("FechaEstreno"), formatoFecha);
                 LocalDate fechaSalida = LocalDate.parse(obj.getString("FechaSalida"), formatoFecha);
-
-                Pelicula p = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida);
+                Duration duracion = Duration.ofMinutes(obj.getInt("Duracion"));
+                Pelicula p = new Pelicula(nombre, rutaImagen, fechaEstreno, fechaSalida, duracion);
                 listaPeliculas.add(p);
             }
 

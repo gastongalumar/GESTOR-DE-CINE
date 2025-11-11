@@ -56,7 +56,7 @@ public class LoginInterfaz extends Application {
 
 
     private void crearInterfaz(Cliente cliente) {
-        stage.setTitle("CINE LOS CULIA - Inicio de Sesión");
+        stage.setTitle("CINE MARCENTER- Inicio de Sesión");
         stage.setOnCloseRequest(e -> stage.close());
         stage.setWidth(400);
         stage.setHeight(500);
@@ -219,7 +219,7 @@ public class LoginInterfaz extends Application {
         footerPanel.setAlignment(Pos.CENTER);
         footerPanel.setPadding(new Insets(10, 0, 0, 0));
 
-        Label infoLabel = new Label("© 2025 Cine Los Culia - Sistema de Gestión");
+        Label infoLabel = new Label("© 2025 Cine Marcenter - Sistema de Gestión");
         infoLabel.setStyle("-fx-font-size: 10; -fx-text-fill: #969696;");
 
         footerPanel.getChildren().add(infoLabel);
@@ -227,12 +227,12 @@ public class LoginInterfaz extends Application {
     }
 
     private void configurarEventos(GestorFunciones gestorFunciones,Cliente cliente) {
-        loginButton.setOnAction(e -> realizarLogin(gestorFunciones,cliente));
+        loginButton.setOnAction(e -> realizarLogin(gestorFunciones));
         registerButton.setOnAction(e -> registrarUsuario());
 
         // Enter para login
-        emailField.setOnAction(e -> realizarLogin(gestorFunciones,cliente));
-        passwordField.setOnAction(e -> realizarLogin(gestorFunciones,cliente));
+        emailField.setOnAction(e -> realizarLogin(gestorFunciones));
+        passwordField.setOnAction(e -> realizarLogin(gestorFunciones));
     }
 
     private void registrarUsuario() {
@@ -240,10 +240,8 @@ public class LoginInterfaz extends Application {
 
         Platform.runLater(() -> {
             try {
-                System.out.println("🎯 ABRIENDO FORMULARIO DE REGISTRO...");
                 // ✅ Esto abre tu formulario de registro que YA funciona
                 RegistroUsuario.abrirRegistroCliente();
-                System.out.println("🎯 FORMULARIO ABIERTO EXITOSAMENTE");
 
             } catch (Exception e) {
                 System.out.println("❌ ERROR AL ABRIR REGISTRO: " + e.getMessage());
@@ -258,7 +256,7 @@ public class LoginInterfaz extends Application {
             }
         });
     }
-    private void realizarLogin(GestorFunciones gestorFunciones,Cliente cliente) {
+    private void realizarLogin(GestorFunciones gestorFunciones) {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
 
@@ -274,14 +272,14 @@ public class LoginInterfaz extends Application {
             GestorEstadisticasLogin.getInstance().registrarLogin(email, tipoUsuario);
 
             mostrarAlerta("Login Exitoso",
-                    "¡Bienvenido a CINE LOS CULIA!\nUsuario: " + email + "\nTipo: " + tipoUsuario,
+                    "¡Bienvenido a CINE MARCENTER!\nUsuario: " + email + "\nTipo: " + tipoUsuario,
                     Alert.AlertType.INFORMATION);
 
             intentosLogin = 0;
             stage.close();
 
 
-            abrirSistemaPrincipal(email, tipoUsuario, gestorFunciones,cliente);
+            abrirSistemaPrincipal(email, tipoUsuario, gestorFunciones);
 
         } else {
             intentosLogin++;
@@ -330,7 +328,7 @@ public class LoginInterfaz extends Application {
 
 
     // En LoginInterfaz.java - Modificar el método abrirSistemaPrincipal
-    private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones,Cliente cliente) {
+    private void abrirSistemaPrincipal(String usuario, String tipoUsuario, GestorFunciones gestorFunciones) {
         mostrarAlerta("Login Exitoso",
                 "¡Bienvenido " + usuario + "!\nTipo: " + tipoUsuario,
                 Alert.AlertType.INFORMATION);
@@ -339,13 +337,13 @@ public class LoginInterfaz extends Application {
 
         // Redirigir según el tipo de usuario
         if (tipoUsuario.equals("Administrador")) {
-            abrirPanelAdministrador(gestorFunciones,cliente);
+            abrirPanelAdministrador(gestorFunciones);
         } else {
             abrirPanelCliente(usuario, gestorFunciones);
         }
     }
 
-    private void abrirPanelAdministrador(GestorFunciones gestorFunciones,Cliente cliente) {
+    private void abrirPanelAdministrador(GestorFunciones gestorFunciones) {
         System.out.println("🎯 INTENTANDO ABRIR PANEL ADMIN...");
 
         Platform.runLater(() -> {
@@ -355,8 +353,7 @@ public class LoginInterfaz extends Application {
 
                 DashboardAdmin dashboard = new DashboardAdmin(
                         gestorUsuarios,
-                        gestorFunciones ,
-                        cliente// ✅ AGREGAR ESTO
+                        gestorFunciones
                 );
                 dashboard.mostrarDashboard();
 
@@ -384,9 +381,8 @@ public class LoginInterfaz extends Application {
                 cliente = new Cliente();
             }
 
-            // Crear UNA sola ventana que integre todo
             Stage clienteStage = new Stage();
-            clienteStage.setTitle("CINE LOS CULIA - Cartelera");
+            clienteStage.setTitle("CINE MARCENTER - Cartelera");
 
             // Contenedor principal
             VBox panelPrincipal = new VBox();

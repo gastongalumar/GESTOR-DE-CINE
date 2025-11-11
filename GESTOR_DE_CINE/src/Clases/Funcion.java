@@ -37,12 +37,6 @@ public class Funcion {
                 encontrado = true;
             }
         }
-        /*for (SalaCine s : listaSalas) {
-            if (s.getNombreSala().equalsIgnoreCase(nombreSala)) {
-                salaEncontrada = s;
-                break;
-            }
-        }*/
 
         for(Pelicula p: listaPeliculas){
             if(p.getNombrePelicula().equalsIgnoreCase(nombrePelicula)){

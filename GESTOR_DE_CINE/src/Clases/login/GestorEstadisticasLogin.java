@@ -71,7 +71,7 @@ public class GestorEstadisticasLogin {
     public void mostrarGraficaLogins() {
         Platform.runLater(() -> {
             Stage stage = new Stage();
-            stage.setTitle("Estadísticas de Logins - CINE LOS CULIA");
+            stage.setTitle("Estadísticas de Logins - CINE MARCENTER");
             stage.setWidth(800);
             stage.setHeight(600);
 

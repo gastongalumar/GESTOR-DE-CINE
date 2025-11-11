@@ -26,7 +26,7 @@ public class HistorialCompras {
 
     public static void mostrarHistorialReservas(Cliente cliente) {
         Stage stage = new Stage();
-        stage.setTitle("Mi Historial de Reservas - CINE LOS CULIA");
+        stage.setTitle("Mi Historial de Reservas - CINE MARCENTER");
 
         BorderPane panel = new BorderPane();
         panel.setPadding(new Insets(20));
@@ -163,7 +163,7 @@ public class HistorialCompras {
         stage.show();
     }
 
-    // ✅ MÉTODO MEJORADO PARA CANCELAR RESERVA
+
     private static void cancelarReserva(String numeroTicket, Cliente cliente, Stage stageActual) {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Confirmar Cancelación");
@@ -195,10 +195,9 @@ public class HistorialCompras {
         });
     }
 
-    // ✅ NUEVO MÉTODO PARA CANCELAR RESERVA DESDE EL PANEL LATERAL
     public static void mostrarCancelarReserva(Cliente cliente) {
         Stage stage = new Stage();
-        stage.setTitle("Cancelar Reserva - CINEMAX");
+        stage.setTitle("Cancelar Reserva - CINE MARCENTER");
 
         VBox panel = new VBox(20);
         panel.setPadding(new Insets(20));

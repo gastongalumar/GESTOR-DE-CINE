@@ -55,7 +55,10 @@ public abstract class Usuario{
         this.tipoUsuario = tipoUsuario;
     }
 
-    // Método abstracto que las subclases deben implementar
+
+    public static boolean validarNombreApellido(String texto) {
+        return texto.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s']+$");
+    }
     public abstract boolean puedeRealizarAccion(String accion);
 
     // Métodos de validación (mantener igual)

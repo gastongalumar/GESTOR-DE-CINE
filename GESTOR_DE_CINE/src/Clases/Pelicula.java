@@ -1,5 +1,6 @@
 package Clases;
 
+import java.time.Duration;
 import java.time.LocalDate;
 
 public class Pelicula {
@@ -7,6 +8,7 @@ public class Pelicula {
     private LocalDate fechaEstreno;
     private LocalDate fechaSalida;
     private String rutaImagen;
+    private Duration duracion;
 
     public Pelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
@@ -22,13 +24,22 @@ public class Pelicula {
         this.fechaSalida = fechaSalida;
     }
 
-    public Pelicula(String nombre, String rutaImagen, LocalDate estreno, LocalDate salida) {
+    public Pelicula(String nombre, String rutaImagen, LocalDate estreno, LocalDate salida, Duration duracion) {
         this.nombrePelicula = nombre;
         this.rutaImagen = rutaImagen;
         this.fechaEstreno = estreno;
         this.fechaSalida = salida;
+        this.duracion = duracion;
     }
 
+
+    public Duration getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(Duration duracion) {
+        this.duracion = duracion;
+    }
 
     public String getNombrePelicula() {
         return nombrePelicula;

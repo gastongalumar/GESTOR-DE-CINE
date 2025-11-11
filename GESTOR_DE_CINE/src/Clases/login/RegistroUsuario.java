@@ -19,6 +19,8 @@ import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
 import Clases.login.usuario.Administrador;
 
+import static Clases.login.usuario.Usuario.validarNombreApellido;
+
 public class RegistroUsuario {
     private TextField nombreField, apellidoField, emailField, telefonoField;
     private PasswordField passwordField, confirmPasswordField;
@@ -70,7 +72,7 @@ public class RegistroUsuario {
 
     private void inicializarInterfaz() {
         // ✅ TÍTULO DINÁMICO SEGÚN MODO
-        stage.setTitle("CINE LOS CULIA - " +
+        stage.setTitle("CINE MARCENTER - " +
                 (esAdministrador ? "Registro de Administrador" : "Registro de Cliente"));
         stage.setOnCloseRequest(e -> stage.close());
         stage.setWidth(500);
@@ -305,7 +307,7 @@ public class RegistroUsuario {
 
             mostrarExito(mensajeExito);
             limpiarFormulario();
-            //reiniciarAplicacion();
+            reiniciarAplicacion();
             stage.close();
 
         } catch (UsuarioException e) {
@@ -317,6 +319,7 @@ public class RegistroUsuario {
     }
 
     private boolean validarCampos() {
+        // Validación de campos vacíos
         if (nombreField.getText().trim().isEmpty() ||
                 apellidoField.getText().trim().isEmpty() ||
                 emailField.getText().trim().isEmpty() ||
@@ -328,6 +331,23 @@ public class RegistroUsuario {
             return false;
         }
 
+        // validacion nombre sin numeros
+        if (!validarNombreApellido(nombreField.getText().trim())) {
+            mostrarError("El nombre solo puede contener letras\nNo se permiten números ni caracteres especiales");
+            nombreField.requestFocus();
+            nombreField.selectAll();
+            return false;
+        }
+
+        // ✅ validacion apellido sin numeros
+        if (!validarNombreApellido(apellidoField.getText().trim())) {
+            mostrarError("El apellido solo puede contener letras y espacios\nNo se permiten números ni caracteres especiales");
+            apellidoField.requestFocus();
+            apellidoField.selectAll();
+            return false;
+        }
+
+        // Resto de validaciones existentes...
         if (!Usuario.validarEmail(emailField.getText().trim())) {
             mostrarError("Por favor ingrese un email válido\nEjemplo: usuario@correo.com");
             emailField.requestFocus();
@@ -372,7 +392,7 @@ public class RegistroUsuario {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Registro Exitoso");
         alert.setHeaderText(esAdministrador ?
-                "¡Nuevo Administrador Registrado!" : "¡Bienvenido a CINE LOS CULIA!");
+                "¡Nuevo Administrador Registrado!" : "¡Bienvenido a CINE MARCENTER!");
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
@@ -397,19 +417,13 @@ public class RegistroUsuario {
     }
 
     public static void abrirRegistroCliente() {
-        System.out.println("🎯 abrirRegistroCliente() EJECUTADO");
 
         Platform.runLater(() -> {
-            System.out.println("🎯 Platform.runLater EN RegistroUsuario EJECUTADO");
 
             try {
-                System.out.println("🎯 CREANDO NUEVA INSTANCIA RegistroUsuario");
-                RegistroUsuario registro = new RegistroUsuario(); // ✅ Usa constructor sin parámetro
-                System.out.println("🎯 INSTANCIA CREADA: " + registro);
+                RegistroUsuario registro = new RegistroUsuario();
 
-                System.out.println("🎯 LLAMANDO mostrarVentana()");
                 registro.mostrarVentana();
-                System.out.println("🎯 mostrarVentana() COMPLETADO");
 
             } catch (Exception e) {
                 System.out.println("❌ ERROR EN RegistroUsuario: " + e.getMessage());
@@ -424,7 +438,7 @@ public class RegistroUsuario {
         System.out.println("🎯 STAGE CREADO: " + this.stage);
         inicializarInterfaz();
     }
-    private void reiniciarAplicacion(Cliente cliente) {
+    private void reiniciarAplicacion() {
         System.out.println("🔄 REINICIANDO APLICACIÓN...");
 
         Platform.runLater(() -> {
@@ -452,7 +466,7 @@ public class RegistroUsuario {
                     // Reabrir dashboard fresco (con los nuevos usuarios cargados)
                     // Necesitamos recrear el dashboard con el gestor actualizado
                     GestorUsuarios gestorActualizado = new GestorUsuarios();
-                    DashboardAdmin nuevoDashboard = new DashboardAdmin(gestorActualizado, gestorFunciones, cliente);
+                    DashboardAdmin nuevoDashboard = new DashboardAdmin(gestorActualizado, gestorFunciones);
                     nuevoDashboard.mostrarDashboard();
 
                 } else {
@@ -462,7 +476,7 @@ public class RegistroUsuario {
                     // Cerrar ventanas de login existentes
                     for (Stage ventana : Stage.getWindows().toArray(new Stage[0])) {
                         if (ventana.getTitle() != null &&
-                                ventana.getTitle().contains("CINE LOS CULIA - Inicio de Sesión")) {
+                                ventana.getTitle().contains("CINE MARCENTER - Inicio de Sesión")) {
                             ventana.close();
                         }
                     }

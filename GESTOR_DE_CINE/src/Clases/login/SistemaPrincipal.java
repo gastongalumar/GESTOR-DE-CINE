@@ -49,7 +49,7 @@ public class SistemaPrincipal extends Application {
     }
 
     private void inicializarInterfaz(Cliente cliente) {
-        stage.setTitle("CINEMAX - Sistema de Gestión");
+        stage.setTitle("CINE MARCENTER - Sistema de Gestión");
         stage.setOnCloseRequest(e -> Platform.exit());
         stage.setWidth(1200);
         stage.setHeight(800);
@@ -83,7 +83,7 @@ public class SistemaPrincipal extends Application {
         headerPanel.setAlignment(Pos.CENTER_LEFT);
 
         // Título
-        Label titleLabel = new Label("CINE LOS CULIA - Sistema de Gestión Cinematográfica");
+        Label titleLabel = new Label("CINE MARCENTER- Sistema de Gestión Cinematográfica");
         titleLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 20;");
 
         // Info usuario
@@ -163,7 +163,7 @@ public class SistemaPrincipal extends Application {
         welcomePanel.setAlignment(Pos.CENTER);
         welcomePanel.setPadding(new Insets(20));
 
-        Label welcomeLabel = new Label("¡Bienvenido al Sistema CINE LOS CULIA!");
+        Label welcomeLabel = new Label("¡Bienvenido al Sistema CINE MARCENTER!");
         welcomeLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #191923;");
 
         Label userInfoLabel = new Label("Usuario: " + usuarioActual + " | Tipo: " + tipoUsuario);
@@ -182,7 +182,7 @@ public class SistemaPrincipal extends Application {
         switch (opcion) {
             case "Dashboard":
                 if (esAdministrador()) {
-                    new DashboardAdmin(gestorUsuarios,gestorFunciones,cliente).mostrarDashboard();
+                    new DashboardAdmin(gestorUsuarios,gestorFunciones).mostrarDashboard();
                 }
                 break;
 
@@ -277,7 +277,7 @@ public class SistemaPrincipal extends Application {
 
     private void abrirCarteleraGeneral(Cliente cliente) {
         Stage carteleraStage = new Stage();
-        carteleraStage.setTitle("Cartelera - CINE LOS CULIA");
+        carteleraStage.setTitle("Cartelera - CINE MARCENTER");
 
         HBox contenedor = new HBox(20);
         contenedor.setStyle("-fx-background-color: #6E0A17; -fx-padding: 20;");

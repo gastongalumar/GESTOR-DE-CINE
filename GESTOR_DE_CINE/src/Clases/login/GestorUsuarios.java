@@ -9,9 +9,6 @@ import Enumeradores.login.TipoUsuario;
 import Excepciones.AutenticacionException;
 import Excepciones.UsuarioException;
 import ManejoJSON.FuncionesJSON;
-import ManejoJSON.GestorJsonLogin;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.util.List;

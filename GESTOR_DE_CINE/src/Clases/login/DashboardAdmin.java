@@ -29,7 +29,7 @@ public class DashboardAdmin {
     private Stage stage;
 
     // ✅ Constructor modificado para recibir GestorFunciones
-    public DashboardAdmin(GestorUsuarios gestorUsuarios, GestorFunciones gestorFunciones,Cliente cliente) {
+    public DashboardAdmin(GestorUsuarios gestorUsuarios, GestorFunciones gestorFunciones) {
         this.gestorUsuarios = gestorUsuarios;
         this.gestorFunciones = gestorFunciones;
     }
@@ -38,7 +38,7 @@ public class DashboardAdmin {
     public void mostrarDashboard(Cliente cliente) {
         Platform.runLater(() -> {
             stage = new Stage();
-            stage.setTitle("Dashboard Administrador - CINE LOS CULIA");
+            stage.setTitle("Dashboard Administrador - CINE MARCENTER");
             stage.setWidth(1200);
             stage.setHeight(800);
 
@@ -134,7 +134,7 @@ public class DashboardAdmin {
         // Tarjetas de métricas
         metricas.add(crearTarjetaMetrica("Total Usuarios", String.valueOf(totalUsuarios), "#3498db"), 0, 0);
         metricas.add(crearTarjetaMetrica("Administradores", String.valueOf(admins), "#e74c3c"), 1, 0);
-        metricas.add(crearTarjetaMetrica("Clientes", String.valueOf(clientes), "#27ae60"), 3, 0);
+        metricas.add(crearTarjetaMetrica("Clientes", String.valueOf(clientes), "#27ae60"), 2, 0);
 
         // Estadísticas de login
         GestorEstadisticasLogin stats = GestorEstadisticasLogin.getInstance();

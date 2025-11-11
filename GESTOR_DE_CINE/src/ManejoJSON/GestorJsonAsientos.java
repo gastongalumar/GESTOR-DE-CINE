@@ -3,6 +3,7 @@ package ManejoJSON;
 import Clases.Funcion;
 import Clases.GestorFunciones;
 import Clases.SalaCine;
+import Interfaces.ConversorJson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -15,8 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class GestorJsonAsientos {
-    // Carpeta específica para JSONs de asientos
+public class GestorJsonAsientos implements ConversorJson {
     private static final String CARPETA_JSON = "JSONasientos/";
     private static final String ARCHIVO_POR_DEFECTO = CARPETA_JSON + "Asientos.json";
     private final SalaCine sala;
@@ -30,9 +30,8 @@ public class GestorJsonAsientos {
     public GestorJsonAsientos(SalaCine sala, String archivoAsientos) {
         this.sala = sala;
 
-        // Asegurar que todos los archivos vayan a la carpeta JSONasientos
+
         if (archivoAsientos != null && !archivoAsientos.isEmpty()) {
-            // Si ya incluye la carpeta, usarlo tal cual, sino agregarla
             if (archivoAsientos.startsWith(CARPETA_JSON)) {
                 this.archivoAsientos = archivoAsientos;
             } else {
@@ -42,7 +41,6 @@ public class GestorJsonAsientos {
             this.archivoAsientos = ARCHIVO_POR_DEFECTO;
         }
 
-        // Crear carpeta si no existe
         crearCarpetaJSON();
         inicializarArchivo();
     }
@@ -50,7 +48,7 @@ public class GestorJsonAsientos {
     /**
      * Crea la carpeta JSONasientos si no existe
      */
-    private void crearCarpetaJSON() {
+    public void crearCarpetaJSON() {
         File carpeta = new File(CARPETA_JSON);
         if (!carpeta.exists()) {
             if (carpeta.mkdirs()) {
@@ -61,7 +59,7 @@ public class GestorJsonAsientos {
         }
     }
 
-    private void inicializarArchivo() {
+    public void inicializarArchivo() {
         File archivo = new File(archivoAsientos);
         if (!archivo.exists()) {
             System.out.println("📝 Creando nuevo archivo JSON... -> " + archivoAsientos);
@@ -224,23 +222,35 @@ public class GestorJsonAsientos {
     }
 
 
+    public static void renombrarArchivoAsientos(Funcion funcionVieja, Funcion funcionNueva) {
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
+
+        String nombreAnt = funcionVieja.getPelicula().getNombrePelicula().replaceAll("\\s+", "_");
+        String horarioAnt = funcionVieja.getHorarioFuncion().format(fmt);
+        String nombreNuev = funcionNueva.getPelicula().getNombrePelicula().replaceAll("\\s+", "_");
+        String horarioNuev = funcionNueva.getHorarioFuncion().format(fmt);
+
+        File fileViejo = new File(CARPETA_JSON, String.format("Asientos_%s_%s.json", nombreAnt, horarioAnt));
+        File fileNuevo = new File(CARPETA_JSON, String.format("Asientos_%s_%s.json", nombreNuev, horarioNuev));
+
+        if (fileViejo.exists()) {
+            boolean renombrado = fileViejo.renameTo(fileNuevo);
+            if (renombrado) {
+                System.out.println("✅ Archivo renombrado correctamente: " + fileNuevo.getName());
+            } else {
+                System.out.println("⚠️ No se pudo renombrar el archivo de asientos");
+            }
+        } else {
+            System.out.println("⚠️ No se encontró el archivo de asientos original: " + fileViejo.getName());
+        }
+    }
 
 
     public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
         try {
-            System.out.println("🔄 ===== INICIANDO COPIA Y RENOMBRE DE ARCHIVOS DE ASIENTOS =====");
-            System.out.println("📝 Nombre anterior: '" + nombreAnterior + "'");
-            System.out.println("📝 Nuevo nombre: '" + nuevoNombre + "'");
-
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
             File carpeta = new File(CARPETA_JSON);
 
-            if (!carpeta.exists()) {
-                System.err.println("❌ Carpeta no existe: " + CARPETA_JSON);
-                return;
-            }
-
-            System.out.println("✅ Carpeta verificada: " + CARPETA_JSON);
             boolean algunaCopia = false;
 
             // 🔸 PRIMERA PASADA: copiar y eliminar archivos
@@ -250,7 +260,6 @@ public class GestorJsonAsientos {
 
                 if (nombreFuncion.equalsIgnoreCase(nombreAnterior)) {
                     algunaCopia = true;
-                    System.out.println("🎯 Función coincidente encontrada para horario " + horarioFuncion);
 
                     String nombreAnt = nombreAnterior.replaceAll("\\s+", "_");
                     String nombreNuev = nuevoNombre.replaceAll("\\s+", "_");
@@ -263,7 +272,6 @@ public class GestorJsonAsientos {
                             String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
                             Files.write(fileNuevo.toPath(), contenido.getBytes(),
                                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                            System.out.println("✅ Copiado: " + fileViejo.getName() + " → " + fileNuevo.getName());
 
                             boolean eliminado = fileViejo.delete();
                             if (!eliminado) {
@@ -272,20 +280,14 @@ public class GestorJsonAsientos {
                                 eliminado = fileViejo.delete();
                             }
 
-                            System.out.println(eliminado
-                                    ? "🗑️ Archivo viejo eliminado: " + fileViejo.getName()
-                                    : "⚠️ No se pudo eliminar: " + fileViejo.getName());
 
                         } catch (Exception e) {
-                            System.err.println("❌ Error copiando archivo " + fileViejo.getName() + ": " + e.getMessage());
+
                         }
-                    } else {
-                        System.err.println("❌ Archivo no encontrado: " + fileViejo.getName());
                     }
                 }
             }
 
-            // 🔸 SEGUNDA PASADA: actualizar nombres en funciones
             if (algunaCopia) {
                 for (Funcion f : gestorFunciones.getListaFunciones().getElementos()) {
                     if (f.getPelicula().getNombrePelicula().equalsIgnoreCase(nombreAnterior)) {
@@ -293,223 +295,16 @@ public class GestorJsonAsientos {
                     }
                 }
 
-                // Guardar funciones actualizadas
                 FuncionesJSON.serializarFunciones(gestorFunciones.getListaFunciones().getElementos());
-                System.out.println("💾 Funciones actualizadas y serializadas correctamente.");
-            } else {
-                System.err.println("⚠️ No se encontraron funciones con el nombre anterior: " + nombreAnterior);
+
             }
 
-            System.out.println("✅ ===== FIN DE PROCESO =====");
-
         } catch (Exception e) {
-            System.err.println("❌ ERROR CRÍTICO al copiar archivos de asientos: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
 
-    /*public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
-        try {
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
-
-            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
-                if (funcion.getPelicula().getNombrePelicula().equals(nombreAnterior)) {
-                    String horarioStr = funcion.getHorarioFuncion().format(fmt);
-
-                    // Archivos dentro de la carpeta JSONasientos
-                    String archivoViejo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
-                            nombreAnterior.replaceAll("\\s+", "_"), horarioStr);
-                    String archivoNuevo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
-                            nuevoNombre.replaceAll("\\s+", "_"), horarioStr);
-
-                    File fileViejo = new File(archivoViejo);
-                    File fileNuevo = new File(archivoNuevo);
-
-                    System.out.println("🔄 Procesando: " + archivoViejo + " → " + archivoNuevo);
-
-                    if (fileViejo.exists()) {
-                        // 🔴 FORZAR SOBREESCRITURA incluso si el archivo nuevo ya existe
-                        String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
-                        Files.write(fileNuevo.toPath(), contenido.getBytes(),
-                                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                        System.out.println("✅ Datos SOBREESCRITOS: " + archivoViejo + " → " + archivoNuevo);
-
-                    } else {
-                        System.out.println("⚠️ Archivo origen no encontrado: " + archivoViejo);
-                    }
-
-                    fileViejo.delete();
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("⚠️ Error al copiar archivos de asientos: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }*/
-
-
-    /*public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
-        try {
-            System.out.println("🔄 ===== INICIANDO COPIA DE ARCHIVOS DE ASIENTOS =====");
-            System.out.println("📝 Nombre anterior: '" + nombreAnterior + "'");
-            System.out.println("📝 Nombre nuevo: '" + nuevoNombre + "'");
-
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
-
-            // Verificar que la carpeta existe
-            File carpeta = new File(CARPETA_JSON);
-            if (!carpeta.exists()) {
-                System.err.println("❌ Carpeta no existe: " + CARPETA_JSON);
-                return;
-            }
-            System.out.println("✅ Carpeta verificada: " + CARPETA_JSON);
-
-            // Listar todas las funciones para debug
-            System.out.println("🎬 Lista completa de funciones:");
-            boolean funcionesEncontradas = false;
-
-            for (Funcion funcion : gestorFunciones.getListaFunciones().getElementos()) {
-                String nombreFuncion = funcion.getPelicula().getNombrePelicula();
-                String horarioFuncion = funcion.getHorarioFuncion().format(fmt);
-
-                System.out.println("   - '" + nombreFuncion + "' | Horario: " + horarioFuncion);
-
-                // Verificar si coincide con el nombre anterior (con diferentes criterios)
-                boolean coincideExacto = nombreFuncion.equals(nombreAnterior);
-                boolean contieneNombre = nombreFuncion.contains(nombreAnterior);
-                boolean nombresSimilares = nombreFuncion.replaceAll("\\s+", "_")
-                        .equals(nombreAnterior.replaceAll("\\s+", "_"));
-
-                System.out.println("     → Coincide exacto: " + coincideExacto);
-                System.out.println("     → Contiene nombre: " + contieneNombre);
-                System.out.println("     → Nombres similares: " + nombresSimilares);
-
-                if (coincideExacto) {
-                    funcionesEncontradas = true;
-                    System.out.println("🎯 FUNCIÓN COINCIDENTE ENCONTRADA!");
-
-                    String nombreAnteriorSinEspacios = nombreAnterior.replaceAll("\\s+", "_");
-                    String nuevoNombreSinEspacios = nuevoNombre.replaceAll("\\s+", "_");
-
-                    // Archivo VIEJO (con nombre anterior)
-                    String archivoViejo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
-                            nombreAnteriorSinEspacios, horarioFuncion);
-
-                    // Archivo NUEVO (con nuevo nombre)
-                    String archivoNuevo = CARPETA_JSON + String.format("Asientos_%s_%s.json",
-                            nuevoNombreSinEspacios, horarioFuncion);
-
-                    File fileViejo = new File(archivoViejo);
-                    File fileNuevo = new File(archivoNuevo);
-
-                    System.out.println("📁 Archivo viejo esperado: " + archivoViejo);
-                    System.out.println("📁 Archivo nuevo destino: " + archivoNuevo);
-                    System.out.println("📁 Archivo viejo existe: " + fileViejo.exists());
-                    System.out.println("📁 Archivo nuevo existe: " + fileNuevo.exists());
-
-                    if (fileViejo.exists()) {
-                        try {
-                            // Leer contenido del archivo viejo
-                            String contenido = new String(Files.readAllBytes(fileViejo.toPath()));
-                            System.out.println("✅ Contenido leído, tamaño: " + contenido.length() + " caracteres");
-
-                            // Escribir en archivo nuevo
-                            Files.write(fileNuevo.toPath(), contenido.getBytes(),
-                                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                            System.out.println("✅ ARCHIVO COPIADO EXITOSAMENTE: " + archivoViejo + " → " + archivoNuevo);
-
-                            // Verificar que se copió correctamente
-                            if (fileNuevo.exists()) {
-                                String contenidoVerificado = new String(Files.readAllBytes(fileNuevo.toPath()));
-                                System.out.println("✅ Verificación: nuevo archivo tiene " + contenidoVerificado.length() + " caracteres");
-                            } else {
-                                System.err.println("❌ Error: nuevo archivo no se creó");
-                            }
-
-                        } catch (Exception e) {
-                            System.err.println("❌ Error durante la copia: " + e.getMessage());
-                            e.printStackTrace();
-                        }
-                    } else {
-                        System.err.println("❌ Archivo origen no encontrado: " + archivoViejo);
-
-                        // Listar archivos disponibles que podrían coincidir
-                        System.out.println("🔍 Buscando archivos similares...");
-                        String[] archivosDisponibles = carpeta.list((dir, name) ->
-                                name.startsWith("Asientos_") &&
-                                        name.contains(nombreAnteriorSinEspacios) &&
-                                        name.endsWith(".json"));
-
-                        if (archivosDisponibles != null && archivosDisponibles.length > 0) {
-                            System.out.println("📂 Archivos similares encontrados:");
-                            for (String archivo : archivosDisponibles) {
-                                System.out.println("   - " + archivo);
-                            }
-                        } else {
-                            System.out.println("📂 No se encontraron archivos similares");
-
-                            // Listar todos los archivos de asientos
-                            String[] todosArchivos = carpeta.list((dir, name) ->
-                                    name.startsWith("Asientos_") && name.endsWith(".json"));
-                            if (todosArchivos != null && todosArchivos.length > 0) {
-                                System.out.println("📂 Todos los archivos de asientos:");
-                                for (String archivo : todosArchivos) {
-                                    System.out.println("   - " + archivo);
-                                }
-                            }
-                        }
-                    }
-                    System.out.println("---");
-                }
-            }
-
-            if (!funcionesEncontradas) {
-                System.err.println("❌ NO SE ENCONTRARON FUNCIONES con el nombre anterior: '" + nombreAnterior + "'");
-                System.out.println("🔍 Posibles causas:");
-                System.out.println("   - El nombre ya fue actualizado en las funciones");
-                System.out.println("   - No hay funciones para esta película");
-                System.out.println("   - Diferencia en mayúsculas/minúsculas o espacios");
-            }
-
-            System.out.println("======= FIN DE COPIA DE ARCHIVOS =======");
-
-        } catch (Exception e) {
-            System.err.println("❌ ERROR CRÍTICO al copiar archivos de asientos: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }*/
-    /*public static void copiarArchivosAsientos(String nombreViejo, String nombreNuevo, GestorFunciones gestorFunciones) {
-        File carpeta = new File("Asientos");
-        if (!carpeta.exists() || !carpeta.isDirectory()) return;
-
-        File[] archivos = carpeta.listFiles();
-        if (archivos == null) return;
-
-        for (File archivoViejo : archivos) {
-            // Si el archivo pertenece a la película vieja
-            if (archivoViejo.getName().startsWith("Asientos_" + nombreViejo + "_")) {
-                try {
-                    // Crear nuevo nombre reemplazando solo el nombre de la película
-                    String nombreNuevoArchivo = archivoViejo.getName().replace(nombreViejo, nombreNuevo);
-                    File archivoNuevo = new File(carpeta, nombreNuevoArchivo);
-
-                    // Copiar contenido (reservas incluidas)
-                    java.nio.file.Files.copy(
-                            archivoViejo.toPath(),
-                            archivoNuevo.toPath(),
-                            java.nio.file.StandardCopyOption.REPLACE_EXISTING
-                    );
-
-                    // Eliminar el viejo
-                    archivoViejo.delete();
-
-                } catch (Exception e) {
-                    System.out.println("Error copiando asientos: " + e.getMessage());
-                }
-            }
-        }
-    }*/
 
 
     private int[] etiquetaACoordenadas(String etiqueta) {
