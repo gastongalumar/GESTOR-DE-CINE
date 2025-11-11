@@ -1,12 +1,13 @@
 package ManejoJSON;
 
-import Clases.*;
-import Clases.GestionDePagos.Pago;
-import Clases.login.GestorUsuarios;
+import Clases.Administracion.GestorPeliculas;
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
+import Clases.GestionSelectorAsientos.SalaCine;
 import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
-import Interfaces.ConversorJson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

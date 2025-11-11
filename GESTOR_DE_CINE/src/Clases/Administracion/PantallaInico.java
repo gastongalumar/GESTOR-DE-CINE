@@ -1,4 +1,4 @@
-package Clases;
+package Clases.Administracion;
 
 import Clases.login.LoginInterfaz;
 import javafx.animation.FadeTransition;

@@ -1,9 +1,6 @@
 package Interfaces;
 
-import Clases.Funcion;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public interface ConversorJson{
 

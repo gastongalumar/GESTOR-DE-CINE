@@ -2,9 +2,9 @@
 package Clases.GestionDePagos;
 
 import Clases.GestionSelectorAsientos.AsientoButton;
-import Clases.Funcion;
+import Clases.GestionFunciones.Funcion;
 import Clases.GestionSelectorAsientos.SelectorAsientos;
-import Clases.ListaGenerica;
+import Clases.Utilidades.ListaGenerica;
 import Clases.login.usuario.Cliente;
 import Enumeradores.EstadoAsiento;
 import javafx.scene.control.*;
@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 public class GestorDePagos {
     private ListaGenerica<Pago> listaPagos = new ListaGenerica<>();

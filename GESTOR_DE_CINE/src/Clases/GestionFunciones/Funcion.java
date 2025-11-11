@@ -1,4 +1,6 @@
-package Clases;
+package Clases.GestionFunciones;
+
+import Clases.GestionSelectorAsientos.SalaCine;
 
 import java.time.LocalDateTime;
 import java.util.List;

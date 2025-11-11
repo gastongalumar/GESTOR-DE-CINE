@@ -1,5 +1,6 @@
-package Clases;
+package Clases.GestionFunciones;
 
+import Clases.Utilidades.ListaGenerica;
 import Excepciones.FechaInvalidaException;
 import ManejoJSON.FuncionesJSON;
 

@@ -1,7 +1,11 @@
 package Clases.login;
 
-import Clases.*;
+import Clases.Administracion.GestorAdministrador;
+import Clases.Administracion.GestorPeliculas;
+import Clases.Administracion.VistaCartelera;
 import Clases.GestionDePagos.HistorialCompras;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import javafx.application.Application;

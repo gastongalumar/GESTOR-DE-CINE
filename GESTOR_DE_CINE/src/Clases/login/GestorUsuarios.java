@@ -1,6 +1,6 @@
 package Clases.login;
 
-import Clases.ListaGenerica;
+import Clases.Utilidades.ListaGenerica;
 import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;

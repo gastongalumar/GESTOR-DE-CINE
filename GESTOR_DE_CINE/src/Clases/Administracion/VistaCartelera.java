@@ -1,5 +1,7 @@
-package Clases;
+package Clases.Administracion;
 
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.Pelicula;
 import Clases.GestionSelectorAsientos.SelectorAsientos;
 import Clases.login.usuario.Cliente;
 import javafx.geometry.Pos;
@@ -20,10 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.swing.SwingUtilities;
 public class VistaCartelera {
 
-    public static VBox crearVista(Pelicula pelicula, List<Funcion> listaFunciones,Cliente cliente){
+    public static VBox crearVista(Pelicula pelicula, List<Funcion> listaFunciones, Cliente cliente){
         String rutaImagen = pelicula.getRutaImagen();
 
         Node imageNode;

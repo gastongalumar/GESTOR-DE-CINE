@@ -1,7 +1,5 @@
 package Clases.GestionDePagos;
 
-import Clases.Funcion;
-import Clases.ListaGenerica;
 import Clases.login.usuario.Cliente;
 import ManejoJSON.JSONReservas;
 import javafx.collections.FXCollections;
@@ -14,8 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class HistorialCompras {
 

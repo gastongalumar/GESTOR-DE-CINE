@@ -1,5 +1,6 @@
-package Clases;
+package Clases.Administracion;
 
+import Clases.GestionFunciones.Pelicula;
 import ManejoJSON.FuncionesJSON;
 
 import java.util.ArrayList;

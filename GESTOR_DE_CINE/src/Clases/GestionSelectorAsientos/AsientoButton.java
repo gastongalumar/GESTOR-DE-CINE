@@ -1,6 +1,5 @@
 package Clases.GestionSelectorAsientos;
 
-import Clases.SalaCine;
 import Enumeradores.EstadoAsiento;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;

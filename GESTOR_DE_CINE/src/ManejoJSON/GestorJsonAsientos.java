@@ -1,8 +1,8 @@
 package ManejoJSON;
 
-import Clases.Funcion;
-import Clases.GestorFunciones;
-import Clases.SalaCine;
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionSelectorAsientos.SalaCine;
 import Interfaces.ConversorJson;
 import org.json.JSONArray;
 import org.json.JSONObject;

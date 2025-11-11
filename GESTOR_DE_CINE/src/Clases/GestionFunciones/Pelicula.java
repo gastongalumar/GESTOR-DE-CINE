@@ -1,4 +1,4 @@
-package Clases;
+package Clases.GestionFunciones;
 
 import java.time.Duration;
 import java.time.LocalDate;

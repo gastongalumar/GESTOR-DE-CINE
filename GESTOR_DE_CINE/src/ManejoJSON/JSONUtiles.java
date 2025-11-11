@@ -18,12 +18,9 @@ public class JSONUtiles {
             file.write(array.toString(4));
             file.flush();
             file.close();
-            System.out.println("💾 JSONArray guardado en: " + archivo);
-        } catch (IOException e) {
-            System.err.println("❌ Error al guardar JSONArray: " + e.getMessage());
+        } catch (IOException e) {;
             e.printStackTrace();
         } catch (JSONException e) {
-            System.err.println("❌ Error de JSON al guardar array: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -34,12 +31,11 @@ public class JSONUtiles {
             file.write(obj.toString(4));
             file.flush();
             file.close();
-            System.out.println("💾 JSONObject guardado en: " + archivo);
         } catch (IOException e) {
-            System.err.println("❌ Error al guardar JSONObject: " + e.getMessage());
+            System.err.println("Error al guardar JSONObject: " + e.getMessage());
             e.printStackTrace();
         } catch (JSONException e) {
-            System.err.println("❌ Error de JSON al guardar objeto: " + e.getMessage());
+            System.err.println("Error de JSON al guardar objeto: " + e.getMessage());
             e.printStackTrace();
         }
     }

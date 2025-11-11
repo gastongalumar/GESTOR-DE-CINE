@@ -1,8 +1,7 @@
 package Clases.login;
 
-import Clases.GestorFunciones;
-import Clases.HashUtil;
-import Clases.ManejoVentanas;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.Utilidades.HashUtil;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Excepciones.UsuarioException;

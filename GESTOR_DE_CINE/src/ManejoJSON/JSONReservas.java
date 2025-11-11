@@ -2,8 +2,8 @@ package ManejoJSON;
 
 import Clases.GestionDePagos.GestorDePagos;
 import Clases.GestionDePagos.Reserva;
-import Clases.ListaGenerica;
-import Clases.SalaCine;
+import Clases.Utilidades.ListaGenerica;
+import Clases.GestionSelectorAsientos.SalaCine;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

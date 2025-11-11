@@ -1,12 +1,10 @@
-package Clases;
+package Clases.Utilidades;
 
+import Clases.Administracion.GestorAdministrador;
+import Clases.GestionFunciones.GestorFunciones;
 import Clases.login.usuario.Cliente;
 import javafx.application.Platform;
 import javafx.stage.Stage;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 public class ManejoVentanas {
 

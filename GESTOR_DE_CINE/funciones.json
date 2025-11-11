@@ -1,41 +1,5 @@
 [
     {
-        "Sala": "Sala 2",
-        "Fecha y hora": "2025-11-25 17:00",
-        "Pelicula": "Havoc",
-        "Precio": 2000
-    },
-    {
-        "Sala": "Sala 1",
-        "Fecha y hora": "2025-12-03 10:00",
-        "Pelicula": "Havoc",
-        "Precio": 5000
-    },
-    {
-        "Sala": "Sala 1",
-        "Fecha y hora": "2025-12-04 10:00",
-        "Pelicula": "Havoc",
-        "Precio": 5000
-    },
-    {
-        "Sala": "Sala 1",
-        "Fecha y hora": "2025-12-05 10:00",
-        "Pelicula": "Havoc",
-        "Precio": 5000
-    },
-    {
-        "Sala": "Sala 1",
-        "Fecha y hora": "2025-11-25 18:00",
-        "Pelicula": "Havoc",
-        "Precio": 5000
-    },
-    {
-        "Sala": "Sala 1",
-        "Fecha y hora": "2025-11-25 20:01",
-        "Pelicula": "Havoc",
-        "Precio": 4000
-    },
-    {
         "Sala": "Sala 1",
         "Fecha y hora": "2025-12-15 21:00",
         "Pelicula": "Ace Ventura",
@@ -45,6 +9,72 @@
         "Sala": "Sala 1",
         "Fecha y hora": "2025-12-16 21:00",
         "Pelicula": "Ace Ventura",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-11 23:38",
+        "Pelicula": "Jhon Wick 4",
+        "Precio": 400
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-11 10:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-12 10:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-13 10:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-14 10:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-15 10:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-11 21:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-12 21:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-13 21:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-14 21:00",
+        "Pelicula": "Los 4 Fantasticos",
+        "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-15 21:00",
+        "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
     }
 ]

@@ -1,6 +1,6 @@
 package Clases.GestionDePagos;
 
-import Clases.Funcion;
+import Clases.GestionFunciones.Funcion;
 import Clases.login.usuario.Cliente;
 
 import java.time.LocalDateTime;

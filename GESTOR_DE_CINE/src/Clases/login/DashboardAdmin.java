@@ -1,6 +1,6 @@
 package Clases.login;
-import Clases.GestorAdministrador;
-import Clases.GestorFunciones;
+import Clases.Administracion.GestorAdministrador;
+import Clases.GestionFunciones.GestorFunciones;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Enumeradores.login.TipoUsuario;

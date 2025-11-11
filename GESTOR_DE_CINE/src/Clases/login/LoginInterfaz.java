@@ -1,7 +1,12 @@
 package Clases.login;
 
-import Clases.*;
+import Clases.Administracion.GestorAdministrador;
+import Clases.Administracion.GestorPeliculas;
+import Clases.Administracion.VistaCartelera;
 import Clases.GestionDePagos.HistorialCompras;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
+import Clases.GestionSelectorAsientos.SalaCine;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import Excepciones.AutenticacionException;
@@ -22,7 +27,7 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-import static Clases.HashUtil.hashSHA256;
+import static Clases.Utilidades.HashUtil.hashSHA256;
 
 public class LoginInterfaz extends Application {
     private Stage stage;
@@ -38,6 +43,7 @@ public class LoginInterfaz extends Application {
         GestorFunciones gestorFunciones = new GestorFunciones();
         cargarPeliculasActualizadas(gestorFunciones, new SalaCine("Sala 1", 9,14), new SalaCine("Sala 2", 9,14));
         crearInterfaz(cliente);
+        GestorAdministrador.iniciarAdministrador(gestorFunciones,cliente);
         configurarEventos(gestorFunciones,cliente);
         stage.show();
     }
@@ -120,8 +126,8 @@ public class LoginInterfaz extends Application {
         emailLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 12;");
 
         emailField = new TextField();
-        emailField.setPrefSize(300, 40);  // ✅ Mismo tamaño
-        emailField.setMaxWidth(280);      // ✅ Importante: forzar el ancho máximo
+        emailField.setPrefSize(300, 40);
+        emailField.setMaxWidth(280);
         emailField.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 10;");
 
 // Contraseña CON OJITO
@@ -132,11 +138,11 @@ public class LoginInterfaz extends Application {
         HBox passwordContainer = new HBox();
         passwordContainer.setSpacing(5);
         passwordContainer.setAlignment(Pos.CENTER_LEFT);
-        passwordContainer.setPrefWidth(300);  // ✅ Mismo ancho total
-        passwordContainer.setMaxWidth(300);   // ✅ Forzar ancho máximo
+        passwordContainer.setPrefWidth(300);
+        passwordContainer.setMaxWidth(300);
 
         passwordField = new PasswordField();
-        passwordField.setPrefSize(280, 40);   // ✅ Un poco menos para el ojito
+        passwordField.setPrefSize(280, 40);   // Un poco menos para el ojito
         passwordField.setStyle("-fx-font-size: 14; -fx-border-color: #646496; -fx-border-width: 1; -fx-padding: 10;");
 
 // Campo de texto visible (oculto inicialmente)

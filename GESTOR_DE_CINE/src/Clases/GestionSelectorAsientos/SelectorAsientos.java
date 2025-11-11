@@ -1,10 +1,7 @@
 package Clases.GestionSelectorAsientos;
 
-import Clases.Funcion;
+import Clases.GestionFunciones.Funcion;
 import Clases.GestionDePagos.GestorDePagos;
-import Clases.ManejoVentanas;
-import Clases.SalaCine;
-import Clases.login.usuario.Administrador;
 import Clases.login.usuario.Cliente;
 import Clases.login.usuario.Usuario;
 import ManejoJSON.GestorJsonAsientos;

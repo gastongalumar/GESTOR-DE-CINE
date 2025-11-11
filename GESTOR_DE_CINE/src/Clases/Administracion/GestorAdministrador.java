@@ -1,20 +1,16 @@
-package Clases;
+package Clases.Administracion;
 
+import Clases.GestionFunciones.Funcion;
+import Clases.GestionFunciones.GestorFunciones;
+import Clases.GestionFunciones.Pelicula;
+import Clases.Utilidades.ListaGenerica;
 import Clases.login.GestorEstadisticasLogin;
 import Clases.login.usuario.Cliente;
-import Excepciones.CamposIncompletosException;
 import ManejoJSON.FuncionesJSON;
-import ManejoJSON.GestorJsonAsientos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -23,21 +19,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Clases.Formularios.compararFechas;
-
 public class GestorAdministrador {
 
-    public static void iniciarAdministrador(GestorFunciones gestorFunciones,Cliente cliente) {
-        Clases.GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
+    public static void iniciarAdministrador(GestorFunciones gestorFunciones, Cliente cliente) {
+        GestorPeliculas.setListaPeliculas(FuncionesJSON.deserializarPeliculas());
 
         vistaAdministrador(GestorPeliculas.getListaPeliculas(), gestorFunciones,cliente);
     }
@@ -73,7 +63,7 @@ public class GestorAdministrador {
         return vigentes;
     }
 
-    public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones,Cliente cliente){
+    public static void vistaAdministrador(List<Pelicula> listaPeliculas, GestorFunciones gestorFunciones, Cliente cliente){
 
 
         gestorFunciones.setListaFunciones(
