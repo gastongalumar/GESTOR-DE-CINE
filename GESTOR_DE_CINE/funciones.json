@@ -19,12 +19,6 @@
     },
     {
         "Sala": "Sala 2",
-        "Fecha y hora": "2025-11-11 10:00",
-        "Pelicula": "Los 4 Fantasticos",
-        "Precio": 4000
-    },
-    {
-        "Sala": "Sala 2",
         "Fecha y hora": "2025-11-12 10:00",
         "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
@@ -76,5 +70,17 @@
         "Fecha y hora": "2025-11-15 21:00",
         "Pelicula": "Los 4 Fantasticos",
         "Precio": 4000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-11 13:42",
+        "Pelicula": "F1 La pelicula",
+        "Precio": 5000
+    },
+    {
+        "Sala": "Sala 1",
+        "Fecha y hora": "2025-11-12 13:42",
+        "Pelicula": "F1 La pelicula",
+        "Precio": 5000
     }
 ]

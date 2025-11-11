@@ -26,8 +26,6 @@ public class Reserva {
         this(cliente, funcion, metodoPago, monto, List.of());
     }
 
-
-
     public Reserva(Cliente cliente, Funcion funcion, String metodoPago, double monto, List<String> asientosSeleccionados) {
         this.funcion = funcion;
         this.metodoPago = metodoPago;

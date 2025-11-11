@@ -16,12 +16,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+// Constantes para configuración de archivos
 public class GestorJsonAsientos implements ConversorJson {
     private static final String CARPETA_JSON = "JSONasientos/";
     private static final String ARCHIVO_POR_DEFECTO = CARPETA_JSON + "Asientos.json";
     private final SalaCine sala;
     private final String archivoAsientos;
 
+    // Constructor por defecto - usa archivo por defecto
     public GestorJsonAsientos(SalaCine sala) {
         this(sala, ARCHIVO_POR_DEFECTO);
     }
@@ -45,8 +47,7 @@ public class GestorJsonAsientos implements ConversorJson {
         inicializarArchivo();
     }
 
-
-
+    // Crea la carpeta para archivos JSON si no existe
     public void crearCarpetaJSON() {
         File carpeta = new File(CARPETA_JSON);
         if (!carpeta.exists()) {
@@ -58,6 +59,7 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
+    // Inicializa el archivo JSON si no existe
     public void inicializarArchivo() {
         File archivo = new File(archivoAsientos);
         if (!archivo.exists()) {
@@ -65,6 +67,7 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
+    // Carga el estado guardado desde el archivo JSON
     public boolean cargarEstadoGuardado() {
         try {
             JSONObject estadoSala = JSONUtiles.leerObject(archivoAsientos);
@@ -121,9 +124,7 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
-    /**
-     * Guarda el estado completo en JSON
-     */
+    // Guarda el estado completo de la sala en JSON
     public void guardarEstadoCompleto() {
         try {
             JSONObject estadoSala = new JSONObject();
@@ -160,15 +161,14 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
-    /**
-     * Confirma las selecciones y guarda en JSON
-     */
+    // Confirma las selecciones y guarda en JSON
     public int confirmarSelecciones() {
         int confirmados = sala.confirmarSelecciones();
         guardarEstadoCompleto();
         return confirmados;
     }
 
+    // Genera un reporte del estado actual de la sala
     public JSONObject generarReporte() {
         try {
             JSONObject reporte = new JSONObject();
@@ -199,21 +199,18 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
-
+    // Genera etiqueta para un asiento (ej: A1, B2, etc.)
     private String generarEtiquetaAsiento(int fila, int columna) {
         return String.valueOf((char) ('A' + columna)) + (fila + 1);
     }
 
-    /**
-     * Limpia selecciones y guarda
-     */
+    // Limpia selecciones y guarda el estado
     public void limpiarSelecciones() {
         sala.limpiarSelecciones();
         guardarEstadoCompleto();
     }
 
-
-
+    // Copia archivos de asientos cuando se renombra una película
     public static void copiarArchivosAsientos(String nombreAnterior, String nuevoNombre, GestorFunciones gestorFunciones) {
         try {
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmm");
@@ -272,9 +269,7 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
-
-
-
+    // Convierte etiqueta de asiento (ej: "A1") a coordenadas (fila, columna)
     private int[] etiquetaACoordenadas(String etiqueta) {
         if (etiqueta == null || etiqueta.length() < 2) {
             return new int[]{-1, -1};
@@ -321,6 +316,7 @@ public class GestorJsonAsientos implements ConversorJson {
         }
     }
 
+    // Libera asientos ocupados (cambia estado de OCUPADO a LIBRE)
     public boolean liberarAsientos(List<String> asientosALiberar) {
         try {
             System.out.println(" Liberando " + asientosALiberar.size() + " asientos: " + asientosALiberar);

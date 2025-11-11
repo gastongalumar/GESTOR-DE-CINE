@@ -21,7 +21,7 @@ public class GestorDePagos {
     private SelectorAsientos selectorAsientos;
 
 
-    // CONSTRUCTOR
+    // CONSTRUCTOR - inicializa con el selector de asientos
     public GestorDePagos(SelectorAsientos selectorAsientos) {
         this.selectorAsientos = selectorAsientos;
     }
@@ -45,17 +45,20 @@ public class GestorDePagos {
 
 
     // MÉTODOS DE GESTIÓN DE PAGOS
+
+    // Agrega un metodo de pago a la lista disponible
     public void agregarMetodoDePago(MetodoDePago metodo) {
         metodoDePagos.agregar(metodo);
     }
 
-
-
+    // Procesa un pago con el metodo seleccionado (simulado)
     public static boolean procesarPago(MetodoDePago metodoPago, double totalAPagar, String descripcion) {
         return true;
     }
 
     // MÉTODOS DE ACTUALIZACIÓN DE UI
+
+    // Actualiza el contador de asientos seleccionados en la interfaz
     public void actualizarContador() {
         if (selectorAsientos != null && selectorAsientos.getContadorLabel() != null) {
             int seleccionados = selectorAsientos.getSala().contarAsientosSeleccionados();
@@ -63,6 +66,7 @@ public class GestorDePagos {
         }
     }
 
+    // Actualiza el precio total mostrado en la interfaz
     public void actualizarPrecioTotal() {
         if (selectorAsientos != null && selectorAsientos.getPrecioTotalLabel() != null) {
             double total = calcularPrecioTotal();
@@ -70,6 +74,7 @@ public class GestorDePagos {
         }
     }
 
+    // Calcula el precio total basado en asientos seleccionados y precio de función
     public double calcularPrecioTotal() {
         if (selectorAsientos == null || selectorAsientos.getSala() == null) return 0.0;
 
@@ -79,6 +84,7 @@ public class GestorDePagos {
     }
 
     // METODO PRINCIPAL DE PROCESAMIENTO DE PAGO
+    // Maneja el flujo completo de pago
     public void procesarPago(Cliente cliente) {
         double totalAPagar = calcularPrecioTotal();
         List<String> asientosSeleccionadosParaTicket = obtenerAsientosSeleccionados();
@@ -121,6 +127,7 @@ public class GestorDePagos {
         }
     }
 
+    // Crea el resumen de compra para mostrar en el diálogo
     private String crearResumenCompra(int cantidadAsientos, double totalAPagar) {
         Funcion funcion = selectorAsientos.getFuncion();
         return String.format(
@@ -140,6 +147,7 @@ public class GestorDePagos {
         );
     }
 
+    // Procesa el pago con el metodo específico seleccionado
     private void procesarPagoConMetodo(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados,Cliente cliente) {
         MetodoDePago metodoPago = new MetodoDePago(generarIdMetodoPago(), metodoSeleccionado);
         String descripcion = String.format("Compra de %d asientos para %s",
@@ -156,6 +164,7 @@ public class GestorDePagos {
         }
     }
 
+    // Muestra la confirmación de pago exitoso y opción para imprimir ticket
     private void mostrarConfirmacionPago(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados,Cliente cliente) {
         Alert exito = new Alert(Alert.AlertType.INFORMATION);
         exito.setTitle("Pago Exitoso");
@@ -180,6 +189,7 @@ public class GestorDePagos {
         }
     }
 
+    // Confirma las selecciones de asientos y los marca como ocupados
     private int confirmarSelecciones() {
         if (selectorAsientos == null || selectorAsientos.getGestorJson() == null) return 0;
 
@@ -214,6 +224,7 @@ public class GestorDePagos {
         return seleccionados;
     }
 
+    // Genera e imprime el ticket de compra
     private void imprimirTicketCompra(String metodoSeleccionado, double totalAPagar, int cantidadAsientos, List<String> asientosSeleccionados, Cliente cliente) {
         try {
             Funcion funcion = selectorAsientos.getFuncion();
@@ -240,7 +251,7 @@ public class GestorDePagos {
         }
     }
 
-
+    // Genera el archivo HTML del ticket desde la reserva
     private void imprimirTicketDesdeReserva(Reserva reserva) {
         try {
 
@@ -272,7 +283,6 @@ public class GestorDePagos {
 
             // Verificar permisos
             //File testFile = new File(fileName);
-
 
             fileName = ticketsDir + "/ticket_cine_" + reserva.getNumeroTicket() + ".html";
             java.io.FileWriter writer = new java.io.FileWriter(fileName);
@@ -537,6 +547,7 @@ public class GestorDePagos {
         }
     }
 
+    // Obtiene la lista de asientos seleccionados en formato texto
     private List<String> obtenerAsientosSeleccionados() {
         List<String> asientos = new ArrayList<>();
 
@@ -569,11 +580,12 @@ public class GestorDePagos {
     }
 
     // MÉTODOS AUXILIARES
-
+    // Genera un ID único para métodos de pago
     private int generarIdMetodoPago() {
         return (int) (System.currentTimeMillis() % 1000000);
     }
 
+    // Busca la ruta absoluta de una imagen en varias ubicaciones posibles
     public String obtenerRutaAbsolutaImagen(String nombreArchivo) {
 
 
@@ -598,6 +610,7 @@ public class GestorDePagos {
         return null;
     }
 
+    // Abre el ticket en el navegador predeterminado
     private void abrirEnNavegador(String fileName) {
         try {
             java.io.File file = new java.io.File(fileName);
@@ -617,6 +630,7 @@ public class GestorDePagos {
         }
     }
 
+    // Muestra alerta de error al generar ticket
     private void mostrarAlertaError(Exception e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error al Generar Ticket");
@@ -625,7 +639,7 @@ public class GestorDePagos {
         alert.showAndWait();
     }
 
-
+    // Obtiene el cliente actual del sistema
     private Cliente obtenerClienteActual() {
         if (selectorAsientos != null && selectorAsientos.getCliente() != null) {
             return selectorAsientos.getCliente();
@@ -639,15 +653,17 @@ public class GestorDePagos {
         return new Cliente("Cliente", "Cinemax", "cliente@cinemax.com", "", "000-0000");
     }
 
-
+    // Obtiene el email del cliente logueado (placeholder)
     private String obtenerEmailClienteLogueado() {
         return null;
     }
 
+    // Getter para cliente
     public Cliente getCliente() {
         return obtenerClienteActual();
     }
 
+    // Elimina un ticket temporal del sistema de archivos
     public static void eliminarTicketTemporal(String numeroTicket) {
         try {
             // Siempre usar el nombre completo con prefijo

@@ -194,5 +194,54 @@
         "salaNombre": "Sala 1",
         "numeroTicket": "TK1762822233229933",
         "horarioFuncion": "16/12/2025 21:00"
+    },
+    {
+        "metodoPago": "MetodoDePago : Tarjeta de Débito\n",
+        "clienteNombre": "gaston gg",
+        "monto": 90000,
+        "asientosSeleccionados": [
+            "E7",
+            "E8",
+            "E9",
+            "E10",
+            "E11",
+            "F7",
+            "G7",
+            "H7",
+            "H9",
+            "H10",
+            "H11",
+            "I7",
+            "I11",
+            "J7",
+            "J8",
+            "J9",
+            "J10",
+            "J11"
+        ],
+        "nombrePelicula": "F1 La pelicula",
+        "clienteEmail": "g@g.com",
+        "codigoOR": "OR-CMX-1762879289346225",
+        "fechaEmision": "2025-11-11T13:41:29.3466205",
+        "salaNombre": "Sala 1",
+        "numeroTicket": "TK1762879289346225",
+        "horarioFuncion": "11/11/2025 13:42"
+    },
+    {
+        "metodoPago": "MetodoDePago : Tarjeta de Crédito\n",
+        "clienteNombre": "gaston gg",
+        "monto": 15000,
+        "asientosSeleccionados": [
+            "D7",
+            "D8",
+            "D9"
+        ],
+        "nombrePelicula": "F1 La pelicula",
+        "clienteEmail": "g@g.com",
+        "codigoOR": "OR-CMX-1762879640865146",
+        "fechaEmision": "2025-11-11T13:47:20.8650766",
+        "salaNombre": "Sala 1",
+        "numeroTicket": "TK1762879640865146",
+        "horarioFuncion": "11/11/2025 13:42"
     }
 ]
