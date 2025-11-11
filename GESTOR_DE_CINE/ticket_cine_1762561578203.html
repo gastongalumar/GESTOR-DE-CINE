@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ticket de Cine - CINEMAX</title>
+    <meta charset="UTF-8">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .ticket-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            padding: 12px;
+            border-radius: 6px 6px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .ticket-info {
+            padding: 15px;
+            background: white;
+        }
+        .info-section {
+            margin-bottom: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #1a237e;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding-bottom: 3px;
+            border-bottom: 1px dashed #ddd;
+        }
+        .info-label {
+            font-weight: bold;
+            color: #333;
+            min-width: 120px;
+        }
+        .info-value {
+            color: #555;
+            text-align: right;
+            flex: 1;
+        }
+        .total-section {
+            background: #e8f5e8;
+            padding: 12px;
+            margin: 12px 0;
+            border: 2px solid #4caf50;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .total-amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        .codes-section {
+            display: flex;
+            justify-content: space-between;
+            background: #f5f5f5;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 5px;
+            gap: 10px;
+        }
+        .code-block {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+        }
+        .barcode-simple {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            letter-spacing: 3px;
+            font-weight: bold;
+            margin: 5px 0;
+            padding: 6px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            color: #333;
+        }
+        .numeric-code {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            margin: 4px 0;
+            padding: 5px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            color: #333;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px;
+            background: #333;
+            color: white;
+            border-radius: 0 0 6px 6px;
+            font-size: 10px;
+        }
+        .important-info {
+            background: #fff3cd;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        .promo-section {
+            background: #e3f2fd;
+            padding: 6px;
+            margin: 8px 0;
+            border: 1px solid #90caf9;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 10px;
+        }
+        .img-container {
+            width: 80px;
+            height: 80px;
+            margin: 5px auto;
+            border: 2px solid #333;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        .img-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+        <div class="header">
+            <h1>🎬 CINEMAX THEATRES </h1>
+            <div style="font-size: 11px; margin-top: 3px;">¡Gracias por su compra!</div>
+        </div>
+        
+        <div class="ticket-info">
+            <div class="info-section">
+                <div class="info-row">
+                    <span class="info-label">Ticket #:</span>
+                    <span class="info-value">TK824809</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Emisión:</span>
+                    <span class="info-value">07/11/2025 21:26:18</span>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-row">
+                    <span class="info-label">Película:</span>
+                    <span class="info-value">Havoc</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Función:</span>
+                    <span class="info-value">05/11/2025 14:00</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Sala:</span>
+                    <span class="info-value">Sala 1</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Asientos:</span>
+                    <span class="info-value">F6, F7, G6</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Método Pago:</span>
+                    <span class="info-value">MetodoDePago : Tarjeta de Crédito
+</span>
+                </div>
+            </div>
+            
+            <div class="total-section">
+                <div class="total-amount">TOTAL: $9.000,00</div>
+            </div>
+            
+            <div class="codes-section">
+                <div class="code-block">
+                    <strong style="font-size: 11px;">📋 CÓDIGO OR</strong>
+                    <div class="numeric-code" style="font-size: 10px; padding: 4px;">OR-CMX-824809</div>
+                    <small style="font-size: 8px; color: #666;">Orden de compra</small>
+                </div>
+                
+                <div class="code-block">
+                    <strong style="font-size: 11px;">📊 CÓDIGO BARRAS</strong>
+                    <div class="img-container" style="width: 150px; height: 100px;">
+                        <img src="file:/C:/Users/Usuario/Desktop/Sistema%20gestion%20de%20cine/GESTOR-DE-CINE/GESTOR_DE_CINE/bar.jpg" alt="Código de Barras" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=&quot;padding:10px;text-align:center;color:#660;&quot;>Imagen no disponible</div>';">
+                    </div>
+                    <div class="numeric-code" style="font-size: 9px; margin-top: 3px;">824809</div>
+                    <small style="font-size: 8px; color: #666;">Escaneo rápido</small>
+                </div>
+                
+                <div class="code-block">
+                    <strong style="font-size: 11px;">🔳 CÓDIGO QR</strong>
+                    <div class="img-container" style="width: 100px; height: 100px;">
+                        <img src="file:/C:/Users/Usuario/Desktop/Sistema%20gestion%20de%20cine/GESTOR-DE-CINE/GESTOR_DE_CINE/qr.jpg" alt="Código QR" onerror="this.style.display='none'; this.parentNode.innerHTML='<div style=&quot;padding:10px;text-align:center;color:#666;&quot;>Imagen no disponible</div>';">
+                    </div>
+                    <div class="numeric-code" style="font-size: 9px; margin-top: 3px;">824809</div>
+                    <small style="font-size: 8px; color: #666;">Escaneo móvil</small>
+                </div>
+            </div>
+            
+            <div class="important-info">
+                <strong>📋 INFORMACIÓN IMPORTANTE</strong><br>
+                • Presente este ticket en la entrada<br>
+                • Llegue con 20 min de anticipación<br>
+                • No se permiten reembolsos
+            </div>
+            
+            <div class="promo-section">
+                <strong>📱 ¡Descargue nuestra App!</strong><br>
+                Obtenga un <strong>combo GRATIS</strong>
+            </div>
+        </div>
+        
+        <div class="footer">
+            ¡Disfrute de la función!<br>
+            @CinemaxTheaters #CinemaxExperience
+        </div>
+    </div>
+</body>
+</html>
